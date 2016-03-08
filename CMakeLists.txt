@@ -11,14 +11,14 @@ set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Builds)
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Builds)
 
 #add common include directories for dependancies
-include_directories(${CMAKE_SOURCE_DIR}/dep/gl)
-include_directories(${CMAKE_SOURCE_DIR}/dep/glfw/include)
-include_directories(${CMAKE_SOURCE_DIR}/dep/utilities)
-include_directories(${CMAKE_SOURCE_DIR}/dep/fbx)
-include_directories(${CMAKE_SOURCE_DIR}/dep/stb)
+include_directories(${CMAKE_SOURCE_DIR}/deps/gl)
+include_directories(${CMAKE_SOURCE_DIR}/deps/glfw/include)
+include_directories(${CMAKE_SOURCE_DIR}/deps/utilities)
+include_directories(${CMAKE_SOURCE_DIR}/deps/fbx)
+include_directories(${CMAKE_SOURCE_DIR}/deps/stb)
 
 add_definitions(-DGLM_SWIZZLE)
-include_directories(${CMAKE_SOURCE_DIR}/dep/glm)
+include_directories(${CMAKE_SOURCE_DIR}/deps/glm)
 
 add_subdirectory (JustnEngine)
 add_subdirectory (TestEngine)

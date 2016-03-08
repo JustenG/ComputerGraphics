@@ -43,8 +43,8 @@ SET(HEADERS
 )
 
 SET(EXTRA_SOURCES
-    ${CMAKE_SOURCE_DIR}/dep/gl/gl_core_4_4.c
-    ${CMAKE_SOURCE_DIR}/dep/utilities/Gizmos.cpp
+    ${CMAKE_SOURCE_DIR}/deps/gl/gl_core_4_4.c
+    ${CMAKE_SOURCE_DIR}/deps/utilities/Gizmos.cpp
     )
     
 
@@ -56,7 +56,7 @@ option(GLFW_BUILD_TESTS "Build the GLFW test programs" OFF)
 option(GLFW_BUILD_DOCS "Build the GLFW documentation" ON)
 option(GLFW_INSTALL "Generate installation target" OFF)
 option(GLFW_DOCUMENT_INTERNALS "Include internals in documentation" OFF)
-add_subdirectory(${CMAKE_SOURCE_DIR}/dep/glfw ${CMAKE_BINARY_DIR}/dep/glfw)
+add_subdirectory(${CMAKE_SOURCE_DIR}/deps/glfw ${CMAKE_BINARY_DIR}/deps/glfw)
   
   
 source_group(Base ./)
