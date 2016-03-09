@@ -14,7 +14,8 @@ public:
 	void GenerateBuffer(GLuint &data);
 	template<typename T>
 	void BindBuffer(GLuint data, GLuint size, T* bufferData);
-	void UnbindBuffer();
+	void Bind(GLuint data);
+	void Unbind();
 
 	void DeleteBuffers(GLuint VBO);
 

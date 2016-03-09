@@ -1,6 +1,7 @@
 #pragma once
-
 #include "Application.h"
+
+class Mesh;
 
 class TestEngineApp : public Application
 {
@@ -12,5 +13,8 @@ public:
 	void Draw();
 
 private:
+
+	Mesh* m_pModel;
+
 };
 

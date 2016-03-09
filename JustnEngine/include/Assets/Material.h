@@ -1,9 +1,10 @@
 #pragma once
+#include "Assets\Asset.h"
 
-class FBXMaterial;
+struct FBXMaterial;
 class Texture;
 
-class Material
+class Material : public Asset
 {
 public:
 	enum TextureSlots
@@ -37,6 +38,9 @@ public:
 	}
 
 private:
+
+	void onBind() override;
+	void onUnbind() override;
 
 	void LoadIfExists(TextureSlots slot, FBXMaterial* pMaterial, unsigned int FBXTextureType);
 

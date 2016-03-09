@@ -19,6 +19,7 @@ SET(SOURCES
 	src/Rendering/VertexArrayObject.cpp
 	src/Rendering/VertexBuffer.cpp
 
+	src/Assets/Asset.cpp
 	src/Assets/FBX.cpp
 	src/Assets/Material.cpp
 	src/Assets/Mesh.cpp
@@ -34,7 +35,8 @@ SET(HEADERS
 	include/Rendering/IndexBuffer.h
 	include/Rendering/VertexArrayObject.h
 	include/Rendering/VertexBuffer.h
-	
+
+	include/Assets/Asset.h	
 	include/Assets/FBX.h
 	include/Assets/Material.h
 	include/Assets/Mesh.h
