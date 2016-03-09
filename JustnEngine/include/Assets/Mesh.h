@@ -1,4 +1,6 @@
 #pragma once
+#include "Assets\Asset.h"
+
 #include <vector>
 #include <iostream>
 #include <string>
@@ -11,8 +13,9 @@ class VertexArrayObject;
 class Shader;
 class Material;
 class FBXMeshNode;
+class Camera;
 
-class Mesh
+class Mesh : public Asset
 {
 public:
 	Mesh();
@@ -22,7 +25,12 @@ public:
 	void LoadFBX(std::string fileName);
 	void LoadShader(const GLchar* vertexPath, const GLchar* fragmentPath);
 
+	void Render(Camera* pCamera, bool setUniforms = true);
+
 private:
+
+	void onBind() override;
+	void onUnbind() override;
 
 	void SetShader(Shader* shader);
 
@@ -40,7 +48,6 @@ private:
 	Shader* m_pShader;
 	Material* m_pMaterial;
 
-	GLuint* m_pData;
 	std::vector<Mesh*> m_internalMeshes;
 
 };

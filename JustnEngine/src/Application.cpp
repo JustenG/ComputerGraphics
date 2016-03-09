@@ -11,6 +11,11 @@ Application::~Application()
 {
 }
 
+Camera* Application::GetCamera()
+{
+	return m_fCamera;
+}
+
 int Application::Startup()
 {
 	currentTime = 0;

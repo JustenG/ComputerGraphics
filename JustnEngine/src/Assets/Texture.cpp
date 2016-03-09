@@ -16,23 +16,23 @@ Texture::~Texture()
 
 }
 
-//void Texture::onBind()
-//{
-//	glActiveTexture(GL_TEXTURE0 + m_uiTextureSlot);
-//	glBindTexture(GL_TEXTURE_2D, m_uiTextureID);
-//}
-//
-//void Texture::onUnbind()
-//{
-//	//Do any texture unbinding
-//}
+void Texture::onBind()
+{
+	glActiveTexture(GL_TEXTURE0 + m_uiTextureSlot);
+	glBindTexture(GL_TEXTURE_2D, m_uiTextureID);
+}
+
+void Texture::onUnbind()
+{
+	//Do any texture unbinding
+}
 
 void Texture::SetTextureSlot(unsigned int uiSlot)
 {
 	m_uiTextureSlot = uiSlot;
 }
 
-void Texture::LoadWithSTBImage(std::string& strFilePath)
+void Texture::LoadTexture(std::string& strFilePath)
 {
 	unsigned char* data = stbi_load(strFilePath.c_str(), &m_iImageWidth, &m_iImageHeight, &m_iTextureFormat, STBI_default);
 

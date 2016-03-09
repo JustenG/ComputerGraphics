@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\src\Application.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\src\main.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\src\Cameras\Camera.cpp">
+      <Filter>Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\src\Cameras\FlyCamera.cpp">
+      <Filter>Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\src\Rendering\IndexBuffer.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\src\Rendering\VertexArrayObject.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\src\Rendering\VertexBuffer.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\src\Assets\Asset.cpp">
+      <Filter>Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\src\Assets\FBX.cpp">
+      <Filter>Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\src\Assets\Material.cpp">
+      <Filter>Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\src\Assets\Mesh.cpp">
+      <Filter>Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\src\Assets\Shader.cpp">
+      <Filter>Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\src\Assets\Texture.cpp">
+      <Filter>Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\deps\gl\gl_core_4_4.c">
+      <Filter>ExtraSources</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\deps\utilities\Gizmos.cpp">
+      <Filter>ExtraSources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\include\Application.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\include\Cameras\Camera.h">
+      <Filter>Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\include\Cameras\FlyCamera.h">
+      <Filter>Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\include\Rendering\IndexBuffer.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\include\Rendering\VertexArrayObject.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\include\Rendering\VertexBuffer.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\include\Assets\Asset.h">
+      <Filter>Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\include\Assets\FBX.h">
+      <Filter>Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\include\Assets\Material.h">
+      <Filter>Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\include\Assets\Mesh.h">
+      <Filter>Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\include\Assets\Shader.h">
+      <Filter>Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\include\Assets\Texture.h">
+      <Filter>Assets</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\justen.grabandt\Documents\ComputerGraphics\JustnEngine\CMakeLists.txt">
+      <Filter>Base</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Base">
+      <UniqueIdentifier>{B5D2DECA-74AB-341B-AE31-8DAAF716BD94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ExtraSources">
+      <UniqueIdentifier>{EFEB285A-3164-3CA0-9BE0-69CA77FC7576}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{B22F8EDD-1577-3198-B4CB-A4AB408561BD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cameras">
+      <UniqueIdentifier>{8D36B70C-3744-3C4D-A968-63EC92F02DFD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering">
+      <UniqueIdentifier>{0963B69B-7949-3106-BDE0-2B176369A54D}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

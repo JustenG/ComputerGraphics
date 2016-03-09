@@ -1,0 +1,31 @@
+#version 410\n
+in vec4 vPosition;
+in vec4 vColour;
+in vec2 vTexture;
+in vec4 vNormal;
+out vec4 FragColor;
+
+uniform sampler2D uTexture;
+uniform vec3 lightDir;
+uniform vec3 lightColour;
+uniform vec3 cameraPos;
+uniform int specPow;
+void main()
+{
+	float ambientStrength = 0.1f;
+	vec3 ambient = ambientStrength * lightColour;
+	
+	vec3 norm = normalize(vNormal.xyz);
+	float diff = max(0, dot(norm , lightDir ) );
+	vec3 diffuse = diff * lightColour;
+	
+	float specularStrength = 1.f;
+	vec3 viewDir = normalize( cameraPos - vPosition.xyz );
+	vec3 reflectDir = reflect(-lightDir, norm);
+	float spec = max(0.0f, dot(viewDir,normalize(reflectDir)));
+	spec = pow(spec, specPow);
+	vec3 specular = specularStrength * spec * lightColour;
+	
+	vec4 result = vec4(ambient + diffuse + specular,1) * texture(uTexture, vTexture);
+	FragColor =  result;
+}

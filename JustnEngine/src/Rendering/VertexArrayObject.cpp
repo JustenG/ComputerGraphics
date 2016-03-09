@@ -17,21 +17,39 @@ void VertexArrayObject::GenerateBuffer(GLuint &data)
 	glGenVertexArrays(1, &data);
 }
 
-void VertexArrayObject::UnbindBuffer()
+void VertexArrayObject::Bind()
+{
+	glBindVertexArray(m_pData[0]);
+	m_VertexBuffer->Bind(m_pData[1]);
+	m_IndexBuffer->Bind(m_pData[2]);
+}
+
+void VertexArrayObject::Unbind()
+{
+	glBindVertexArray(0);
+	m_VertexBuffer->Unbind();
+	m_IndexBuffer->Unbind();
+}
+
+void VertexArrayObject::BindVAO(GLuint data)
+{
+	glBindVertexArray(data);
+}
+void VertexArrayObject::UnbindVAO()
 {
 	glBindVertexArray(0);
 }
 
-void VertexArrayObject::BindBuffer(GLuint data)
-{
-	glBindVertexArray(data);
-}
 
 void VertexArrayObject::DeleteBuffers(GLuint VAO, GLuint VBO, GLuint IBO)
 {
 	glDeleteVertexArrays(1, &VAO);
 	m_VertexBuffer->DeleteBuffers(VBO);
 	m_IndexBuffer->DeleteBuffers(IBO);
+
+	delete m_IndexBuffer;
+	delete m_VertexBuffer;
+	delete m_pData;
 }
 
 template<>
@@ -58,9 +76,9 @@ void VertexArrayObject::SetUpAttributes<FBXVertex>()
 	glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, sizeof(FBXVertex), (void*)FBXVertex::Offsets::WeightsOffset);
 }
 
-void VertexArrayObject::DrawObject(std::vector<GLuint> IBO_Data)
+void VertexArrayObject::DrawObject()
 {
-	glDrawElements(GL_TRIANGLES, (GLuint)IBO_Data.size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, *m_IndexBuffer->GetBufferData(), GL_UNSIGNED_INT, 0);
 }
 
 

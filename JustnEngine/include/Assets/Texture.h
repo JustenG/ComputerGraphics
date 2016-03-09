@@ -1,17 +1,22 @@
 #pragma once
+#include "Assets\Asset.h"
 
 #include<string>
 
-class Texture
+class Texture : public Asset
 {
 public:
 	Texture();
 	~Texture();
 
 	void SetTextureSlot(unsigned int uiSlot);
+
+	void LoadTexture(std::string& strFilePath);
+
 private:
 
-	void LoadWithSTBImage(std::string& strFilePath);
+	void onBind() override;
+	void onUnbind() override;
 
 	unsigned int m_uiTextureID;
 	

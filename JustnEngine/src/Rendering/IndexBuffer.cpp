@@ -14,15 +14,26 @@ void IndexBuffer::GenerateBuffer(GLuint &data)
 	glGenBuffers(1, &data);
 }
 
-void IndexBuffer::UnbindBuffer()
+void IndexBuffer::Unbind()
 {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void IndexBuffer::BindBuffer(GLuint data, GLuint size, GLuint* bufferData)
+void IndexBuffer::Bind(GLuint data)
 {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, data);
+}
+
+void IndexBuffer::BindBuffer(GLuint data, GLuint size, GLuint* bufferData)
+{
+	m_IBO_Data = bufferData;
+	Bind(data);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size * sizeof(GLuint), bufferData, GL_STATIC_DRAW);
+}
+
+GLuint* IndexBuffer::GetBufferData()
+{
+	return m_IBO_Data;
 }
 
 void IndexBuffer::DeleteBuffers(GLuint IBO)

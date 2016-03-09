@@ -1,4 +1,4 @@
-#include "Assets/Mesh.h"
+#include "Assets\Mesh.h"
 
 #include <FBXFile.h>
 #include "gl_core_4_4.h"
@@ -8,10 +8,13 @@
 
 #include "Rendering\VertexArrayObject.h"
 #include "Assets\Shader.h"
+#include "Cameras\Camera.h"
 
 Mesh::Mesh()
 {
-
+	m_pShader = new Shader();
+	m_pMaterial = new Material();
+	m_pRenderObject = new VertexArrayObject();
 
 }
 
@@ -24,12 +27,49 @@ void Mesh::LoadFile(std::string fileName)
 {
 	int startOfExtension = fileName.find_last_of('.');
 	std::string fileType = fileName.substr(startOfExtension + 1, fileName.length());
+	printf("filename");
 
 	if (fileType == "fbx")
 	{
-		LoadFBX(fileName);
+		//LoadFBX(fileName);
 	}
 
+}
+
+void Mesh::onBind()
+{
+	m_pShader->Bind();
+	m_pMaterial->Bind();
+	m_pRenderObject->Bind();
+}
+
+void Mesh::onUnbind()
+{
+	m_pRenderObject->Unbind();
+	m_pMaterial->Unbind();
+	m_pShader->Unbind();
+}
+
+void Mesh::Render(Camera* pCamera, bool setUniforms)
+{
+	if (setUniforms)
+	{
+		m_pShader->SetProjectionUniform(pCamera->GetProjection());
+		m_pShader->SetViewUniform(pCamera->GetView());
+		m_pShader->SetProjectionViewUniform(pCamera->GetProjectionView());
+		m_pShader->SetProjectionViewModelUniform(pCamera->GetProjectionView());
+	}
+
+	Bind();
+	m_pRenderObject->DrawObject();
+	Unbind();
+
+	//Also need to render each internal mesh - they will be using the same shader
+	for (unsigned int i = 0; i < m_internalMeshes.size(); ++i)
+	{
+		Mesh* pMesh = m_internalMeshes[i];
+		pMesh->Render(pCamera,false);
+	}
 }
 
 void Mesh::LoadFBX(std::string fileName)
@@ -57,14 +97,12 @@ void Mesh::LoadFBX(std::string fileName)
 
 }
 
-void Mesh::BuildRenderDataFromLoaderNode(VertexArrayObject** pRenderData, FBXMeshNode* pMesh)
+void Mesh::BuildRenderDataFromLoaderNode(VertexArrayObject** pRenderObject, FBXMeshNode* pMesh)
 {
 	assert(pMesh);
-	assert(pRenderData);
+	assert(pRenderObject);
 
-	*pRenderData = new VertexArrayObject();
-
-	(*pRenderData)->CreateVAO<FBXVertex>(m_pData, pMesh->m_vertices.size(), pMesh->m_indices.size(), pMesh->m_vertices.data(), pMesh->m_indices.data());
+	(*pRenderObject)->CreateVAO<FBXVertex>(pMesh->m_vertices.size(), pMesh->m_indices.size(), pMesh->m_vertices.data(), pMesh->m_indices.data());
 }
 
 void Mesh::SetShader(Shader* shader)

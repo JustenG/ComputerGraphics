@@ -14,6 +14,7 @@ using glm::mat4;
 
 
 class FlyCamera;
+class Camera;
 class Asset;
 
 class Application
@@ -30,6 +31,8 @@ public:
 	void EarlyUpdate();
 	void DrawGizmos();
 	void Shutdown();
+
+	Camera* GetCamera();
 
 private:
 	

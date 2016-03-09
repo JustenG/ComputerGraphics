@@ -1,0 +1,13 @@
+﻿  Checking Build System
+  CMake does not need to re-run because C:/Users/justen.grabandt/Documents/ComputerGraphics/_Builds/CMakeFiles/generate.stamp is up-to-date.
+  CMake is re-running because C:/Users/justen.grabandt/Documents/ComputerGraphics/_Builds/JustnEngine/CMakeFiles/generate.stamp is out-of-date.
+    the file 'C:/Users/justen.grabandt/Documents/ComputerGraphics/JustnEngine/CMakeLists.txt'
+    is newer than 'C:/Users/justen.grabandt/Documents/ComputerGraphics/_Builds/JustnEngine/CMakeFiles/generate.stamp.depend'
+    result='-1'
+  -- Could NOT find Vulkan (missing:  VULKAN_LIBRARY VULKAN_INCLUDE_DIR) 
+  -- Could NOT find Doxygen (missing:  DOXYGEN_EXECUTABLE) 
+  -- Using Win32 for window creation
+  -- Using WGL for context creation
+  -- Configuring done
+  -- Generating done
+  -- Build files have been written to: C:/Users/justen.grabandt/Documents/ComputerGraphics/_Builds
