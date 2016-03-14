@@ -1,4 +1,4 @@
-#include "Assets/Mesh.h"
+#include "Assets\Mesh.h"
 
 #include <FBXFile.h>
 #include "gl_core_4_4.h"
@@ -27,10 +27,11 @@ void Mesh::LoadFile(std::string fileName)
 {
 	int startOfExtension = fileName.find_last_of('.');
 	std::string fileType = fileName.substr(startOfExtension + 1, fileName.length());
+	printf("filename");
 
 	if (fileType == "fbx")
 	{
-		LoadFBX(fileName);
+		//LoadFBX(fileName);
 	}
 
 }

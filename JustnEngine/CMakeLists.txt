@@ -48,9 +48,7 @@ SET(EXTRA_SOURCES
     ${CMAKE_SOURCE_DIR}/deps/gl/gl_core_4_4.c
     ${CMAKE_SOURCE_DIR}/deps/utilities/Gizmos.cpp
     )
-    
-
-
+	
 
 #Need to build GLFW if we haven't already..
 option(GLFW_BUILD_EXAMPLES "Build the GLFW example programs" OFF)
@@ -60,18 +58,15 @@ option(GLFW_INSTALL "Generate installation target" OFF)
 option(GLFW_DOCUMENT_INTERNALS "Include internals in documentation" OFF)
 add_subdirectory(${CMAKE_SOURCE_DIR}/deps/glfw ${CMAKE_BINARY_DIR}/deps/glfw)
   
+#Tell cmake that this will be a library (and not a exectutable)
+add_library(${PROJECT_NAME} ${SOURCES} ${EXTRA_SOURCES} ${HEADERS})
   
 source_group(Base ./)
 source_group(ExtraSources FILES ${EXTRA_SOURCES})
 source_group(Assets .*/Assets.*/)
 source_group(Cameras .*/Cameras/)
 source_group(Rendering .*/Rendering/)
-#source_group(AssetLoading .*/AssetLoading/)
 
-
-
-#Tell cmake that this will be a library (and not a exectutable)
-add_library(${PROJECT_NAME} ${SOURCES} ${EXTRA_SOURCES} ${HEADERS})
 
 #And we need to link against GLFW
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
@@ -83,3 +78,6 @@ target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES})
 #for this library when compiling it into other projects
 #TODO: Work out why this isn't working...
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+
+    
