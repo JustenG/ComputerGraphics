@@ -164,8 +164,5 @@ IF(NOT FBX_FOUND)
         SET(FBX_FOUND "NO")
     ENDIF()
 
-<<<<<<< HEAD
 ENDIF()
-=======
-ENDIF()
->>>>>>> b7907e781c7a70ceb5492f555ef3592566517786
+

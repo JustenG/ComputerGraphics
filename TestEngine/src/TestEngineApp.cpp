@@ -4,12 +4,6 @@
 
 TestEngineApp::TestEngineApp()
 {
-<<<<<<< HEAD
-	m_pModel = new Mesh();
-	m_pModel->LoadFile("/data/models/soulspear/soulspear.fbx");
-	m_pModel->LoadShader("/data/shaders/defultVertexShader.txt","data/shaders/defultFragmentShader.txt");
-=======
->>>>>>> b7907e781c7a70ceb5492f555ef3592566517786
 }
 
 TestEngineApp::~TestEngineApp()

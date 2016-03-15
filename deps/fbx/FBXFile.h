@@ -10,11 +10,7 @@
 #include "glm/gtc/quaternion.hpp"
 #include "glm/gtc/epsilon.hpp"
 
-<<<<<<< HEAD
-#include <malloc.h>
-=======
 #include "memaligned.h"
->>>>>>> b7907e781c7a70ceb5492f555ef3592566517786
 
 struct ImportAssistor;
 
@@ -131,13 +127,9 @@ struct FBXMaterial
 	glm::vec2		textureTiling[TextureTypes_Count];			// Texture repeat count
 	float			textureRotation[TextureTypes_Count];		// Texture rotation around Z (2D rotation)
 
-<<<<<<< HEAD
-																//ALIGNED_NEW_OP_16
-																//ALIGNED_DELETE_OP
-=======
-	//ALIGNED_NEW_OP_16
-	//ALIGNED_DELETE_OP
->>>>>>> b7907e781c7a70ceb5492f555ef3592566517786
+	ALIGNED_NEW_OP_16;
+	ALIGNED_DELETE_OP;
+
 };
 
 // Simple tree node with local/global transforms and children
@@ -173,13 +165,8 @@ public:
 
 	void*					m_userData;
 
-<<<<<<< HEAD
 	ALIGNED_NEW_OP_16;
 	ALIGNED_DELETE_OP;
-=======
-	ALIGNED_NEW_OP_16
-	ALIGNED_DELETE_OP
->>>>>>> b7907e781c7a70ceb5492f555ef3592566517786
 };
 
 // A simple mesh node that contains an array of vertices and indices used
@@ -193,21 +180,13 @@ public:
 	virtual ~FBXMeshNode();
 
 	unsigned int				m_vertexAttributes;
-<<<<<<< HEAD
+
 	std::vector<FBXMaterial*>	m_materials;
 	std::vector<FBXVertex>		m_vertices;
 	std::vector<unsigned int>	m_indices;
 
 	ALIGNED_NEW_OP_16;
 	ALIGNED_DELETE_OP;
-=======
-    std::vector<FBXMaterial*>	m_materials;
-	std::vector<FBXVertex>		m_vertices;
-	std::vector<unsigned int>	m_indices;
-
-	ALIGNED_NEW_OP_16
-	ALIGNED_DELETE_OP
->>>>>>> b7907e781c7a70ceb5492f555ef3592566517786
 };
 
 // A light node that can represent a point, directional, or spot light
@@ -233,13 +212,9 @@ public:
 	float		m_innerAngle;	// spotlight inner cone angle (if a spotlight)
 	float		m_outerAngle;	// spotlight outer cone angle (if a spotlight)
 
-<<<<<<< HEAD
 	ALIGNED_NEW_OP_16;
 	ALIGNED_DELETE_OP;
-=======
-	ALIGNED_NEW_OP_16
-	ALIGNED_DELETE_OP
->>>>>>> b7907e781c7a70ceb5492f555ef3592566517786
+
 };
 
 // A camera node with information to create projection matrix
@@ -260,13 +235,9 @@ public:
 
 	glm::mat4	m_viewMatrix;	// inverse matrix of node's m_globalTransform
 
-<<<<<<< HEAD
 	ALIGNED_NEW_OP_16;
 	ALIGNED_DELETE_OP;
-=======
-	ALIGNED_NEW_OP_16
-	ALIGNED_DELETE_OP
->>>>>>> b7907e781c7a70ceb5492f555ef3592566517786
+
 };
 
 // A single frame for a bone in an animation
@@ -282,13 +253,9 @@ public:
 	glm::vec3		m_translation;
 	glm::vec3		m_scale;
 
-<<<<<<< HEAD
 	ALIGNED_NEW_OP_16;
 	ALIGNED_DELETE_OP;
-=======
-	ALIGNED_NEW_OP_16
-	ALIGNED_DELETE_OP
->>>>>>> b7907e781c7a70ceb5492f555ef3592566517786
+
 };
 
 // A collection of frames for a single bone in an animation
@@ -345,13 +312,8 @@ public:
 
 	void*			m_userData;
 
-<<<<<<< HEAD
 	ALIGNED_NEW_OP_16;
 	ALIGNED_DELETE_OP;
-=======
-	ALIGNED_NEW_OP_16
-	ALIGNED_DELETE_OP
->>>>>>> b7907e781c7a70ceb5492f555ef3592566517786
 };
 
 // An FBX scene representing the contents on an FBX file.
@@ -382,7 +344,6 @@ public:
 
 	// must unload a scene before loading a new one over top
 	bool			load(
-<<<<<<< HEAD
 		const char* a_filename,
 		UNIT_SCALE a_scale = FBXFile::UNITS_METER,
 		bool a_loadTextures = true,
@@ -392,17 +353,7 @@ public:
 		bool a_loadLights = false,
 		bool a_flipTextureY = true
 		);
-=======
-                         const char* a_filename,
-                         UNIT_SCALE a_scale = FBXFile::UNITS_METER,
-                         bool a_loadTextures = true,
-                         bool a_loadAnimations = true,
-                         bool a_loadMeshes = true,
-                         bool a_loadCameras = false,
-                         bool a_loadLights = false,
-                         bool a_flipTextureY = true
-                         );
->>>>>>> b7907e781c7a70ceb5492f555ef3592566517786
+
 	void			unload();
 
 	// goes through all loaded textures and creates their GL versions
@@ -410,7 +361,6 @@ public:
 
 	// the folder path of the FBX file
 	// useful for accessing texture locations
-<<<<<<< HEAD
 	const char*			getPath() const { return m_path.c_str(); }
 
 	// the scene arranged in a tree graph
@@ -426,23 +376,6 @@ public:
 	unsigned int	getSkeletonCount() const { return m_skeletons.size(); }
 	unsigned int	getAnimationCount() const { return m_animations.size(); }
 	unsigned int	getTextureCount() const { return m_textures.size(); }
-=======
-	const char*			getPath() const				{ return m_path.c_str(); }
-
-	// the scene arranged in a tree graph
-	FBXNode*			getRoot() const				{ return m_root; }
-
-	// the ambient light of the scene
-	const glm::vec4&	getAmbientLight() const		{ return m_ambientLight; }
-
-	unsigned int	getMeshCount() const		{ return m_meshes.size(); }
-	unsigned int	getLightCount() const		{ return m_lights.size(); }
-	unsigned int	getCameraCount() const		{ return m_cameras.size(); }
-	unsigned int	getMaterialCount() const	{ return m_materials.size(); }
-	unsigned int	getSkeletonCount() const	{ return m_skeletons.size(); }
-	unsigned int	getAnimationCount() const	{ return m_animations.size(); }
-	unsigned int	getTextureCount() const		{ return m_textures.size(); }
->>>>>>> b7907e781c7a70ceb5492f555ef3592566517786
 
 	FBXMeshNode*	getMeshByName(const char* a_name);
 	FBXLightNode*	getLightByName(const char* a_name);
@@ -452,7 +385,7 @@ public:
 	FBXTexture*		getTextureByName(const char* a_name);
 
 	// these methods are slow as the items are stored in a map
-<<<<<<< HEAD
+
 	FBXMeshNode*	getMeshByIndex(unsigned int a_index) const { return m_meshes[a_index]; }
 	FBXLightNode*	getLightByIndex(unsigned int a_index);
 	FBXCameraNode*	getCameraByIndex(unsigned int a_index);
@@ -463,18 +396,6 @@ public:
 
 	ALIGNED_NEW_OP_16;
 	ALIGNED_DELETE_OP;
-=======
-	FBXMeshNode*	getMeshByIndex(unsigned int a_index) const	{ return m_meshes[a_index]; }
-	FBXLightNode*	getLightByIndex(unsigned int a_index);
-	FBXCameraNode*	getCameraByIndex(unsigned int a_index);
-	FBXMaterial*	getMaterialByIndex(unsigned int a_index);
-	FBXSkeleton*	getSkeletonByIndex(unsigned int a_index)	{ return m_skeletons[a_index]; }
-	FBXAnimation*	getAnimationByIndex(unsigned int a_index);
-	FBXTexture*		getTextureByIndex(unsigned int a_index);
-
-	ALIGNED_NEW_OP_16
-	ALIGNED_DELETE_OP
->>>>>>> b7907e781c7a70ceb5492f555ef3592566517786
 
 private:
 
@@ -555,13 +476,9 @@ inline bool FBXVertex::operator < (const FBXVertex& a_rhs) const
 }
 
 inline FBXTexture::FBXTexture()
-<<<<<<< HEAD
 	: handle(0 - 1),
 	data(nullptr),
-=======
-	: handle(0-1),
-    data(nullptr),
->>>>>>> b7907e781c7a70ceb5492f555ef3592566517786
+
 	width(0),
 	height(0),
 	format(0)
