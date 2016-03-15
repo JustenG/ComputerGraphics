@@ -82,13 +82,13 @@ void Mesh::LoadFBX(std::string fileName)
 	assert(pMesh && "Require at least one mesh in your FBX");
 
 	BuildRenderDataFromLoaderNode(&m_pRenderObject, pMesh);
-	BuildMaterialFromLoaderNode(&m_pMaterial, pMesh->m_material);
+	BuildMaterialFromLoaderNode(&m_pMaterial, pMesh->m_materials[0]);
 
 	for (unsigned int i = 1; i < fbx->getMeshCount(); ++i)
 	{
 		Mesh* pNewMesh = new Mesh();
 		BuildRenderDataFromLoaderNode(&(pNewMesh->m_pRenderObject), fbx->getMeshByIndex(i));
-		BuildMaterialFromLoaderNode(&(pNewMesh->m_pMaterial), fbx->getMeshByIndex(i)->m_material);
+		BuildMaterialFromLoaderNode(&(pNewMesh->m_pMaterial), fbx->getMeshByIndex(i)->m_materials[0]);
 
 		if (m_pShader)
 			pNewMesh->SetShader(m_pShader);
