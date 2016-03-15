@@ -1,21 +1,26 @@
 #include "TestEngineApp.h"
-#include "Assets\Mesh.h"
+
 
 
 TestEngineApp::TestEngineApp()
 {
-	m_pModel = new Mesh();
-<<<<<<< HEAD
-	m_pModel->LoadFile("data/models/soulspear/soulspear.fbx");
-	m_pModel->LoadShader("data/shaders/defultVertexShader.txt","data/shaders/defultFragmentShader.txt");
-=======
-	m_pModel->LoadFile("/data/models/soulspear/soulspear.fbx");
-	//m_pModel->LoadShader("/data/shaders/defultVertexShader.txt","data/shaders/defultFragmentShader.txt");
->>>>>>> 7b5775473875dc19d44cc6928b9a85feb39b4c09
 }
 
 TestEngineApp::~TestEngineApp()
 {
+}
+
+void TestEngineApp::Initialize()
+{
+	m_pModel = new Mesh();
+
+	m_pModel->LoadFile("data/models/soulspear/soulspear.fbx");
+	m_pModel->LoadShader("data/shaders/defultVertexShader.vert", "data/shaders/defultFragmentShader.frag");
+}
+
+void TestEngineApp::Destroy()
+{
+	delete m_pModel;
 }
 
 void TestEngineApp::Update()
@@ -24,10 +29,16 @@ void TestEngineApp::Update()
 }
 void TestEngineApp::Draw()
 {
-<<<<<<< HEAD
+	m_pModel->GetShader()->SetModelUniform(glm::mat4(1));
+
+	m_pModel->GetShader()->SetUniform("lightDir", glm::vec3(1, 0, 1));
+	m_pModel->GetShader()->SetUniform("lightColour", glm::vec3( 1, 1, 1));
+	m_pModel->GetShader()->SetUniform("cameraPos", GetCamera()->GetPos());
+
+	int spec = 8;
+	m_pModel->GetShader()->SetUniform("specPow", spec);
+
 	m_pModel->Render(GetCamera());
-=======
-	//m_pModel->Render(GetCamera());
->>>>>>> 7b5775473875dc19d44cc6928b9a85feb39b4c09
+
 	DrawGizmos();
 }

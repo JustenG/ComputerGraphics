@@ -1,5 +1,7 @@
 project (JustnEngine)
 
+find_package(FBX)
+
 #Need to find OpenGL link_libraries(
 find_package(OpenGL REQUIRED)
 
@@ -47,8 +49,12 @@ SET(HEADERS
 SET(EXTRA_SOURCES
     ${CMAKE_SOURCE_DIR}/deps/gl/gl_core_4_4.c
     ${CMAKE_SOURCE_DIR}/deps/utilities/Gizmos.cpp
+	${CMAKE_SOURCE_DIR}/deps/memalign/memaligned.cpp
     )
-	
+
+IF(FBX_FOUND)
+    SET(EXTRA_SOURCES ${EXTRA_SOURCES} ${CMAKE_SOURCE_DIR}/deps/fbx/FBXFile.cpp)
+ENDIF(FBX_FOUND)
 
 #Need to build GLFW if we haven't already..
 option(GLFW_BUILD_EXAMPLES "Build the GLFW example programs" OFF)
@@ -80,4 +86,20 @@ target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES})
 target_include_directories (${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 
+#Include FBX if supported by this PC
+IF(FBX_FOUND)
+    message("FBX Support enabled")
+    
+    include_directories(${CMAKE_SOURCE_DIR}/deps/fbx)
+    include_directories(${FBX_INCLUDE_DIR})
+    message(${FBX_INCLUDE_DIR})
+
+    target_link_libraries(${PROJECT_NAME} debug ${FBX_LIBRARY_DEBUG})
+    target_link_libraries(${PROJECT_NAME} optimized ${FBX_LIBRARY})
+    
+    target_compile_definitions(${PROJECT_NAME} PUBLIC FBX_SUPPORTED)
+    
+ELSE(FBX_FOUND)
+    message("No FBX support in this development environement")
+ENDIF(FBX_FOUND)
     

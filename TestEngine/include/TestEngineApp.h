@@ -1,5 +1,8 @@
 #pragma once
 #include "Application.h"
+#include "Assets\Mesh.h"
+#include "Assets\Shader.h"
+#include "Cameras\Camera.h"
 
 class Mesh;
 
@@ -11,6 +14,8 @@ public:
 
 	void Update();
 	void Draw();
+	void Initialize();
+	void Destroy();
 
 private:
 

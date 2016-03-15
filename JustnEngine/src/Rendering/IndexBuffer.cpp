@@ -9,9 +9,9 @@ IndexBuffer::~IndexBuffer()
 {
 }
 
-void IndexBuffer::GenerateBuffer(GLuint &data)
+void IndexBuffer::GenerateBuffer(GLuint* data)
 {
-	glGenBuffers(1, &data);
+	glGenBuffers(1, data);
 }
 
 void IndexBuffer::Unbind()
@@ -26,14 +26,14 @@ void IndexBuffer::Bind(GLuint data)
 
 void IndexBuffer::BindBuffer(GLuint data, GLuint size, GLuint* bufferData)
 {
-	m_IBO_Data = bufferData;
+	m_IBO_Size = size;
 	Bind(data);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size * sizeof(GLuint), bufferData, GL_STATIC_DRAW);
 }
 
-GLuint* IndexBuffer::GetBufferData()
+GLuint IndexBuffer::GetBufferSize()
 {
-	return m_IBO_Data;
+	return m_IBO_Size;
 }
 
 void IndexBuffer::DeleteBuffers(GLuint IBO)

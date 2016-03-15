@@ -39,9 +39,30 @@ void Texture::LoadTexture(std::string& strFilePath)
 	if (data == nullptr)
 		return;
 
+	GLuint uiTextureFormat = GL_RGB;
+
+	switch (m_iTextureFormat)
+	{
+	case 1:
+		uiTextureFormat = GL_RED;
+		break;
+	case 2:
+		uiTextureFormat = GL_RG;
+		break;
+	case 3:
+		uiTextureFormat = GL_RGB;
+		break;
+	case 4:
+		uiTextureFormat = GL_RGBA;
+		break;
+	default:
+		assert("Unkown texture format");
+	}
+
+
 	glGenTextures(1, &m_uiTextureID);
 	glBindTexture(GL_TEXTURE_2D, m_uiTextureID);
-	glTexImage2D(GL_TEXTURE_2D, 0, m_iTextureFormat, m_iImageWidth, m_iImageHeight,	0, m_iTextureFormat, GL_UNSIGNED_BYTE, data);
+	glTexImage2D(GL_TEXTURE_2D, 0, uiTextureFormat, m_iImageWidth, m_iImageHeight,	0, uiTextureFormat, GL_UNSIGNED_BYTE, data);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 

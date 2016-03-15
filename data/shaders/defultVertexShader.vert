@@ -1,22 +1,26 @@
-#version 410\n\
+#version 410
 layout(location = 0) in vec4 Position;
 layout(location = 1) in vec4 Normal;
-layout(location = 2) in vec2 Colour;
-layout(location = 3) in vec4 TexCoords;
-layout(location = 4) in vec4 TexCoords2;
-layout(location = 5) in vec4 Tangent;
+layout(location = 2) in vec4 Colour;
+layout(location = 3) in vec2 TexCoords;
+layout(location = 4) in vec2 TexCoords2;
+layout(location = 5) in vec3 Tangent;
 layout(location = 6) in vec4 Binormal;
-layout(location = 7) in vec4 Indicies;
+layout(location = 7) in vec4 Indices;
 layout(location = 8) in vec4 Weights;
 
 out vec4 vPosition;          
 out vec4 vColour;            
-out vec2 vTexture;
+out vec2 vTexCoords;
 out vec4 vNormal;
 out vec3 vTangent;
 out vec3 vBitTangent;
-uniform mat4 projectionView;
+
+uniform mat4 projection;
+uniform mat4 view;
 uniform mat4 model;
+uniform mat4 projectionView;
+uniform mat4 projectionViewModel;
 
 const int MAX_BONES = 128;
 uniform mat4 bones[MAX_BONES];
@@ -25,7 +29,7 @@ void main()
 {
 	vPosition = Position;
 	vColour = vec4(1,1,1,1);
-	vTexture = Texture;
+	vTexCoords = TexCoords;
 	vNormal = Normal;
 	vTangent = Tangent.xyz;
 	vBitTangent = cross(Normal.xyz, Tangent.xyz);
@@ -37,5 +41,5 @@ void main()
 	P += bones[index.z] * Position * Weights.z;
 	P += bones[index.w] * Position * Weights.w;
 	
-	gl_Position = (projectionView * model) * P ;
+	gl_Position = projectionView * model * Position;
 }

@@ -1,15 +1,24 @@
-#version 410\n
+#version 410
 in vec4 vPosition;
 in vec4 vColour;
-in vec2 vTexture;
+in vec2 vTexCoords;
 in vec4 vNormal;
 out vec4 FragColor;
 
-uniform sampler2D uTexture;
+uniform sampler2D DiffuseTexture;
+uniform sampler2D AmbientTexture;
+uniform sampler2D GlowTexture;
+uniform sampler2D SpecularTexture;
+uniform sampler2D GlossTexture;
+uniform sampler2D NormalTexture;
+uniform sampler2D AlphaTexture;
+uniform sampler2D DisplacementTexture;
+
 uniform vec3 lightDir;
 uniform vec3 lightColour;
 uniform vec3 cameraPos;
 uniform int specPow;
+
 void main()
 {
 	float ambientStrength = 0.1f;
@@ -26,6 +35,6 @@ void main()
 	spec = pow(spec, specPow);
 	vec3 specular = specularStrength * spec * lightColour;
 	
-	vec4 result = vec4(ambient + diffuse + specular,1) * texture(uTexture, vTexture);
+	vec4 result = vec4(ambient + diffuse + specular,1) * texture(DiffuseTexture, vTexCoords);
 	FragColor =  result;
 }
