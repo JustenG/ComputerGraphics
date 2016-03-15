@@ -4,17 +4,17 @@
 
 VertexArrayObject::VertexArrayObject()
 {
-
 }
 
 
 VertexArrayObject::~VertexArrayObject()
 {
+
 }
 
-void VertexArrayObject::GenerateBuffer(GLuint &data)
+void VertexArrayObject::GenerateBuffer(GLuint* data)
 {
-	glGenVertexArrays(1, &data);
+	glGenVertexArrays(1, data);
 }
 
 void VertexArrayObject::Bind()
@@ -78,7 +78,7 @@ void VertexArrayObject::SetUpAttributes<FBXVertex>()
 
 void VertexArrayObject::DrawObject()
 {
-	glDrawElements(GL_TRIANGLES, *m_IndexBuffer->GetBufferData(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetBufferSize(), GL_UNSIGNED_INT, 0);
 }
 
 

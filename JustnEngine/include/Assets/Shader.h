@@ -6,6 +6,8 @@
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 
+#include <map>
+
 class Shader : public Asset
 {
 public:
@@ -46,20 +48,20 @@ public:
 	template<typename T>
 	int SetUniform(std::string uniformName, T& value)
 	{
-		int iPos = -1;
-		auto it = m_cachedShaderUniforms.find(uniformName);
-		if (it == m_cachedShaderUniforms.end())
+		int UnifromID = -1;
+		auto Uniform = m_cachedShaderUniforms.find(uniformName);
+		if (Uniform == m_cachedShaderUniforms.end())
 		{
-			iPos = glGetUniformLocation(m_shaderID, uniformName.c_str());
-			m_cachedShaderUniforms[uniformName] = iPos;
+			UnifromID = glGetUniformLocation(m_ProgramID, uniformName.c_str());
+			m_cachedShaderUniforms[uniformName] = UnifromID;
 		}
 		else
 		{
-			iPos = it->second;
+			UnifromID = Uniform->second;
 		}
 
-		SetUniform(iPos, value);
-		return iPos;
+		SetUniform(UnifromID, value);
+		return UnifromID;
 	}
 
 	void SetUniform(int uniformID, float value);
@@ -76,6 +78,8 @@ private:
 
 	GLuint m_ProgramID;
 	GLuint m_shaderUniforms[SupportedShaderUniforms::NUM_SUPPORTED_UNIFORMS];
+
+	std::map<std::string, int> m_cachedShaderUniforms;
 
 };
 

@@ -9,11 +9,14 @@ enable_testing()
 
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Builds)
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Builds)
+set (ASSETS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/data)
 
 #add common include directories for dependancies
 include_directories(${CMAKE_SOURCE_DIR}/deps/gl)
 include_directories(${CMAKE_SOURCE_DIR}/deps/glfw/include)
 include_directories(${CMAKE_SOURCE_DIR}/deps/utilities)
+include_directories(${CMAKE_SOURCE_DIR}/deps/memalign)
+include_directories(${CMAKE_SOURCE_DIR}/deps/imgui)
 include_directories(${CMAKE_SOURCE_DIR}/deps/fbx)
 include_directories(${CMAKE_SOURCE_DIR}/deps/stb)
 

@@ -27,6 +27,8 @@ public:
 
 	void Render(Camera* pCamera, bool setUniforms = true);
 
+	Shader* GetShader() const { return m_pShader; }
+
 private:
 
 	void onBind() override;

@@ -20,7 +20,9 @@ Mesh::Mesh()
 
 Mesh::~Mesh()
 {
-
+	delete m_pRenderObject;
+	delete m_pMaterial;
+	delete m_pShader;
 }
 
 void Mesh::LoadFile(std::string fileName)
@@ -31,7 +33,7 @@ void Mesh::LoadFile(std::string fileName)
 
 	if (fileType == "fbx")
 	{
-		//LoadFBX(fileName);
+		LoadFBX(fileName);
 	}
 
 }
@@ -76,7 +78,6 @@ void Mesh::LoadFBX(std::string fileName)
 {
 	FBXFile* fbx = new FBXFile();
 	bool bLoaded = fbx->load(fileName.c_str());
-
 
 	FBXMeshNode* pMesh = fbx->getMeshByIndex(0);
 	assert(pMesh && "Require at least one mesh in your FBX");

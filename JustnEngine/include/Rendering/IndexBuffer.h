@@ -11,20 +11,20 @@ public:
 	IndexBuffer();
 	~IndexBuffer();
 
-	void GenerateBuffer(GLuint &data);
+	void GenerateBuffer(GLuint* data);
 	void Unbind();
 	void Bind(GLuint data);
 	void BindBuffer(GLuint data, GLuint size, GLuint* bufferData);
 
 	void DeleteBuffers(GLuint IBO);
 
-	GLuint* GetBufferData();
+	GLuint GetBufferSize();
 
 	GLuint* GenerateGridIndex(GLuint rows, GLuint cols);
 
 private:
 
 	GLuint m_IBO;
-	GLuint* m_IBO_Data;
+	GLuint m_IBO_Size;
 };
 

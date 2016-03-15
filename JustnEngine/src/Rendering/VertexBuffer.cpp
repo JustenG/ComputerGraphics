@@ -10,9 +10,9 @@ VertexBuffer::~VertexBuffer()
 {
 }
 
-void VertexBuffer::GenerateBuffer(GLuint &data)
+void VertexBuffer::GenerateBuffer(GLuint* data)
 {
-	glGenBuffers(1, &data);
+	glGenBuffers(1, data);
 }
 
 void VertexBuffer::Unbind()

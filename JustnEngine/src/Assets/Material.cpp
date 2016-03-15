@@ -5,8 +5,7 @@
 
 Material::Material()
 {
-
-
+	memset(m_pTextures, 0, sizeof(Texture*) * TextureSlots::TextureTypes_Count);
 }
 
 Material::~Material()
@@ -18,7 +17,8 @@ void Material::onBind()
 {
 	for (int i = 0; i < TextureSlots::TextureTypes_Count; ++i)
 	{
-		if (m_pTextures[i])	m_pTextures[i]->Bind();
+		if (m_pTextures[i])
+			m_pTextures[i]->Bind();
 	}
 }
 
@@ -26,7 +26,8 @@ void Material::onUnbind()
 {
 	for (int i = 0; i < TextureSlots::TextureTypes_Count; ++i)
 	{
-		if (m_pTextures[i])	m_pTextures[i]->Unbind();
+		if (m_pTextures[i])
+			m_pTextures[i]->Unbind();
 	}
 }
 

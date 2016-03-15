@@ -11,7 +11,7 @@ public:
 	VertexBuffer();
 	~VertexBuffer();
 
-	void GenerateBuffer(GLuint &data);
+	void GenerateBuffer(GLuint* data);
 	template<typename T>
 	void BindBuffer(GLuint data, GLuint size, T* bufferData);
 	void Bind(GLuint data);

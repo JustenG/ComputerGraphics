@@ -27,13 +27,13 @@ public:
 	template<typename T>
 	void InitializeFromLoaderMaterial(T* pMaterial)
 	{
-		LoadIfExists(TextureSlots::DiffuseTexture, pMaterial, TextureSlots::DiffuseTexture);
-		LoadIfExists(TextureSlots::AmbientTexture, pMaterial, TextureSlots::AmbientTexture);
-		LoadIfExists(TextureSlots::GlowTexture, pMaterial, TextureSlots::GlowTexture);
-		LoadIfExists(TextureSlots::SpecularTexture, pMaterial, TextureSlots::SpecularTexture);
-		LoadIfExists(TextureSlots::GlossTexture, pMaterial, TextureSlots::GlossTexture);
-		LoadIfExists(TextureSlots::NormalTexture, pMaterial, TextureSlots::NormalTexture);
-		LoadIfExists(TextureSlots::AlphaTexture, pMaterial, TextureSlots::AlphaTexture);
+		LoadIfExists(TextureSlots::DiffuseTexture,		pMaterial, TextureSlots::DiffuseTexture);
+		LoadIfExists(TextureSlots::AmbientTexture,		pMaterial, TextureSlots::AmbientTexture);
+		LoadIfExists(TextureSlots::GlowTexture,			pMaterial, TextureSlots::GlowTexture);
+		LoadIfExists(TextureSlots::SpecularTexture,		pMaterial, TextureSlots::SpecularTexture);
+		LoadIfExists(TextureSlots::GlossTexture,		pMaterial, TextureSlots::GlossTexture);
+		LoadIfExists(TextureSlots::NormalTexture,		pMaterial, TextureSlots::NormalTexture);
+		LoadIfExists(TextureSlots::AlphaTexture,		pMaterial, TextureSlots::AlphaTexture);
 		LoadIfExists(TextureSlots::DisplacementTexture, pMaterial, TextureSlots::DisplacementTexture);
 	}
 

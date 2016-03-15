@@ -91,7 +91,7 @@ void Shader::LoadShader(const GLchar* vertexPath, const GLchar* fragmentPath)
 	glBindAttribLocation(m_ProgramID, 4, "TexCoords2");
 	glBindAttribLocation(m_ProgramID, 5, "Tangent");
 	glBindAttribLocation(m_ProgramID, 6, "Binormal");
-	glBindAttribLocation(m_ProgramID, 7, "Indicies");
+	glBindAttribLocation(m_ProgramID, 7, "Indices");
 	glBindAttribLocation(m_ProgramID, 8, "Weights");
 
 	glLinkProgram(m_ProgramID);
@@ -112,11 +112,11 @@ void Shader::LoadShader(const GLchar* vertexPath, const GLchar* fragmentPath)
 
 	Bind();
 	//Prepare Shade rUniforms
-	m_shaderUniforms[SupportedShaderUniforms::Projection] = glGetUniformLocation(m_ProgramID, "Projection");
-	m_shaderUniforms[SupportedShaderUniforms::View] = glGetUniformLocation(m_ProgramID, "View");
-	m_shaderUniforms[SupportedShaderUniforms::Model] = glGetUniformLocation(m_ProgramID, "Model");
-	m_shaderUniforms[SupportedShaderUniforms::ProjectionView] = glGetUniformLocation(m_ProgramID, "ProjectionView");
-	m_shaderUniforms[SupportedShaderUniforms::ProjectionViewModel] = glGetUniformLocation(m_ProgramID, "ProjectionViewModel");
+	m_shaderUniforms[SupportedShaderUniforms::Projection] = glGetUniformLocation(m_ProgramID, "projection");
+	m_shaderUniforms[SupportedShaderUniforms::View] = glGetUniformLocation(m_ProgramID, "view");
+	m_shaderUniforms[SupportedShaderUniforms::Model] = glGetUniformLocation(m_ProgramID, "model");
+	m_shaderUniforms[SupportedShaderUniforms::ProjectionView] = glGetUniformLocation(m_ProgramID, "projectionView");
+	m_shaderUniforms[SupportedShaderUniforms::ProjectionViewModel] = glGetUniformLocation(m_ProgramID, "projectionViewModel");
 	//Setup Texture Locations
 	m_shaderUniforms[SupportedShaderUniforms::DiffuseTexture] = glGetUniformLocation(m_ProgramID, "DiffuseTexture");
 	m_shaderUniforms[SupportedShaderUniforms::AmbientTexture] = glGetUniformLocation(m_ProgramID, "AmbientTexture");

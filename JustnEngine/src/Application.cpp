@@ -65,7 +65,7 @@ int Application::Startup()
 void Application::Run()
 {
 	Startup();
-
+	Initialize();
 	while (glfwWindowShouldClose(window) == false && glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS)
 	{
 		//RunEvents(); // (Virtual fucntion)
@@ -76,7 +76,7 @@ void Application::Run()
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
-
+	Destroy();
 	Shutdown();
 }
 
