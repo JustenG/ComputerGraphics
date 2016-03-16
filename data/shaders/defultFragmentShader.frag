@@ -14,9 +14,9 @@ uniform sampler2D NormalTexture;
 uniform sampler2D AlphaTexture;
 uniform sampler2D DisplacementTexture;
 
+uniform vec3 cameraPosition;
 uniform vec3 lightDir;
 uniform vec3 lightColour;
-uniform vec3 cameraPos;
 uniform int specPow;
 
 void main()

@@ -3,6 +3,7 @@
 #include "Assets\Mesh.h"
 #include "Assets\Shader.h"
 #include "Cameras\Camera.h"
+#include "Cameras\FlyCamera.h"
 
 class Mesh;
 
@@ -14,12 +15,14 @@ public:
 
 	void Update();
 	void Draw();
-	void Initialize();
+	void Initialise();
 	void Destroy();
 
 private:
 
 	Mesh* m_pModel;
+
+	FlyCamera* m_pFlyCam;
 
 };
 

@@ -19,6 +19,7 @@ public:
 		Model,
 		ProjectionView,
 		ProjectionViewModel,
+		CameraPosition,
 
 		/*Texture Samplers*/
 		DiffuseTexture,
@@ -44,6 +45,7 @@ public:
 	void SetModelUniform(const glm::mat4& mat);
 	void SetProjectionViewUniform(const glm::mat4& mat);
 	void SetProjectionViewModelUniform(const glm::mat4& mat);
+	void SetCameraPositionUniform(const glm::vec3& vec);
 
 	template<typename T>
 	int SetUniform(std::string uniformName, T& value)

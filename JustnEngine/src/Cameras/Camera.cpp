@@ -6,11 +6,9 @@ using glm::mat4;
 
 Camera::Camera()
 {
-	rotationMatrix = mat4(1);
-	forward = mat4(1);
-	forwardVec = vec3(1);
+	SetPerspective(45, 16 / 9.0f, 1, 1000);
+	SetLookAt(vec3(0, 10, 10), vec3(0), vec3(0, 1, 0));
 }
-
 
 Camera::~Camera()
 {
@@ -18,10 +16,8 @@ Camera::~Camera()
 
 void Camera::Update(float deltaTime, GLFWwindow* window)
 {
-
+	UpdateProjectionViewTransform();
 }
-
-
 
 void Camera::SetPerspective(float fieldOfView, float aspectRatio, float _near, float _far)
 {
@@ -38,15 +34,15 @@ void Camera::UpdateProjectionViewTransform()
 	projectionViewTransform = projectionTransform * GetView();
 }
 
-vec3 Camera::GetPos()
-{;
-	return vec3(worldTransform[3][0], worldTransform[3][1], worldTransform[3][2]);
-}
-
-void Camera::MovePos(vec3 pos)
-{
-	worldTransform[3] = glm::vec4( vec3(worldTransform[3]) + pos, 1 );
-}
+//vec3 Camera::GetPos()
+//{;
+//	return vec3(worldTransform[3][0], worldTransform[3][1], worldTransform[3][2]);
+//}
+//
+//void Camera::MovePos(vec3 pos)
+//{
+//	worldTransform[3] = glm::vec4( vec3(worldTransform[3]) + pos, 1 );
+//}
 
 mat4 Camera::GetView()
 {

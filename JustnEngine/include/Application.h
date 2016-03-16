@@ -21,55 +21,47 @@ class Application
 {
 public:
 	Application();
-	virtual ~Application();
+	virtual ~Application() = 0;
 
+	virtual void Initialise() = 0;
+	virtual void EarlyUpdate() = 0;
 	virtual void Update() = 0;
+	virtual void LateUpdate() = 0;
 	virtual void Draw() = 0;
-	virtual void Initialize() = 0;
 	virtual void Destroy() = 0;
 
-	int Startup();
-	void Run();
-	void EarlyUpdate();
+	int Startup(int width, int height);
+	void Run(int windowWidth, int windowHeight);
+	void EngineUpdate();
+	void UpdateTime();
+	void UpdateGL();
+	void UpdateGizmos();
+	void UpdateImGui();
+	void Render();
 	void DrawGizmos();
 	void Shutdown();
 
-	Camera* GetCamera();
+	void SetCamera(Camera* camera);
+	void SetGizmos(bool active);
+
+	float GetDeltaTime();
+	GLFWwindow* GetWindow();
 
 private:
 	
 	//WINDOW
 	//------------------------
-	GLFWwindow* window;
+	GLFWwindow* m_pWindow;
 	//------------------------
 
 	//TIME
 	//-----------------------
-	float currentTime;
-	float deltaTime;
-	float previousTime;
+	float currentTime, deltaTime, previousTime;
 	//-----------------------
 
-	//Version Control
-	//------------------------
-	int major;
-	int minor;
-	//------------------------
+	Camera* m_pCamera;
+	bool m_isGizmosActive;
 
-	//Camera
-	//------------------------
-	FlyCamera* m_fCamera;
-
-	float camRotation;
-	float camX;
-	float camY;
-	//-----------------------
-
-	vec4 white;
-	vec4 black;
-
-	Asset* m_Soulspear;
-	Asset* m_Pyro;
-
+	vec4 white, black;
 };
 

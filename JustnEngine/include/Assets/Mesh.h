@@ -14,8 +14,9 @@ class Shader;
 class Material;
 class FBXMeshNode;
 class Camera;
+class Component;
 
-class Mesh : public Asset
+class Mesh : public Asset, public Component
 {
 public:
 	Mesh();

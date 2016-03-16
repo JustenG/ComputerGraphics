@@ -117,6 +117,7 @@ void Shader::LoadShader(const GLchar* vertexPath, const GLchar* fragmentPath)
 	m_shaderUniforms[SupportedShaderUniforms::Model] = glGetUniformLocation(m_ProgramID, "model");
 	m_shaderUniforms[SupportedShaderUniforms::ProjectionView] = glGetUniformLocation(m_ProgramID, "projectionView");
 	m_shaderUniforms[SupportedShaderUniforms::ProjectionViewModel] = glGetUniformLocation(m_ProgramID, "projectionViewModel");
+	m_shaderUniforms[SupportedShaderUniforms::CameraPosition] = glGetUniformLocation(m_ProgramID, "cameraPosition");
 	//Setup Texture Locations
 	m_shaderUniforms[SupportedShaderUniforms::DiffuseTexture] = glGetUniformLocation(m_ProgramID, "DiffuseTexture");
 	m_shaderUniforms[SupportedShaderUniforms::AmbientTexture] = glGetUniformLocation(m_ProgramID, "AmbientTexture");
@@ -171,6 +172,13 @@ void Shader::SetProjectionViewModelUniform(const glm::mat4& mat)
 {
 	Bind();
 	glUniformMatrix4fv(m_shaderUniforms[SupportedShaderUniforms::ProjectionViewModel], 1, GL_FALSE, glm::value_ptr(mat));
+	Unbind();
+}
+
+void Shader::SetCameraPositionUniform(const glm::vec3& vec)
+{
+	Bind();
+	glUniform3fv(m_shaderUniforms[SupportedShaderUniforms::CameraPosition], 1, glm::value_ptr(vec));
 	Unbind();
 }
 

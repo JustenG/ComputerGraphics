@@ -16,34 +16,44 @@ SET(SOURCES
 	
 	src/Cameras/Camera.cpp
 	src/Cameras/FlyCamera.cpp
+
+	src/Components/Component.cpp
+	src/Components/ComponentManager.cpp
+	src/Components/GameObject.cpp
+	src/Components/Transform.cpp
 	
 	src/Rendering/IndexBuffer.cpp
 	src/Rendering/VertexArrayObject.cpp
 	src/Rendering/VertexBuffer.cpp
 
 	src/Assets/Asset.cpp
-	src/Assets/FBX.cpp
 	src/Assets/Material.cpp
 	src/Assets/Mesh.cpp
 	src/Assets/Shader.cpp
 	src/Assets/Texture.cpp
+
 )
 SET(HEADERS
 	include/Application.h
 	
 	include/Cameras/Camera.h
 	include/Cameras/FlyCamera.h
+
+	include/Components/Component.h
+	include/Components/ComponentManager.h
+	include/Components/GameObject.h
+	include/Components/Transform.h
 	
 	include/Rendering/IndexBuffer.h
 	include/Rendering/VertexArrayObject.h
 	include/Rendering/VertexBuffer.h
 
 	include/Assets/Asset.h	
-	include/Assets/FBX.h
 	include/Assets/Material.h
 	include/Assets/Mesh.h
 	include/Assets/Shader.h
 	include/Assets/Texture.h
+
 )
 
 SET(EXTRA_SOURCES
@@ -71,6 +81,7 @@ source_group(Base ./)
 source_group(ExtraSources FILES ${EXTRA_SOURCES})
 source_group(Assets .*/Assets.*/)
 source_group(Cameras .*/Cameras/)
+source_group(Components .*/Components/)
 source_group(Rendering .*/Rendering/)
 
 

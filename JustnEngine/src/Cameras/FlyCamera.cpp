@@ -8,9 +8,6 @@ using glm::mat4;
 FlyCamera::FlyCamera()
 {
 	SetSpeed(5);
-	SetPerspective(45, 16 / 9.0f, 1, 1000);
-	SetLookAt(vec3(0,10,10), vec3(0), vec3(0, 1, 0));
-
 	prevMouseX = 0;
 	prevMouseY = 0;
 }
@@ -23,8 +20,8 @@ FlyCamera::~FlyCamera()
 
 void FlyCamera::Update(float deltaTime, GLFWwindow* window)
 {
-	GetInput(deltaTime, window);
-	MouseContol(deltaTime, window);
+	//GetInput(deltaTime, window);
+	//MouseContol(deltaTime, window);
 	UpdateProjectionViewTransform();
 }
 void FlyCamera::SetSpeed(float _speed)
@@ -32,32 +29,32 @@ void FlyCamera::SetSpeed(float _speed)
 	speed = _speed;
 }
 
-void FlyCamera::GetInput(float deltaTime, GLFWwindow* window)
-{
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-	{
-		vec3 vForward = glm::normalize( vec3(worldTransform[2].x, worldTransform[2].y, worldTransform[2].z) );
-		MovePos(-vForward * speed * deltaTime);
-	}
-
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-	{
-		vec3 vForward = glm::normalize( vec3(worldTransform[2].x, worldTransform[2].y, worldTransform[2].z) );
-		MovePos(vForward * speed * deltaTime);
-	}
-
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-	{
-		vec3 vRight = vec3(worldTransform[0].x, worldTransform[0].y, worldTransform[0].z);
-		MovePos(-vRight * speed * deltaTime);
-	}
-
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-	{
-		vec3 vRight = vec3(worldTransform[0].x, worldTransform[0].y, worldTransform[0].z);
-		MovePos(vRight * speed * deltaTime);
-	}
-}
+//void FlyCamera::GetInput(float deltaTime, GLFWwindow* window)
+//{
+//	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+//	{
+//		vec3 vForward = glm::normalize( vec3(worldTransform[2].x, worldTransform[2].y, worldTransform[2].z) );
+//		MovePos(-vForward * speed * deltaTime);
+//	}
+//
+//	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+//	{
+//		vec3 vForward = glm::normalize( vec3(worldTransform[2].x, worldTransform[2].y, worldTransform[2].z) );
+//		MovePos(vForward * speed * deltaTime);
+//	}
+//
+//	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+//	{
+//		vec3 vRight = vec3(worldTransform[0].x, worldTransform[0].y, worldTransform[0].z);
+//		MovePos(-vRight * speed * deltaTime);
+//	}
+//
+//	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+//	{
+//		vec3 vRight = vec3(worldTransform[0].x, worldTransform[0].y, worldTransform[0].z);
+//		MovePos(vRight * speed * deltaTime);
+//	}
+//}
 
 void FlyCamera::MouseContol(float deltaTime, GLFWwindow* window)
 {

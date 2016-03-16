@@ -60,6 +60,7 @@ void Mesh::Render(Camera* pCamera, bool setUniforms)
 		m_pShader->SetViewUniform(pCamera->GetView());
 		m_pShader->SetProjectionViewUniform(pCamera->GetProjectionView());
 		m_pShader->SetProjectionViewModelUniform(pCamera->GetProjectionView());
+		//m_pShader->SetCameraPositionUniform(pCamera->GetPos());
 	}
 
 	Bind();

@@ -1,87 +1,96 @@
 #include "Application.h"
 
 #include "Cameras/FlyCamera.h"
-
+#include "imgui.h"
+#include "imgui_impl_glfw_gl3.h"
+#include "Components\ComponentManager.h"
 Application::Application()
 {
 }
 
-
-Application::~Application()
+int Application::Startup(int width, int height)
 {
-}
-
-Camera* Application::GetCamera()
-{
-	return m_fCamera;
-}
-
-int Application::Startup()
-{
+	//Setup Data
 	currentTime = 0;
 	deltaTime = 0;
 	previousTime = (float)glfwGetTime();
-	m_fCamera = new FlyCamera();
 	white = vec4(0, 0, 0, 1);
 	black = vec4(1, 1, 1, 1);
+	m_isGizmosActive = false;
+	m_pCamera = nullptr;
 
 	//If GL fails to initalise
 	if (glfwInit() == false)
 		return -1;
 
 	//Make window
-	window = glfwCreateWindow(1280, 720, "Open GL - Computer Graphics", nullptr, nullptr);
+	m_pWindow = glfwCreateWindow(width, height, "Open GL - Computer Graphics", nullptr, nullptr);
 
 	//If window fails
-	if (window == nullptr)
+	if (m_pWindow == nullptr)
 	{
 		glfwTerminate();
 		return -2;
 	}
 
-	glfwMakeContextCurrent(window);
+	glfwMakeContextCurrent(m_pWindow);
 
 	//If window fails to remap all of OpenGL’s function calls to the correct versions and feature sets
 	if (ogl_LoadFunctions() == ogl_LOAD_FAILED)
 	{
-		glfwDestroyWindow(window);
+		glfwDestroyWindow(m_pWindow);
 		glfwTerminate();
 		return -3;
 	}
-	
-	Gizmos::create();
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	
-	major = ogl_GetMajorVersion();
-	minor = ogl_GetMinorVersion();
 
-	camRotation = 0;
-	camX = 200;
-	camY = 200;
+	//SetUp GL input
+	glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//Initialise GUI
+	ImGui_ImplGlfwGL3_Init(m_pWindow, true);
+
+	ImGuiIO& io = ImGui::GetIO();
+	io.DisplaySize.x = width;
+	io.DisplaySize.y = height;
+
+	//Create Gizmos
+	Gizmos::create();
+
+
 
 	return 0;
 }
 
-void Application::Run()
+void Application::Run(int windowWidth, int windowHeight)
 {
-	Startup();
-	Initialize();
-	while (glfwWindowShouldClose(window) == false && glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS)
+	if (Startup(windowWidth, windowHeight) != 0) return;
+	Initialise();
+
+	while (glfwWindowShouldClose(m_pWindow) == false && glfwGetKey(m_pWindow, GLFW_KEY_ESCAPE) != GLFW_PRESS)
 	{
-		//RunEvents(); // (Virtual fucntion)
+		EngineUpdate();
 		EarlyUpdate();
 		Update();
-		Draw();
+		LateUpdate();
 
-		glfwSwapBuffers(window);
+		Render();
+
+		glfwSwapBuffers(m_pWindow);
 		glfwPollEvents();
 	}
+
 	Destroy();
 	Shutdown();
 }
 
+void Application::EngineUpdate()
+{
+	UpdateTime();
+	UpdateGL();
+	if(m_isGizmosActive) UpdateGizmos();
+	UpdateImGui();
+}
 
-void Application::EarlyUpdate()
+void Application::UpdateTime()
 {
 	//Time
 	//-------------------------------------------------------------------
@@ -89,19 +98,18 @@ void Application::EarlyUpdate()
 	deltaTime = currentTime - previousTime; // prev of last frame
 	previousTime = currentTime;
 	//-------------------------------------------------------------------
-
+}
+void Application::UpdateGL()
+{
 	//OPEN GL settings
 	//---------------------------------------------------------
 	glClearColor(0.2f, 0.2f, 0.2f, 1);
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//---------------------------------------------------------
-
-	//Update Camera
-	//------------------------------
-	m_fCamera->Update(deltaTime, window);
-	//------------------------------
-
+}
+void Application::UpdateGizmos()
+{
 	Gizmos::clear();
 	Gizmos::addTransform(glm::mat4(1));
 
@@ -114,18 +122,61 @@ void Application::EarlyUpdate()
 		Gizmos::addLine(vec3(10, 0, -10 + i) * gridScale, vec3(-10, 0, -10 + i) * gridScale, i == 10 * gridScale ? white : black);
 	}
 	//----------------------------------------------------
-
 }
+
+void Application::UpdateImGui()
+{
+	//Clear ImGui
+	ImGui_ImplGlfwGL3_NewFrame();
+
+	//Update ImGuiS
+	ImGui::ColorEdit3("Grid Colour", glm::value_ptr(white));
+}
+
+ void Application::Render()
+ {
+	 if (m_pCamera == nullptr) 
+	 { 
+		 printf("WARNING: No camera set, unable to render"); 
+		 return; 
+	 }
+
+	 Draw();
+	 if(m_isGizmosActive) DrawGizmos();
+	 ImGui::Render();
+ }
+
 void Application::DrawGizmos()
 {
-	Gizmos::draw(m_fCamera->GetProjectionView());
+	if(m_pCamera != nullptr) Gizmos::draw(m_pCamera->GetProjectionView());
 }
+
 void Application::Shutdown()
 {
 	Gizmos::destroy();
-	glfwDestroyWindow(window);
+	ImGui_ImplGlfwGL3_Shutdown();
+	glfwDestroyWindow(m_pWindow);
 	glfwTerminate();
-
-	delete m_fCamera;
 }
+
+float Application::GetDeltaTime()
+{
+	return deltaTime;
+}
+
+GLFWwindow* Application::GetWindow()
+{
+	return m_pWindow;
+}
+
+void Application::SetCamera(Camera* camera)
+{
+	m_pCamera = camera;
+}
+
+void Application::SetGizmos(bool active)
+{
+	m_isGizmosActive = active;
+}
+
 
