@@ -8,11 +8,14 @@
 #include "gl_core_4_4.h"
 #include "Assets\Material.h"
 
+#include "Components\Transform.h"
+#include "Cameras\Camera.h"
 
 class VertexArrayObject;
 class Shader;
 class Material;
 class FBXMeshNode;
+class Transform;
 class Camera;
 class Component;
 
@@ -26,7 +29,8 @@ public:
 	void LoadFBX(std::string fileName);
 	void LoadShader(const GLchar* vertexPath, const GLchar* fragmentPath);
 
-	void Render(Camera* pCamera, bool setUniforms = true);
+	void Update();
+	void Render(Transform transform, Camera camera, Light light, bool setUniforms;
 
 	Shader* GetShader() const { return m_pShader; }
 
@@ -46,6 +50,8 @@ private:
 		(*pMaterial)->InitializeFromLoaderMaterial(pLoaderMaterial);
 
 	}
+
+	int m_specularPower;
 
 	VertexArrayObject* m_pRenderObject;
 	Shader* m_pShader;

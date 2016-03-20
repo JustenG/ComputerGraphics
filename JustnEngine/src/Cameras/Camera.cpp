@@ -1,5 +1,8 @@
 #include "Cameras\Camera.h"
 
+#include <GLFW\glfw3.h>
+#include "Components\Transform.h"
+
 using glm::vec3;
 using glm::vec4;
 using glm::mat4;
@@ -14,8 +17,9 @@ Camera::~Camera()
 {
 }
 
-void Camera::Update(float deltaTime, GLFWwindow* window)
+void Camera::Update(Transform transform)
 {
+	worldTransform = transform.GetMatrix();
 	UpdateProjectionViewTransform();
 }
 
@@ -34,11 +38,11 @@ void Camera::UpdateProjectionViewTransform()
 	projectionViewTransform = projectionTransform * GetView();
 }
 
-//vec3 Camera::GetPos()
-//{;
-//	return vec3(worldTransform[3][0], worldTransform[3][1], worldTransform[3][2]);
-//}
-//
+vec3 Camera::GetPosition()
+{
+	return vec3(worldTransform[3][0], worldTransform[3][1], worldTransform[3][2]);
+}
+
 //void Camera::MovePos(vec3 pos)
 //{
 //	worldTransform[3] = glm::vec4( vec3(worldTransform[3]) + pos, 1 );

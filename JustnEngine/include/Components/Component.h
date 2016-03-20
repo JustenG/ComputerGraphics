@@ -8,6 +8,11 @@ public:
 
 	virtual void Update() = 0;
 
+	void SetTransformIndex(int transformIndex);
+	int GetTransformIndex();
+
 private:
+
+	int m_transformIndex;
 
 };

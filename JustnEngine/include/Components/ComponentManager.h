@@ -8,16 +8,22 @@ class Mesh;
 class ComponentManager
 {
 public:
-	ComponentManager();
+	static ComponentManager* GetInstance();
 	~ComponentManager();
+	ComponentManager(ComponentManager const&) = delete;
+	void operator=(ComponentManager const&) = delete;
 
 	void UpdateAllComponents();
 	void RenderAllComponents();
 
 	template<typename T>
 	int AddComponent();
+	template<typename T>
+	T* GetComponent(int index);
 
 private:
+	ComponentManager();
+	static ComponentManager* m_instance;
 
 	//A Vector of every componenet in-game
 	std::vector<Transform> Transfroms;

@@ -16,12 +16,27 @@ public:
 
 private:
 
-	std::map<char const*, int> Components;
+	ComponentManager* m_pComponentManager;
+
+	std::map<size_t, int> m_components;
+	template<typename T>
+	size_t GetID();
+
+	bool m_hasTransform;
+	bool m_hasCamera;
+	bool m_hasMesh;
+	bool m_hasLight;
 };
 
 template<typename T>
 void GameObject::AddComponent()
 {
-	Components[typeid(T).name()] = ComponentManager->AddComponent<T>();
+	m_components[typeid(T).hash_code()] = ComponentManager->AddComponent<T>();
+}
+
+template<typename T>
+size_t GameObject::GetID()
+{
+	return typeid(T).hash_code();
 }
 

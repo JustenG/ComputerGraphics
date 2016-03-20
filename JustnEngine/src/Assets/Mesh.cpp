@@ -52,15 +52,22 @@ void Mesh::onUnbind()
 	m_pShader->Unbind();
 }
 
-void Mesh::Render(Camera* pCamera, bool setUniforms)
+
+void Mesh::Render(Transform transform, Camera camera, Light light, bool setUniforms)
 {
 	if (setUniforms)
 	{
-		m_pShader->SetProjectionUniform(pCamera->GetProjection());
-		m_pShader->SetViewUniform(pCamera->GetView());
-		m_pShader->SetProjectionViewUniform(pCamera->GetProjectionView());
-		m_pShader->SetProjectionViewModelUniform(pCamera->GetProjectionView());
-		//m_pShader->SetCameraPositionUniform(pCamera->GetPos());
+		m_pShader->SetModelUniform(transform.GetMatrix());
+
+		m_pShader->SetCameraPositionUniform(camera.GetPosition());
+		m_pShader->SetProjectionUniform(camera.GetProjection());
+		m_pShader->SetViewUniform(camera.GetView());
+		m_pShader->SetProjectionViewUniform(camera.GetProjectionView());
+		m_pShader->SetProjectionViewModelUniform(camera.GetProjectionView());
+
+		m_pShader->SetUniform("lightDirection", light.GetDirection());
+		m_pShader->SetUniform("lightColour", light.GetColour());
+		m_pShader->SetUniform("specPow", m_specularPower);
 	}
 
 	Bind();
@@ -71,7 +78,7 @@ void Mesh::Render(Camera* pCamera, bool setUniforms)
 	for (unsigned int i = 0; i < m_internalMeshes.size(); ++i)
 	{
 		Mesh* pMesh = m_internalMeshes[i];
-		pMesh->Render(pCamera,false);
+		pMesh->Render(transform, camera, light, false);
 	}
 }
 
