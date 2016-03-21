@@ -23,6 +23,16 @@ void Camera::Update(Transform transform)
 	UpdateProjectionViewTransform();
 }
 
+void Camera::SetActive()
+{
+	GLuint ID = m_pFBO.GetId();
+	glBindFramebuffer(GL_FRAMEBUFFER, m_pFBO.GetId());
+	glViewport(0, 0, m_pFBO.GetSize.x, m_pFBO.GetSize.y);
+
+	glClearColor(0.2f, 0.2f, 0.2f, 1);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
 void Camera::SetPerspective(float fieldOfView, float aspectRatio, float _near, float _far)
 {
 	projectionTransform = glm::perspective(fieldOfView * glm::pi<float>() / 180.f, aspectRatio, _near, _far);

@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 #include "Components\Component.h"
+#include "Rendering\FrameBuffer.h"
 
 class GLFWwindow;
 class Transform;
@@ -24,6 +25,8 @@ public:
 	glm::vec3 GetPosition();
 	//void MovePos(glm::vec3 position);
 
+	void SetActive();
+
 	glm::mat4 GetView();
 	glm::mat4 GetProjection();
 	glm::mat4 GetProjectionView();
@@ -33,5 +36,8 @@ protected:
 	glm::mat4 worldTransform;
 	glm::mat4 projectionTransform;
 	glm::mat4 projectionViewTransform;
+
+	FrameBuffer m_pFBO;
+
 };
 

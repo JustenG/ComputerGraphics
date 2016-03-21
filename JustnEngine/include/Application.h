@@ -52,6 +52,7 @@ private:
 	//WINDOW
 	//------------------------
 	GLFWwindow* m_pWindow;
+	GLuint* m_fbo;
 	//------------------------
 
 	//TIME

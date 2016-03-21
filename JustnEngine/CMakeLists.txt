@@ -21,7 +21,8 @@ SET(SOURCES
 	src/Components/ComponentManager.cpp
 	src/Components/GameObject.cpp
 	src/Components/Transform.cpp
-	
+
+	src/Rendering/FrameBuffer.cpp	
 	src/Rendering/IndexBuffer.cpp
 	src/Rendering/VertexArrayObject.cpp
 	src/Rendering/VertexBuffer.cpp
@@ -44,6 +45,7 @@ SET(HEADERS
 	include/Components/GameObject.h
 	include/Components/Transform.h
 	
+	include/Rendering/FrameBuffer.h
 	include/Rendering/IndexBuffer.h
 	include/Rendering/VertexArrayObject.h
 	include/Rendering/VertexBuffer.h
@@ -83,7 +85,6 @@ source_group(Assets .*/Assets.*/)
 source_group(Cameras .*/Cameras/)
 source_group(Components .*/Components/)
 source_group(Rendering .*/Rendering/)
-
 
 #And we need to link against GLFW
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})

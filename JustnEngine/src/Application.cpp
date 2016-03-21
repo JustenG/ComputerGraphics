@@ -55,7 +55,7 @@ int Application::Startup(int width, int height)
 	//Create Gizmos
 	Gizmos::create();
 
-
+	glEnable(GL_DEPTH_TEST);
 
 	return 0;
 }
@@ -103,9 +103,7 @@ void Application::UpdateGL()
 {
 	//OPEN GL settings
 	//---------------------------------------------------------
-	glClearColor(0.2f, 0.2f, 0.2f, 1);
-	glEnable(GL_DEPTH_TEST);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	//---------------------------------------------------------
 }
 void Application::UpdateGizmos()

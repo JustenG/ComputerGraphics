@@ -31,20 +31,20 @@ void ComponentManager::UpdateAllComponents()
 		Transform transform = Transfroms[index];
 		Cameras[i].Update(transform);
 	}
-	for (int i = 0; i < Lights.size; ++i)
-	{
-		int index = Lights[i].GetTransformIndex();
-		Transform transform = Transfroms[index];
-		Lights[i].Update(transform);
-	}
+	//for (int i = 0; i < Lights.size; ++i)
+	//{
+	//	int index = Lights[i].GetTransformIndex();
+	//	Transform transform = Transfroms[index];
+	//	Lights[i].Update(transform);
+	//}
 	for (int i = 0; i < Meshs.size; ++i)
 	{
 
-		for (int i = 0; i < Lights.size; ++i)
-		{
+		//for (int i = 0; i < Lights.size; ++i)
+		//{
 
-			Meshs[i].Update(transform);
-		}
+		//	Meshs[i].Update(transform);
+		//}
 	}
 
 
@@ -59,7 +59,7 @@ void ComponentManager::RenderAllComponents()
 			int index = Meshs[i].GetTransformIndex();
 			Transform transform = Transfroms[index];
 
-			Meshs[j].Render(Transfroms[index],Cameras[i],Lights[i]);
+			//Meshs[j].Render(Transfroms[index],Cameras[i],Lights[i]);
 		}
 	}
 }
