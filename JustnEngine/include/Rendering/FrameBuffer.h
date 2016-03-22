@@ -15,23 +15,26 @@ public:
 	FrameBuffer();
 	~FrameBuffer();
 
-	bool Create();
+	void Bind();
+	void Unbind();
+
+	bool CreateBuffer(bool colour, bool depth);
+	void Reset(glm::ivec2 size);
 	void Destroy();
+	void SetShaderProgram(Shader* shader) { m_fboProgram = shader; }
 
 	GLuint GetId() const { return m_fboId; }
-	const Texture& GetTexture() const { return m_fboTexture; }
-	const Texture& GetDepthBufferId() const { return m_fboDepthTex; }
 	const glm::ivec2& GetSize() const { return m_fboSize; }
-	const Shader& GetShaderProgram() { return m_fboProgram; }
+	const Texture* GetTexture() const { return m_fboTexture; }
+	const Texture* GetDepthBufferId() const { return m_fboDepthTex; }
+	const Shader* GetShader() { return m_fboProgram; }
 
 private:
 
 	GLuint m_fboId = 0;
 	glm::ivec2 m_fboSize;
-	Texture m_fboTexture;
-	Texture m_fboDepthTex;
-	bool m_createColorBuffer;
-	bool m_createDepthBuffer;
-	Shader m_fboProgram; // Everything in this RenderPass will be rendered with the Program if it is set.
+	Texture* m_fboTexture;
+	Texture* m_fboDepthTex;
+	Shader* m_fboProgram; // Everything in this RenderPass will be rendered with the Program if it is set.
 
 };

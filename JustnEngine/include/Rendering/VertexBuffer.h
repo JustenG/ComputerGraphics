@@ -3,8 +3,6 @@
 #include "gl_core_4_4.h"
 #include "FBXFile.h"
 
-class Vertex;
-
 class VertexBuffer
 {
 public:
@@ -21,10 +19,6 @@ public:
 
 	template <typename T>
 	void SetAttributes(GLuint textureOffset, GLuint noramlOffset, GLuint tangent, GLuint weight, GLuint indices);
-
-
-
-	Vertex* GenerateGridVertex(GLuint rows, GLuint cols);
 
 private:
 

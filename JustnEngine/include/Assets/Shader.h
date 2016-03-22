@@ -38,7 +38,7 @@ public:
 	Shader();
 	~Shader();
 
-	void LoadShader(const GLchar* vertexPath, const GLchar* fragmentPath);
+	void LoadShader(std::string vertexPath, std::string fragmentPath);
 
 	void SetProjectionUniform(const glm::mat4& mat);
 	void SetViewUniform(const glm::mat4& mat);

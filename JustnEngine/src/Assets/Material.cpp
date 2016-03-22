@@ -35,9 +35,15 @@ void Material::LoadIfExists(TextureSlots slot, FBXMaterial* pMaterial, unsigned 
 {
 	if (pMaterial->textures[uiTextureType])
 	{
-		m_pTextures[slot] = new Texture();
-		m_pTextures[slot]->LoadTexture(pMaterial->textures[uiTextureType]->path);
-		m_pTextures[slot]->SetTextureSlot(slot);
+		std::string name(GetFileName() + "_Texture" + std::to_string(slot));
+		m_pAssetManager->LoadTexture(pMaterial->textures[uiTextureType]->path, name);
+
+		LoadTexture(m_pAssetManager->GetAsset<Texture>(name),slot);
 	}
 }
 
+void Material::LoadTexture(Texture* texture, TextureSlots slot)
+{
+	m_pTextures[slot] = texture;
+	m_pTextures[slot]->SetTextureSlot(slot);
+}

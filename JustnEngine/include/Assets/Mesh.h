@@ -7,6 +7,7 @@
 
 #include "gl_core_4_4.h"
 #include "Assets\Material.h"
+#include "Assets\Assetloader.h" //Change to manager
 
 #include "Components\Transform.h"
 #include "Cameras\Camera.h"
@@ -27,30 +28,32 @@ public:
 
 	void LoadFile(std::string fileName);
 	void LoadFBX(std::string fileName);
-	void LoadShader(const GLchar* vertexPath, const GLchar* fragmentPath);
 
 	void Update();
-	void Render(Transform transform, Camera camera, Light light, bool setUniforms;
+	void Render(Transform transform, Camera camera, std::vector<Light> lights, int shadowMap, bool setUniforms);
+
+	void SetShader(Shader* shader);
+	void SetMaterial(Material* material);
 
 	Shader* GetShader() const { return m_pShader; }
+	Material* GetMaterial() const { return m_pMaterial; }
 
 private:
 
 	void onBind() override;
 	void onUnbind() override;
 
-	void SetShader(Shader* shader);
-
 	void BuildRenderDataFromLoaderNode(VertexArrayObject** pRenderData, FBXMeshNode* pMesh);
 
 	template<typename T>
 	void BuildMaterialFromLoaderNode(Material** pMaterial, T* pLoaderMaterial)
 	{
-		*pMaterial = new Material();
+		m_pAssetManager->CreateMaterial(GetFileName());
+		*pMaterial = m_pAssetManager->GetAsset<Material>(GetFileName());
+
 		(*pMaterial)->InitializeFromLoaderMaterial(pLoaderMaterial);
 
 	}
-
 	int m_specularPower;
 
 	VertexArrayObject* m_pRenderObject;

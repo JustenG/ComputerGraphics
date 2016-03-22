@@ -3,20 +3,39 @@
 
 FrameBuffer::FrameBuffer()
 {
+	m_fboTexture = new Texture();
+	m_fboDepthTex = new Texture();
+	m_fboProgram = nullptr;
 }
 
 FrameBuffer::~FrameBuffer()
 {
 }
 
+void FrameBuffer::Bind()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, m_fboId);
+	glViewport(0, 0, m_fboSize.x, m_fboSize.y);
 
-bool FrameBuffer::Create()
+	m_fboTexture->Bind();
+	m_fboDepthTex->Bind();
+
+	glClearColor(0.2f, 0.2f, 0.2f, 1);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void FrameBuffer::Unbind()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+bool FrameBuffer::CreateBuffer(bool colour, bool depth)
 {
 	// setup framebuffer
 	glGenFramebuffers(1, &m_fboId);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_fboId);
 
-	if (m_createColorBuffer)
+	if (colour)
 	{
 		// Make the texture the FBO will render to.
 		GLuint fboTextureId;
@@ -34,14 +53,14 @@ bool FrameBuffer::Create()
 		glDrawBuffers(1, drawBuffers);
 
 		// Save the texture to be used by following render passes.
-		m_fboTexture.SetId(fboTextureId);
+		m_fboTexture->SetId(fboTextureId);
 	}
 	else
 	{
 		glDrawBuffer(GL_NONE);
 	}
 
-	if (m_createDepthBuffer)
+	if (depth)
 	{
 		// Create the depth buffer
 		/*
@@ -64,7 +83,7 @@ bool FrameBuffer::Create()
 
 		glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, fboDepthId, 0);
 
-		m_fboDepthTex.SetId(fboDepthId);
+		m_fboDepthTex->SetId(fboDepthId);
 
 	}
 
@@ -78,10 +97,18 @@ bool FrameBuffer::Create()
 	return true;
 }
 
+void FrameBuffer::Reset(glm::ivec2 size)
+{
+	Destroy();
+	glDeleteFramebuffers(1, &m_fboId);
+	m_fboId = 0;
+	m_fboSize = glm::ivec2(size);
+}
+
 void FrameBuffer::Destroy()
 {
-	GLuint texId = m_fboTexture.GetId();
-	GLuint depthTexId = m_fboDepthTex.GetId();
-	glDeleteTextures(1, &texId);
-	glDeleteTextures(1, &depthTexId);
+	GLuint texId = m_fboTexture->GetId();
+	GLuint depthTexId = m_fboDepthTex->GetId();
+	if (texId) glDeleteTextures(1, &texId);
+	if (depthTexId) glDeleteTextures(1, &depthTexId);
 }

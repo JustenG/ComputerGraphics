@@ -31,7 +31,7 @@ void Shader::onUnbind()
 	glUseProgram(0);
 }
 
-void Shader::LoadShader(const GLchar* vertexPath, const GLchar* fragmentPath)
+void Shader::LoadShader(std::string vertexPath, std::string fragmentPath)
 {
 	// 1. Retrieve the vertex/fragment source code from filePath
 

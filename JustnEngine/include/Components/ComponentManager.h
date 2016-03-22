@@ -21,9 +21,13 @@ public:
 	template<typename T>
 	T* GetComponent(int index);
 
+	void SetMainCamera(int index);
+
 private:
 	ComponentManager();
 	static ComponentManager* m_instance;
+
+	int m_mainCameraIndex;
 
 	//A Vector of every componenet in-game
 	std::vector<Transform> Transfroms;

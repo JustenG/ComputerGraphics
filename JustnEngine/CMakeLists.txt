@@ -28,6 +28,7 @@ SET(SOURCES
 	src/Rendering/VertexBuffer.cpp
 
 	src/Assets/Asset.cpp
+	src/Assets/AssetLoader.cpp
 	src/Assets/Material.cpp
 	src/Assets/Mesh.cpp
 	src/Assets/Shader.cpp
@@ -51,6 +52,7 @@ SET(HEADERS
 	include/Rendering/VertexBuffer.h
 
 	include/Assets/Asset.h	
+	include/Assets/AssetLoader.h	
 	include/Assets/Material.h
 	include/Assets/Mesh.h
 	include/Assets/Shader.h

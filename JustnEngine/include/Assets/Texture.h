@@ -20,7 +20,7 @@ private:
 	void onBind() override;
 	void onUnbind() override;
 
-	GLuint m_uiTextureID;
+	GLuint m_uiTextureID = 0;
 	GLuint m_uiTextureSlot = 0;
 	
 	//TODO: Add additional texture options

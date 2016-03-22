@@ -12,9 +12,16 @@ Camera::Camera()
 	SetPerspective(45, 16 / 9.0f, 1, 1000);
 	SetLookAt(vec3(0, 10, 10), vec3(0), vec3(0, 1, 0));
 }
+Camera::Camera(glm::ivec2 resolution)
+{
+	SetPerspective(45, 16 / 9.0f, 1, 1000);
+	SetLookAt(vec3(0, 10, 10), vec3(0), vec3(0, 1, 0));
+	SetResolution(resolution);
+}
 
 Camera::~Camera()
 {
+
 }
 
 void Camera::Update(Transform transform)
@@ -25,12 +32,42 @@ void Camera::Update(Transform transform)
 
 void Camera::SetActive()
 {
-	GLuint ID = m_pFBO.GetId();
-	glBindFramebuffer(GL_FRAMEBUFFER, m_pFBO.GetId());
-	glViewport(0, 0, m_pFBO.GetSize.x, m_pFBO.GetSize.y);
+	m_FBO.Bind();
+}
 
-	glClearColor(0.2f, 0.2f, 0.2f, 1);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+void Camera::SetToMain()
+{
+	m_isMainCamera = true;
+	m_renderToTexture = false;
+	SetResolution(glm::ivec2(1024));
+	m_FBO.Reset(m_resolution);
+}
+
+void Camera::SetToCamera()
+{
+	m_isMainCamera = false;
+	m_renderToTexture = true;
+	SetResolution(glm::ivec2(1024));
+	m_FBO.Reset(m_resolution);
+	m_FBO.CreateBuffer(true, true);
+}
+
+void Camera::SetToLight()
+{
+	m_isMainCamera = false;
+	m_renderToTexture = true;
+	SetResolution(glm::ivec2(1024));
+	m_FBO.Reset(m_resolution);
+	m_FBO.CreateBuffer(false, true);
+}
+
+void Camera::SetResolution(glm::ivec2 resolution)
+{
+	m_resolution = resolution;
+}
+glm::ivec2 Camera::GetResolution()
+{
+	return m_resolution;
 }
 
 void Camera::SetPerspective(float fieldOfView, float aspectRatio, float _near, float _far)

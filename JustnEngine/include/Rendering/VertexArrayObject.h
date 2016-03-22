@@ -39,9 +39,6 @@ private:
 	GLuint m_pData[3];
 };
 
-template<>
-void VertexArrayObject::SetUpAttributes<FBXVertex>();
-
 template<typename T>
 void VertexArrayObject::CreateVAO(GLuint VBO_Size, GLuint IBO_Size, T* VBO_Data, GLuint* IBO_Data)
 {

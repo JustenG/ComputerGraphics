@@ -14,10 +14,22 @@ class Camera : public Component
 {
 public:
 	Camera();
+	Camera(glm::ivec2 resolution);
 	virtual ~Camera();
 
 	void Update();
 	void Update(Transform transform);
+
+	void SetToMain();
+	void SetToCamera();
+	void SetToLight();
+
+	FrameBuffer& GetFBO() { return m_FBO; };
+	const Shader* GetShader() { return m_FBO.GetShader(); };
+	glm::ivec2 GetResolution();
+	
+	void SetShader(Shader* shader) { m_FBO.SetShaderProgram(shader); };	
+	void SetResolution(glm::ivec2 resolution);
 
 	void SetPerspective(float fieldOfView, float aspectRatio, float _near, float _far);
 	void SetLookAt(glm::vec3 from, glm::vec3 to, glm::vec3 up);
@@ -37,7 +49,12 @@ protected:
 	glm::mat4 projectionTransform;
 	glm::mat4 projectionViewTransform;
 
-	FrameBuffer m_pFBO;
+	glm::ivec2 m_resolution;
+
+	bool m_isMainCamera;
+	bool m_renderToTexture;
+
+	FrameBuffer m_FBO;
 
 };
 

@@ -1,6 +1,6 @@
 #pragma once
-
 #include <string>
+#include "Assets\AssetLoader.h"
 
 class Asset
 {
@@ -16,7 +16,18 @@ public:
 	void Bind();
 	void Unbind();
 
+	void SetFilePath(std::string filePath);
+	std::string GetFilePath();
+	std::string GetFileName();
+
 protected:
 	virtual void onBind() = 0;
 	virtual void onUnbind() = 0;
+
+	AssetManager* m_pAssetManager;
+
+private:
+	 
+	std::string m_pFilePath;
+
 };

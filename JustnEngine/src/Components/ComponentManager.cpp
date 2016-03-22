@@ -54,6 +54,8 @@ void ComponentManager::RenderAllComponents()
 {
 	for (int i = 0; i < Cameras.size; ++i)
 	{
+		Cameras[i].SetActive();
+
 		for (int j = 0; j < Meshs.size; ++j)
 		{
 			int index = Meshs[i].GetTransformIndex();
@@ -62,6 +64,12 @@ void ComponentManager::RenderAllComponents()
 			//Meshs[j].Render(Transfroms[index],Cameras[i],Lights[i]);
 		}
 	}
+}
+
+void ComponentManager::SetMainCamera(int index)
+{
+	m_mainCameraIndex = index;
+	Cameras[m_mainCameraIndex].SetToMain();
 }
 
 template<>
@@ -80,6 +88,10 @@ template<>
 int ComponentManager::AddComponent<Camera>()
 {
 	Cameras.emplace_back();
+
+	if (Cameras.size() == 1)
+		SetMainCamera(0);
+
 	return Cameras.size() - 1;
 }
 template<>
