@@ -12,8 +12,8 @@ public:
 	void SetTextureSlot(unsigned int uiSlot);
 	void LoadTexture(std::string& strFilePath);
 
-	GLuint GetId() const { return m_uiTextureID; }
-	void SetId(GLuint textureId) { m_uiTextureID = textureId; }
+	const GLuint GetID() { return m_uiTextureID; };
+	void SetID(GLuint textureId) { m_uiTextureID = textureId; };
 
 private:
 

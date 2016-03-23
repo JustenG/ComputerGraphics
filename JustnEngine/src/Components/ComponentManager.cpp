@@ -21,11 +21,11 @@ ComponentManager * ComponentManager::GetInstance()
 
 void ComponentManager::UpdateAllComponents()
 {
-	for (int i = 0; i < Transfroms.size; ++i)
+	for (int i = 0; i < (int)Transfroms.size(); ++i)
 	{
 		Transfroms[i].Update();
 	}
-	for (int i = 0; i < Cameras.size; ++i)
+	for (int i = 0; i < (int)Cameras.size(); ++i)
 	{
 		int index = Cameras[i].GetTransformIndex();
 		Transform transform = Transfroms[index];
@@ -37,7 +37,7 @@ void ComponentManager::UpdateAllComponents()
 	//	Transform transform = Transfroms[index];
 	//	Lights[i].Update(transform);
 	//}
-	for (int i = 0; i < Meshs.size; ++i)
+	for (int i = 0; i < (int)Meshes.size(); ++i)
 	{
 
 		//for (int i = 0; i < Lights.size; ++i)
@@ -52,16 +52,16 @@ void ComponentManager::UpdateAllComponents()
 
 void ComponentManager::RenderAllComponents()
 {
-	for (int i = 0; i < Cameras.size; ++i)
+	for (int i = 0; i < (int)Cameras.size(); ++i)
 	{
-		Cameras[i].SetActive();
+		Cameras[i].Bind();
 
-		for (int j = 0; j < Meshs.size; ++j)
+		for (int j = 0; j < (int)Meshes.size(); ++j)
 		{
-			int index = Meshs[i].GetTransformIndex();
+			int index = Meshes[i].GetTransformIndex();
 			Transform transform = Transfroms[index];
 
-			//Meshs[j].Render(Transfroms[index],Cameras[i],Lights[i]);
+			Meshes[j].Render(Transfroms[index],Cameras[i],Lights,0,true);
 		}
 	}
 }

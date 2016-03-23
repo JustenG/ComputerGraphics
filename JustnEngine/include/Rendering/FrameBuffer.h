@@ -27,7 +27,7 @@ public:
 	const glm::ivec2& GetSize() const { return m_fboSize; }
 	const Texture* GetTexture() const { return m_fboTexture; }
 	const Texture* GetDepthBufferId() const { return m_fboDepthTex; }
-	const Shader* GetShader() { return m_fboProgram; }
+	Shader* GetShader() { return m_fboProgram; }
 
 private:
 

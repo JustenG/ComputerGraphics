@@ -3,6 +3,7 @@
 
 class Transform;
 class Camera;
+class Light;
 class Mesh;
 
 class ComponentManager
@@ -32,7 +33,8 @@ private:
 	//A Vector of every componenet in-game
 	std::vector<Transform> Transfroms;
 	std::vector<Camera> Cameras;
-	std::vector<Mesh> Meshs;
+	std::vector<Light> Lights;
+	std::vector<Mesh> Meshes;
 
 };
 

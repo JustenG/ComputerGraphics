@@ -30,9 +30,14 @@ void Camera::Update(Transform transform)
 	UpdateProjectionViewTransform();
 }
 
-void Camera::SetActive()
+void Camera::Bind()
 {
 	m_FBO.Bind();
+}
+
+void Camera::Unbind()
+{
+	m_FBO.Unbind();
 }
 
 void Camera::SetToMain()

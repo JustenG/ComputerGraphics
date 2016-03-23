@@ -1,6 +1,5 @@
 #pragma once
 
-#define GLM_SWIZZLE 
 #include <gl_core_4_4.h>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
@@ -25,7 +24,7 @@ public:
 	void SetToLight();
 
 	FrameBuffer& GetFBO() { return m_FBO; };
-	const Shader* GetShader() { return m_FBO.GetShader(); };
+	Shader* GetShader() { return m_FBO.GetShader(); };
 	glm::ivec2 GetResolution();
 	
 	void SetShader(Shader* shader) { m_FBO.SetShaderProgram(shader); };	
@@ -37,7 +36,8 @@ public:
 	glm::vec3 GetPosition();
 	//void MovePos(glm::vec3 position);
 
-	void SetActive();
+	void Bind();
+	void Unbind();
 
 	glm::mat4 GetView();
 	glm::mat4 GetProjection();

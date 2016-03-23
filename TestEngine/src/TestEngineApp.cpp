@@ -1,5 +1,5 @@
 #include "TestEngineApp.h"
-
+#include "Assets\AssetLoader.h"
 
 
 TestEngineApp::TestEngineApp()
@@ -19,7 +19,8 @@ void TestEngineApp::Initialise()
 	m_pModel = new Mesh();
 
 	m_pModel->LoadFile("data/models/soulspear/soulspear.fbx");
-	m_pModel->LoadShader("data/shaders/defultVertexShader.vert", "data/shaders/defultFragmentShader.frag");
+	AssetManager::GetInstance()->LoadShader("data/shaders/defultVertexShader.vert", "data/shaders/defultFragmentShader.frag", "DefultShader");
+	m_pModel->SetShader(AssetManager::GetInstance()->GetAsset<Shader>("DefultShader"));
 }
 
 void TestEngineApp::Destroy()
@@ -27,8 +28,19 @@ void TestEngineApp::Destroy()
 	delete m_pModel;
 }
 
+void TestEngineApp::EarlyUpdate()
+{
+
+}
+
 void TestEngineApp::Update()
 {
+
+}
+
+void TestEngineApp::LateUpdate()
+{
+
 
 }
 void TestEngineApp::Draw()

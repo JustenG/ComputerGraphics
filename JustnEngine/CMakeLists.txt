@@ -20,6 +20,7 @@ SET(SOURCES
 	src/Components/Component.cpp
 	src/Components/ComponentManager.cpp
 	src/Components/GameObject.cpp
+	src/Components/Light.cpp
 	src/Components/Transform.cpp
 
 	src/Rendering/FrameBuffer.cpp	
@@ -44,6 +45,7 @@ SET(HEADERS
 	include/Components/Component.h
 	include/Components/ComponentManager.h
 	include/Components/GameObject.h
+	include/Components/Light.h
 	include/Components/Transform.h
 	
 	include/Rendering/FrameBuffer.h

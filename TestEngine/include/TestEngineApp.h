@@ -13,7 +13,9 @@ public:
 	TestEngineApp();
 	virtual ~TestEngineApp();
 
+	void EarlyUpdate();
 	void Update();
+	void LateUpdate();
 	void Draw();
 	void Initialise();
 	void Destroy();

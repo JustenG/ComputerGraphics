@@ -9,6 +9,7 @@
 #include "Rendering\VertexArrayObject.h"
 #include "Assets\Shader.h"
 #include "Cameras\Camera.h"
+#include "Components\Light.h"
 
 Mesh::Mesh()
 {
@@ -20,6 +21,11 @@ Mesh::Mesh()
 Mesh::~Mesh()
 {
 	delete m_pRenderObject;
+}
+
+void Mesh::Update()
+{
+
 }
 
 void Mesh::LoadFile(std::string fileName)

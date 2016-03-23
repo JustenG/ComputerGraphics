@@ -60,7 +60,7 @@ void FlyCamera::MouseContol(float deltaTime, GLFWwindow* window)
 {
 	double x = 0, y = 0;
 
-	glfwGetCursorPos(window, &x, &y);
+	//glfwGetCursorPos(window, &x, &y);
 
 	if (prevMouseX == 0 && prevMouseY == 0)
 	{

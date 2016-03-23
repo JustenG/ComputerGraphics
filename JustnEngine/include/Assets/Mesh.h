@@ -19,6 +19,7 @@ class FBXMeshNode;
 class Transform;
 class Camera;
 class Component;
+class Light;
 
 class Mesh : public Asset, public Component
 {
@@ -30,7 +31,8 @@ public:
 	void LoadFBX(std::string fileName);
 
 	void Update();
-	void Render(Transform transform, Camera camera, std::vector<Light> lights, int shadowMap, bool setUniforms);
+	void Render(Transform transform, Camera camera, std::vector<Light> lights, int shadowMap, bool setUniforms = true);
+	void Render(Light light, bool setUniforms = true);
 
 	void SetShader(Shader* shader);
 	void SetMaterial(Material* material);

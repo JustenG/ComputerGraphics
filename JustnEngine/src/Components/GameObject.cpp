@@ -1,7 +1,8 @@
 #include "Components\GameObject.h"
 #include "Components\Transform.h"
 #include "Cameras\Camera.h"
-//#include "Components\Light.h"
+#include "Components\Light.h"
+#include "Assets\Mesh.h"
 
 GameObject::GameObject()
 {
@@ -45,9 +46,9 @@ void GameObject::AddComponent<Mesh>()
 	m_hasMesh = true;
 	m_components[GetID<Mesh>()] = m_pComponentManager->AddComponent<Mesh>();
 
-	Mesh* camera = m_pComponentManager->GetComponent<Mesh>(m_components[GetID<Mesh>()]);
+	Mesh* mesh = m_pComponentManager->GetComponent<Mesh>(m_components[GetID<Mesh>()]);
 	Transform* transform = m_pComponentManager->GetComponent<Transform>(m_components[GetID<Mesh>()]);
-	camera->SetTransformIndex(m_components[GetID<Mesh>()]);
+	mesh->SetTransformIndex(m_components[GetID<Mesh>()]);
 }
 
 //template<>
