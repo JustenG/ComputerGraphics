@@ -49,7 +49,7 @@ void VertexArrayObject::DeleteBuffers(GLuint VAO, GLuint VBO, GLuint IBO)
 
 	delete m_IndexBuffer;
 	delete m_VertexBuffer;
-	delete m_pData;
+	delete[] m_pData;
 }
 
 template<>

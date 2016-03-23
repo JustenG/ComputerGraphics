@@ -1,8 +1,10 @@
-#include "Assets/Assetloader.h"
-#include "Assets/Mesh.h"
+#include "Assets/AssetManager.h"
+#include "Assets/MeshFile.h"
 #include "Assets/Material.h"
 #include "Assets/Shader.h"
 #include "Assets/Texture.h"
+
+AssetManager* AssetManager::m_instance = new AssetManager();
 
 AssetManager::AssetManager()
 {
@@ -24,11 +26,11 @@ AssetManager * AssetManager::GetInstance()
 };
 
 
-void AssetManager::LoadMesh(std::string filePath, std::string name)
+void AssetManager::LoadMeshFile(std::string filePath, std::string name)
 {
-	Mesh* tempMesh = new Mesh();
+	MeshFile* tempMesh = new MeshFile();
 	tempMesh->LoadFile(filePath);
-	m_meshes[name] = tempMesh;
+	m_meshFiles[name] = tempMesh;
 }
 
 void AssetManager::LoadTexture(std::string filePath, std::string name)
@@ -53,9 +55,9 @@ void AssetManager::CreateMaterial(std::string name)
 
 
 template<>
-Mesh* AssetManager::GetAsset<Mesh>(std::string name)
+MeshFile* AssetManager::GetAsset<MeshFile>(std::string name)
 {
-	return m_meshes[name];
+	return m_meshFiles[name];
 }
 template<>
 Material* AssetManager::GetAsset<Material>(std::string name)

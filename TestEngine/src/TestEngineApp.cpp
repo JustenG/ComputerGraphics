@@ -1,10 +1,15 @@
 #include "TestEngineApp.h"
-#include "Assets\AssetLoader.h"
 
+#include "Assets\AssetManager.h"
+#include "Assets\Shader.h"
+#include "Assets\Mesh.h"
 
-TestEngineApp::TestEngineApp()
-{
-}
+#include "Components\ComponentManager.h"
+#include "Components\Transform.h"
+#include "Components\Camera.h"
+
+#include "Entitys\EntityManager.h"
+#include "Entitys\GameObject.h"
 
 TestEngineApp::~TestEngineApp()
 {
@@ -12,15 +17,20 @@ TestEngineApp::~TestEngineApp()
 
 void TestEngineApp::Initialise()
 {
-	m_pFlyCam = new FlyCamera();
-	SetCamera(m_pFlyCam);
-	SetGizmos(true);
+	GetAssetManager()->LoadMesh("data/models/soulspear/soulspear.fbx", "spear");
+	m_pModel = GetAssetManager()->GetAsset<Mesh>("spear");
+	GetAssetManager()->LoadShader("data/shaders/defultVertexShader.vert", "data/shaders/defultFragmentShader.frag", "DefultShader");
+	m_pModel->SetShader(GetAssetManager()->GetAsset<Shader>("DefultShader"));
 
-	m_pModel = new Mesh();
+	m_entity = GetEntityManager()->CreateEntity();
+	
+	m_entity->AddComponent<Transform>();
+	m_entity->AddComponent<Camera>();
+	m_entity->AddComponent<Mesh>();
 
-	m_pModel->LoadFile("data/models/soulspear/soulspear.fbx");
-	AssetManager::GetInstance()->LoadShader("data/shaders/defultVertexShader.vert", "data/shaders/defultFragmentShader.frag", "DefultShader");
-	m_pModel->SetShader(AssetManager::GetInstance()->GetAsset<Shader>("DefultShader"));
+	m_entity->GetComponent<Mesh>() = m_pModel;
+
+
 }
 
 void TestEngineApp::Destroy()
@@ -45,7 +55,5 @@ void TestEngineApp::LateUpdate()
 }
 void TestEngineApp::Draw()
 {
-	//m_pModel->Render();
 
-	DrawGizmos();
 }

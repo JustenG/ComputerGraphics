@@ -14,58 +14,67 @@ SET(SOURCES
 	src/Application.cpp
 	src/main.cpp
 	
-	src/Cameras/Camera.cpp
-	src/Cameras/FlyCamera.cpp
+	src/Assets/Asset.cpp
+	src/Assets/AssetManager.cpp
+	src/Assets/Material.cpp
+	src/Assets/Mesh.cpp
+	src/Assets/MeshFile.cpp
+	src/Assets/Shader.cpp
+	src/Assets/Texture.cpp
 
+	src/Components/Camera.cpp
 	src/Components/Component.cpp
 	src/Components/ComponentManager.cpp
-	src/Components/GameObject.cpp
+	src/Components/FlyCamera.cpp
 	src/Components/Light.cpp
+	src/Components/MeshRenderer.cpp
 	src/Components/Transform.cpp
+
+	src/Entitys/GameObject.cpp
+	src/Entitys/EntityManager.cpp
 
 	src/Rendering/FrameBuffer.cpp	
 	src/Rendering/IndexBuffer.cpp
 	src/Rendering/VertexArrayObject.cpp
 	src/Rendering/VertexBuffer.cpp
 
-	src/Assets/Asset.cpp
-	src/Assets/AssetLoader.cpp
-	src/Assets/Material.cpp
-	src/Assets/Mesh.cpp
-	src/Assets/Shader.cpp
-	src/Assets/Texture.cpp
-
 )
 SET(HEADERS
 	include/Application.h
 	
-	include/Cameras/Camera.h
-	include/Cameras/FlyCamera.h
+	include/Assets/Asset.h	
+	include/Assets/AssetManager.h	
+	include/Assets/Material.h
+	include/Assets/Mesh.h
+	include/Assets/MeshFile.h
+	include/Assets/Shader.h
+	include/Assets/Texture.h
 
+	include/Components/Camera.h
 	include/Components/Component.h
 	include/Components/ComponentManager.h
-	include/Components/GameObject.h
+	include/Components/FlyCamera.h
 	include/Components/Light.h
+	include/Components/MeshRenderer.h
 	include/Components/Transform.h
+
+	include/Entitys/GameObject.h
+	include/Entitys/EntityManager.h
 	
 	include/Rendering/FrameBuffer.h
 	include/Rendering/IndexBuffer.h
 	include/Rendering/VertexArrayObject.h
 	include/Rendering/VertexBuffer.h
 
-	include/Assets/Asset.h	
-	include/Assets/AssetLoader.h	
-	include/Assets/Material.h
-	include/Assets/Mesh.h
-	include/Assets/Shader.h
-	include/Assets/Texture.h
-
 )
 
 SET(EXTRA_SOURCES
     ${CMAKE_SOURCE_DIR}/deps/gl/gl_core_4_4.c
     ${CMAKE_SOURCE_DIR}/deps/utilities/Gizmos.cpp
-	${CMAKE_SOURCE_DIR}/deps/memalign/memaligned.cpp
+    ${CMAKE_SOURCE_DIR}/deps/memalign/memaligned.cpp
+    ${CMAKE_SOURCE_DIR}/deps/imgui/imgui.cpp
+    ${CMAKE_SOURCE_DIR}/deps/imgui/imgui_Draw.cpp
+    ${CMAKE_SOURCE_DIR}/deps/imgui/imgui_impl_glfw_gl3.cpp
     )
 
 IF(FBX_FOUND)
@@ -86,8 +95,8 @@ add_library(${PROJECT_NAME} ${SOURCES} ${EXTRA_SOURCES} ${HEADERS})
 source_group(Base ./)
 source_group(ExtraSources FILES ${EXTRA_SOURCES})
 source_group(Assets .*/Assets.*/)
-source_group(Cameras .*/Cameras/)
 source_group(Components .*/Components/)
+source_group(Entitys .*/Entitys/)
 source_group(Rendering .*/Rendering/)
 
 #And we need to link against GLFW

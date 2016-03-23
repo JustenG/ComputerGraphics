@@ -1,30 +1,28 @@
 #pragma once
 #include "Application.h"
-#include "Assets\Mesh.h"
-#include "Assets\Shader.h"
-#include "Cameras\Camera.h"
-#include "Cameras\FlyCamera.h"
 
 class Mesh;
+class GameObject;
+class Camera;
 
 class TestEngineApp : public Application
 {
 public:
-	TestEngineApp();
+	TestEngineApp() {};
 	virtual ~TestEngineApp();
 
-	void EarlyUpdate();
-	void Update();
-	void LateUpdate();
-	void Draw();
-	void Initialise();
-	void Destroy();
+	void Initialise() override;
+	void EarlyUpdate() override;
+	void Update() override;
+	void LateUpdate() override;
+	void Draw() override;
+	void Destroy() override;
 
 private:
 
+	GameObject* m_entity;
 	Mesh* m_pModel;
-
-	FlyCamera* m_pFlyCam;
+	Camera* m_pFlyCam;
 
 };
 

@@ -1,15 +1,26 @@
 #include "Application.h"
 
-#include "Cameras/FlyCamera.h"
 #include "imgui.h"
 #include "imgui_impl_glfw_gl3.h"
 #include "Components\ComponentManager.h"
+#include "Entitys\EntityManager.h"
+#include "Assets\AssetManager.h"
+#include "Components\FlyCamera.h"
+
 Application::Application()
+{
+}
+
+Application::~Application()
 {
 }
 
 int Application::Startup(int width, int height)
 {
+	m_entityManager = EntityManager::GetInstance();
+	m_componentManager = ComponentManager::GetInstance();
+	m_assetManager = AssetManager::GetInstance();
+
 	//Setup Data
 	currentTime = 0;
 	deltaTime = 0;
@@ -17,7 +28,7 @@ int Application::Startup(int width, int height)
 	white = vec4(0, 0, 0, 1);
 	black = vec4(1, 1, 1, 1);
 	m_isGizmosActive = false;
-	m_pCamera = nullptr;
+	m_isGUIActive = true;
 
 	//If GL fails to initalise
 	if (glfwInit() == false)
@@ -45,13 +56,16 @@ int Application::Startup(int width, int height)
 
 	//SetUp GL input
 	glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	//Initialise GUI
-	ImGui_ImplGlfwGL3_Init(m_pWindow, true);
+	
+	if (m_isGUIActive)
+	{
+		//Initialise GUI
+		ImGui_ImplGlfwGL3_Init(m_pWindow, true);
 
-	ImGuiIO& io = ImGui::GetIO();
-	io.DisplaySize.x = width;
-	io.DisplaySize.y = height;
-
+		ImGuiIO& io = ImGui::GetIO();
+		io.DisplaySize.x = (float)width;
+		io.DisplaySize.y = (float)height;
+	}
 	//Create Gizmos
 	Gizmos::create();
 
@@ -87,7 +101,7 @@ void Application::EngineUpdate()
 	UpdateTime();
 	UpdateGL();
 	if(m_isGizmosActive) UpdateGizmos();
-	UpdateImGui();
+	if(m_isGUIActive) UpdateImGui();
 }
 
 void Application::UpdateTime()
@@ -128,25 +142,30 @@ void Application::UpdateImGui()
 	ImGui_ImplGlfwGL3_NewFrame();
 
 	//Update ImGuiS
-	ImGui::ColorEdit3("Grid Colour", glm::value_ptr(white));
+	GUI::Begin("My rendering options");
+	GUI::ColorEdit3("Grid Colour", glm::value_ptr(white));
+	GUI::Button("Button", ImVec2(100, 100));
+	GUI::End();
+
 }
 
  void Application::Render()
  {
-	 if (m_pCamera == nullptr) 
+	/* if (m_pCamera == nullptr) 
 	 { 
 		 printf("WARNING: No camera set, unable to render"); 
 		 return; 
-	 }
+	 }*/
 
 	 Draw();
 	 if(m_isGizmosActive) DrawGizmos();
-	 ImGui::Render();
+	 if(m_isGUIActive) ImGui::Render();
+
  }
 
 void Application::DrawGizmos()
 {
-	if(m_pCamera != nullptr) Gizmos::draw(m_pCamera->GetProjectionView());
+	//if(m_pCamera != nullptr) Gizmos::draw(m_pCamera->GetProjectionView());
 }
 
 void Application::Shutdown()
@@ -155,6 +174,19 @@ void Application::Shutdown()
 	ImGui_ImplGlfwGL3_Shutdown();
 	glfwDestroyWindow(m_pWindow);
 	glfwTerminate();
+}
+
+EntityManager* Application::GetEntityManager()
+{
+	return m_entityManager;
+}
+ComponentManager* Application::GetComponentManager()
+{
+	return m_componentManager;
+}
+AssetManager* Application::GetAssetManager()
+{
+	return m_assetManager;
 }
 
 float Application::GetDeltaTime()
@@ -169,7 +201,7 @@ GLFWwindow* Application::GetWindow()
 
 void Application::SetCamera(Camera* camera)
 {
-	m_pCamera = camera;
+	//m_pCamera = camera;
 }
 
 void Application::SetGizmos(bool active)

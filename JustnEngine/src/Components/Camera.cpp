@@ -1,4 +1,4 @@
-#include "Cameras\Camera.h"
+#include "Components\Camera.h"
 
 #include <GLFW\glfw3.h>
 #include "Components\Transform.h"
@@ -24,6 +24,11 @@ Camera::~Camera()
 
 }
 
+void Camera::Update()
+{
+
+}
+
 void Camera::Update(Transform transform)
 {
 	worldTransform = transform.GetMatrix();
@@ -45,7 +50,7 @@ void Camera::SetToMain()
 	m_isMainCamera = true;
 	m_renderToTexture = false;
 	SetResolution(glm::ivec2(1024));
-	m_FBO.Reset(m_resolution);
+	m_FBO.Reset(GetResolution());
 }
 
 void Camera::SetToCamera()
@@ -53,7 +58,7 @@ void Camera::SetToCamera()
 	m_isMainCamera = false;
 	m_renderToTexture = true;
 	SetResolution(glm::ivec2(1024));
-	m_FBO.Reset(m_resolution);
+	m_FBO.Reset(GetResolution());
 	m_FBO.CreateBuffer(true, true);
 }
 
@@ -62,7 +67,7 @@ void Camera::SetToLight()
 	m_isMainCamera = false;
 	m_renderToTexture = true;
 	SetResolution(glm::ivec2(1024));
-	m_FBO.Reset(m_resolution);
+	m_FBO.Reset(GetResolution());
 	m_FBO.CreateBuffer(false, true);
 }
 

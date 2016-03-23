@@ -8,7 +8,8 @@
 
 Texture::Texture()
 {
-
+	m_uiTextureID = 0;
+	m_uiTextureSlot = 0;
 }
 
 Texture::~Texture()

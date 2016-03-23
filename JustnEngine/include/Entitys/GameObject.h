@@ -13,12 +13,14 @@ public:
 
 	template<typename T>
 	void AddComponent();
+	template<typename T>
+	T* GetComponent();
 
 private:
 
 	ComponentManager* m_pComponentManager;
 
-	std::map<size_t, int> m_components;
+	std::map<size_t, int> m_componentIndex;
 	template<typename T>
 	size_t GetID();
 
@@ -31,7 +33,12 @@ private:
 template<typename T>
 void GameObject::AddComponent()
 {
-	m_components[typeid(T).hash_code()] = ComponentManager->AddComponent<T>();
+	m_componentIndex[typeid(T).hash_code()] = m_pComponentManager->AddComponent<T>();
+}
+template<typename T>
+T* GameObject::GetComponent()
+{
+	m_pComponentManager->GetComponent<T>(m_componentIndex[GetID<T>()])
 }
 
 template<typename T>

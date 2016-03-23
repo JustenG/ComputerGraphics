@@ -1,9 +1,5 @@
 #pragma once
-#include "Cameras\Camera.h"
-
-#include <glm/glm.hpp>
-#include <glm/ext.hpp>
-#include <vector>
+#include "Components\Camera.h"
 
 class Light : public Camera
 {

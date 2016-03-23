@@ -12,7 +12,7 @@ public:
 	void SetTextureSlot(unsigned int uiSlot);
 	void LoadTexture(std::string& strFilePath);
 
-	const GLuint GetID() { return m_uiTextureID; };
+	GLuint GetID() { return m_uiTextureID; };
 	void SetID(GLuint textureId) { m_uiTextureID = textureId; };
 
 private:
@@ -20,8 +20,8 @@ private:
 	void onBind() override;
 	void onUnbind() override;
 
-	GLuint m_uiTextureID = 0;
-	GLuint m_uiTextureSlot = 0;
+	GLuint m_uiTextureID;
+	GLuint m_uiTextureSlot;
 	
 	//TODO: Add additional texture options
 	int m_iTextureFormat;

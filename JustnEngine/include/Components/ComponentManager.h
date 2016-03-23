@@ -4,7 +4,7 @@
 class Transform;
 class Camera;
 class Light;
-class Mesh;
+class MeshRenderer;
 
 class ComponentManager
 {
@@ -34,7 +34,7 @@ private:
 	std::vector<Transform> Transfroms;
 	std::vector<Camera> Cameras;
 	std::vector<Light> Lights;
-	std::vector<Mesh> Meshes;
+	std::vector<MeshRenderer> MeshRenderers;
 
 };
 

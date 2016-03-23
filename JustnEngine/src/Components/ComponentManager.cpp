@@ -1,7 +1,10 @@
 #include "Components\ComponentManager.h"
 #include "Components\Transform.h"
-#include "Assets\Mesh.h"
-#include "Cameras\Camera.h"
+#include "Components\Camera.h"
+#include "Components\Light.h"
+#include "Components\MeshRenderer.h"
+
+ComponentManager* ComponentManager::m_instance = new ComponentManager();
 
 ComponentManager::ComponentManager()
 {
@@ -31,22 +34,12 @@ void ComponentManager::UpdateAllComponents()
 		Transform transform = Transfroms[index];
 		Cameras[i].Update(transform);
 	}
-	//for (int i = 0; i < Lights.size; ++i)
-	//{
-	//	int index = Lights[i].GetTransformIndex();
-	//	Transform transform = Transfroms[index];
-	//	Lights[i].Update(transform);
-	//}
-	for (int i = 0; i < (int)Meshes.size(); ++i)
+	for (int i = 0; i < Lights.size(); ++i)
 	{
-
-		//for (int i = 0; i < Lights.size; ++i)
-		//{
-
-		//	Meshs[i].Update(transform);
-		//}
+		int index = Lights[i].GetTransformIndex();
+		Transform transform = Transfroms[index];
+		Lights[i].Update(transform);
 	}
-
 
 }
 
@@ -56,12 +49,12 @@ void ComponentManager::RenderAllComponents()
 	{
 		Cameras[i].Bind();
 
-		for (int j = 0; j < (int)Meshes.size(); ++j)
+		for (int j = 0; j < (int)MeshRenderers.size(); ++j)
 		{
-			int index = Meshes[i].GetTransformIndex();
+			int index = MeshRenderers[i].GetTransformIndex();
 			Transform transform = Transfroms[index];
 
-			Meshes[j].Render(Transfroms[index],Cameras[i],Lights,0,true);
+			MeshRenderers[j].Render(Transfroms[index],Cameras[i],Lights,0,true);
 		}
 	}
 }
@@ -72,18 +65,14 @@ void ComponentManager::SetMainCamera(int index)
 	Cameras[m_mainCameraIndex].SetToMain();
 }
 
+// Set Component
+//-------------------------------------------------------------------
 template<>
 int ComponentManager::AddComponent<Transform>()
 {
 	Transfroms.emplace_back();
 	return Transfroms.size()-1;
 }
-template<>
-Transform* ComponentManager::GetComponent<Transform>(int index)
-{
-	return &Transfroms[index];
-}
-
 template<>
 int ComponentManager::AddComponent<Camera>()
 {
@@ -95,7 +84,28 @@ int ComponentManager::AddComponent<Camera>()
 	return Cameras.size() - 1;
 }
 template<>
+int ComponentManager::AddComponent<Mesh>()
+{
+	MeshRenderers.emplace_back();
+	return MeshRenderers.size() - 1;
+}
+//-------------------------------------------------------------------
+
+// Get Component
+//-------------------------------------------------------------------
+template<>
+Transform* ComponentManager::GetComponent<Transform>(int index)
+{
+	return &Transfroms[index];
+}
+template<>
 Camera* ComponentManager::GetComponent<Camera>(int index)
 {
 	return &Cameras[index];
 }
+template<>
+MeshRenderer* ComponentManager::GetComponent<MeshRenderer>(int index)
+{
+	return &MeshRenderers[index];
+}
+//-------------------------------------------------------------------

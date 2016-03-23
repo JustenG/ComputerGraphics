@@ -8,20 +8,23 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
+#define GUI ImGui
 using glm::vec3;
 using glm::vec4;
 using glm::mat4;
 
-
 class FlyCamera;
 class Camera;
 class Asset;
+class EntityManager;
+class ComponentManager;
+class AssetManager;
 
 class Application
 {
 public:
 	Application();
-	virtual ~Application() = 0;
+	virtual ~Application();
 
 	virtual void Initialise() = 0;
 	virtual void EarlyUpdate() = 0;
@@ -44,6 +47,10 @@ public:
 	void SetCamera(Camera* camera);
 	void SetGizmos(bool active);
 
+	EntityManager* GetEntityManager();
+	ComponentManager* GetComponentManager();
+	AssetManager* GetAssetManager();
+
 	float GetDeltaTime();
 	GLFWwindow* GetWindow();
 
@@ -55,13 +62,17 @@ private:
 	GLuint* m_fbo;
 	//------------------------
 
+	EntityManager* m_entityManager;
+	ComponentManager* m_componentManager;
+	AssetManager* m_assetManager;
+
 	//TIME
 	//-----------------------
 	float currentTime, deltaTime, previousTime;
 	//-----------------------
 
-	Camera* m_pCamera;
 	bool m_isGizmosActive;
+	bool m_isGUIActive;
 
 	vec4 white, black;
 };

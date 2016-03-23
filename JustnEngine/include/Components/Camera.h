@@ -3,10 +3,11 @@
 #include <gl_core_4_4.h>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
+
 #include "Components\Component.h"
 #include "Rendering\FrameBuffer.h"
 
-class GLFWwindow;
+struct GLFWwindow;
 class Transform;
 
 class Camera : public Component

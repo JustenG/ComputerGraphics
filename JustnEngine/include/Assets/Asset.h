@@ -1,6 +1,10 @@
 #pragma once
 #include <string>
-#include "Assets\AssetLoader.h"
+#include "gl_core_4_4.h"
+
+#include "Assets\AssetManager.h"
+
+//sclass AssetManager;
 
 class Asset
 {

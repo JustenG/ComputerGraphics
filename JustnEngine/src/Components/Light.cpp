@@ -1,7 +1,8 @@
 #include "Components\Light.h"
 
-Light::Light()
+Light::Light() : Camera()
 {
+	SetToLight();
 }
 
 Light::~Light()
