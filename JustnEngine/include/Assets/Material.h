@@ -37,13 +37,14 @@ public:
 		LoadIfExists(TextureSlots::DisplacementTexture, pMaterial, TextureSlots::DisplacementTexture);
 	}
 
+	void LoadTexture(Texture* texture, TextureSlots slot);
+
 private:
 
 	void onBind() override;
 	void onUnbind() override;
 
 	void LoadIfExists(TextureSlots slot, FBXMaterial* pMaterial, unsigned int FBXTextureType);
-	void LoadTexture(Texture* texture, TextureSlots slot);
 
 	Texture* m_pTextures[TextureSlots::TextureTypes_Count];
 

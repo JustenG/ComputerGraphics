@@ -28,6 +28,7 @@ SET(SOURCES
 	src/Components/FlyCamera.cpp
 	src/Components/Light.cpp
 	src/Components/MeshRenderer.cpp
+	src/Components/Terrain.cpp
 	src/Components/Transform.cpp
 
 	src/Entitys/GameObject.cpp
@@ -56,6 +57,7 @@ SET(HEADERS
 	include/Components/FlyCamera.h
 	include/Components/Light.h
 	include/Components/MeshRenderer.h
+	include/Components/Terrain.h
 	include/Components/Transform.h
 
 	include/Entitys/GameObject.h
@@ -63,6 +65,7 @@ SET(HEADERS
 	
 	include/Rendering/FrameBuffer.h
 	include/Rendering/IndexBuffer.h
+	include/Rendering/Vertex.h
 	include/Rendering/VertexArrayObject.h
 	include/Rendering/VertexBuffer.h
 
@@ -74,7 +77,7 @@ SET(EXTRA_SOURCES
     ${CMAKE_SOURCE_DIR}/deps/memalign/memaligned.cpp
     ${CMAKE_SOURCE_DIR}/deps/imgui/imgui.cpp
     ${CMAKE_SOURCE_DIR}/deps/imgui/imgui_Draw.cpp
-    ${CMAKE_SOURCE_DIR}/deps/imgui/imgui_impl_glfw_gl3.cpp
+    ${CMAKE_SOURCE_DIR}/deps/imguihelpers/imgui_impl_glfw_gl3.cpp
     )
 
 IF(FBX_FOUND)

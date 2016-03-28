@@ -5,7 +5,8 @@
 #include "Components\ComponentManager.h"
 #include "Entitys\EntityManager.h"
 #include "Assets\AssetManager.h"
-#include "Components\FlyCamera.h"
+#include "Components\Transform.h"
+#include "Components\Camera.h"
 
 Application::Application()
 {
@@ -27,8 +28,10 @@ int Application::Startup(int width, int height)
 	previousTime = (float)glfwGetTime();
 	white = vec4(0, 0, 0, 1);
 	black = vec4(1, 1, 1, 1);
-	m_isGizmosActive = false;
+	m_isGizmosActive = true;
 	m_isGUIActive = true;
+
+	m_componentManager->SetMainCamResolution(glm::ivec2(width, height));
 
 	//If GL fails to initalise
 	if (glfwInit() == false)
@@ -99,7 +102,7 @@ void Application::Run(int windowWidth, int windowHeight)
 void Application::EngineUpdate()
 {
 	UpdateTime();
-	UpdateGL();
+	m_componentManager->UpdateAllComponents();
 	if(m_isGizmosActive) UpdateGizmos();
 	if(m_isGUIActive) UpdateImGui();
 }
@@ -113,13 +116,7 @@ void Application::UpdateTime()
 	previousTime = currentTime;
 	//-------------------------------------------------------------------
 }
-void Application::UpdateGL()
-{
-	//OPEN GL settings
-	//---------------------------------------------------------
 
-	//---------------------------------------------------------
-}
 void Application::UpdateGizmos()
 {
 	Gizmos::clear();
@@ -143,9 +140,13 @@ void Application::UpdateImGui()
 
 	//Update ImGuiS
 	GUI::Begin("My rendering options");
-	GUI::ColorEdit3("Grid Colour", glm::value_ptr(white));
-	GUI::Button("Button", ImVec2(100, 100));
+
+	Transform* cameraTran = m_componentManager->GetComponent<Transform>(m_componentManager->GetMainCamera()->GetTransformIndex());
+	mainCameraPos = cameraTran->GetPosition();
+	GUI::InputFloat3("Camera Position", glm::value_ptr(mainCameraPos));
 	GUI::End();
+
+	cameraTran->SetPosition(mainCameraPos);
 
 }
 
@@ -157,7 +158,7 @@ void Application::UpdateImGui()
 		 return; 
 	 }*/
 
-	 Draw();
+	 m_componentManager->RenderAllComponents();
 	 if(m_isGizmosActive) DrawGizmos();
 	 if(m_isGUIActive) ImGui::Render();
 
@@ -165,7 +166,11 @@ void Application::UpdateImGui()
 
 void Application::DrawGizmos()
 {
-	//if(m_pCamera != nullptr) Gizmos::draw(m_pCamera->GetProjectionView());
+	if (m_componentManager->GetMainCamera() != nullptr)
+	{
+		glm::mat4 projectionView = m_componentManager->GetMainCamera()->GetProjectionView();
+		Gizmos::draw(projectionView);
+	}
 }
 
 void Application::Shutdown()

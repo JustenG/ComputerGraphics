@@ -15,6 +15,7 @@ out vec2 vTexCoords;
 out vec4 vNormal;
 out vec3 vTangent;
 out vec3 vBitTangent;
+out vec4 vShadowCoord;
 
 uniform mat4 projection;
 uniform mat4 view;
@@ -22,13 +23,15 @@ uniform mat4 model;
 uniform mat4 projectionView;
 uniform mat4 projectionViewModel;
 
+uniform mat4 lightProjectionView;
+
 const int MAX_BONES = 128;
 uniform mat4 bones[MAX_BONES];
 
 void main()
 {
 	vPosition = Position;
-	vColour = vec4(1,1,1,1);
+	vColour = Colour;
 	vTexCoords = TexCoords;
 	vNormal = Normal;
 	vTangent = Tangent.xyz;
@@ -40,6 +43,8 @@ void main()
 	P += bones[index.y] * Position * Weights.y;
 	P += bones[index.z] * Position * Weights.z;
 	P += bones[index.w] * Position * Weights.w;
+	
+	vShadowCoord = lightProjectionView * Position;
 	
 	gl_Position = projectionView * model * Position;
 }

@@ -4,7 +4,7 @@
 #include <string>
 #include "gl_core_4_4.h"
 
-class Component;
+#include "Components\Component.h"
 
 class Shader;
 class Material;
@@ -20,8 +20,8 @@ public:
 	~MeshRenderer();
 
 	void Update();
-	void Render(Transform transform, Camera camera, std::vector<Light> lights, int shadowMap, bool setUniforms = true);
-	void Render(Light light, bool setUniforms = true);
+	void Render(Transform transform, Camera camera, std::vector<Light> lights, int shadowMap);
+	void Render(Light light);
 
 	void SetShader(Shader* shader);
 	void SetMaterial(Material* material);
@@ -30,12 +30,12 @@ public:
 	Shader* GetShader() const { return m_pShader; }
 	Material* GetMaterial() const { return m_pMaterial; }
 
-private:
+protected:
 
 	void Bind();
 	void Unbind();
 
-	int m_specularPower;
+	int m_specularPower = 8;
 
 	Mesh* m_pMesh;
 	Shader* m_pShader;

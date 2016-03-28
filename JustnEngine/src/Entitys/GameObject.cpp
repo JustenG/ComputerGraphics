@@ -2,7 +2,8 @@
 #include "Components\Transform.h"
 #include "Components\Camera.h"
 #include "Components\Light.h"
-#include "Assets\Mesh.h"
+#include "Components\MeshRenderer.h"
+#include "Components\Terrain.h"
 
 GameObject::GameObject()
 {
@@ -10,6 +11,8 @@ GameObject::GameObject()
 
 	m_hasTransform = false;
 	m_hasCamera = false;
+	m_hasMesh = false;
+	m_hasLight = false;
 }
 
 GameObject::~GameObject()
@@ -38,14 +41,14 @@ void GameObject::AddComponent<Camera>()
 }
 
 template<>
-void GameObject::AddComponent<Mesh>()
+void GameObject::AddComponent<MeshRenderer>()
 {
 	if (m_hasMesh || !m_hasTransform) return;
 
 	m_hasMesh = true;
-	m_componentIndex[GetID<Mesh>()] = m_pComponentManager->AddComponent<Mesh>();
+	m_componentIndex[GetID<MeshRenderer>()] = m_pComponentManager->AddComponent<MeshRenderer>();
 
-	Mesh* mesh = m_pComponentManager->GetComponent<Mesh>(m_componentIndex[GetID<Mesh>()]);
+	MeshRenderer* mesh = m_pComponentManager->GetComponent<MeshRenderer>(m_componentIndex[GetID<MeshRenderer>()]);
 	mesh->SetTransformIndex(m_componentIndex[GetID<Transform>()]);
 }
 
@@ -59,4 +62,15 @@ void GameObject::AddComponent<Light>()
 
 	Light* light = m_pComponentManager->GetComponent<Light>(m_componentIndex[GetID<Light>()]);
 	light->SetTransformIndex(m_componentIndex[GetID<Transform>()]);
+}
+
+template<>
+void GameObject::AddComponent<Terrain>()
+{
+	if (!m_hasTransform) return;
+
+	m_componentIndex[GetID<Terrain>()] = m_pComponentManager->AddComponent<Terrain>();
+
+	Terrain* terrain = m_pComponentManager->GetComponent<Terrain>(m_componentIndex[GetID<Terrain>()]);
+	terrain->SetTransformIndex(m_componentIndex[GetID<Transform>()]);
 }

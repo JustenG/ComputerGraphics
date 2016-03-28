@@ -1,7 +1,7 @@
 #pragma once
 #include "Application.h"
 
-class Mesh;
+class MeshFile;
 class GameObject;
 class Camera;
 
@@ -21,7 +21,7 @@ public:
 private:
 
 	GameObject* m_entity;
-	Mesh* m_pModel;
+	MeshFile* m_pModel;
 	Camera* m_pFlyCam;
 
 };

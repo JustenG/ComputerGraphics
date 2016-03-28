@@ -1,10 +1,13 @@
 #pragma once
 #include <vector>
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
 
 class Transform;
 class Camera;
 class Light;
 class MeshRenderer;
+class Terrain;
 
 class ComponentManager
 {
@@ -23,24 +26,31 @@ public:
 	T* GetComponent(int index);
 
 	void SetMainCamera(int index);
+	Camera* GetMainCamera();
+	void SetMainCamResolution(glm::ivec2 resolution) { m_mainCameraResolution = resolution; };
+
+	void RequestTransformUpdate();
 
 private:
+
+	void AddChildren(Transform* parent, short &parentsIndex);
+	void ReorderTransforms();
+
 	ComponentManager();
 	static ComponentManager* m_instance;
 
 	int m_mainCameraIndex;
+	glm::ivec2 m_mainCameraResolution;
 
 	//A Vector of every componenet in-game
-	std::vector<Transform> Transfroms;
+	std::vector<Transform> Transforms;
+	std::vector<Transform> TransformsBuffer;
+	std::vector<short> ParentIndexBuffer;
+	bool m_transformsInline;
+
 	std::vector<Camera> Cameras;
 	std::vector<Light> Lights;
 	std::vector<MeshRenderer> MeshRenderers;
+	std::vector<Terrain> Terrains;
 
 };
-
-//template<typename T>
-//int ComponentManager::AddComponent<T>()
-//{
-//	if (T != anyComponenet)
-//		//Print Error
-//}

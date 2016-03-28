@@ -3,8 +3,6 @@
 #include "gl_core_4_4.h"
 #include "FBXFile.h"
 
-class Vertex;
-
 class IndexBuffer
 {
 public:

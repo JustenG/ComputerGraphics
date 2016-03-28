@@ -17,6 +17,7 @@ include_directories(${CMAKE_SOURCE_DIR}/deps/glfw/include)
 include_directories(${CMAKE_SOURCE_DIR}/deps/utilities)
 include_directories(${CMAKE_SOURCE_DIR}/deps/memalign)
 include_directories(${CMAKE_SOURCE_DIR}/deps/imgui)
+include_directories(${CMAKE_SOURCE_DIR}/deps/imguihelpers)
 include_directories(${CMAKE_SOURCE_DIR}/deps/fbx)
 include_directories(${CMAKE_SOURCE_DIR}/deps/stb)
 

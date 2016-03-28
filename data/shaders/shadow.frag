@@ -8,13 +8,12 @@ out vec4 FragColour;
 uniform vec3 lightDirection;
 
 uniform sampler2D shadowMapSampler;
-uniform float shadowBias;
 
 void main() {
 	
 	float d = max(0, dot(normalize(vNormal.xyz), lightDirection));
 
-	if (texture(shadowMapSampler, vShadowCoord.xy).r  <  vShadowCoord.z - shadowBias) {
+	if (texture(shadowMapSampler, vShadowCoord.xy).r  <  vShadowCoord.z - 0.01f) {
 		d = 0;
 	}
 

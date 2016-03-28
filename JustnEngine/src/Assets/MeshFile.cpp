@@ -7,9 +7,19 @@
 #include "glm/ext.hpp"
 
 #include "Assets\Mesh.h"
+//To be moved to a GameObjectGenerator
+//------------------------------------
+#include "Components\ComponentManager.h"
+#include "Components\Transform.h"
+#include "Components\MeshRenderer.h"
+#include "Entitys\EntityManager.h"
+#include "Entitys\GameObject.h"
+//------------------------------------
 
 MeshFile::MeshFile()
 {
+	m_pEntityManager = EntityManager::GetInstance();
+	m_pComponentManager = ComponentManager::GetInstance();
 	m_pShader = nullptr;
 }
 
@@ -32,6 +42,8 @@ void MeshFile::Update()
 
 void MeshFile::LoadFile(std::string fileName)
 {
+	SetFilePath(fileName);
+
 	int startOfExtension = fileName.find_last_of('.');
 	std::string fileType = fileName.substr(startOfExtension + 1, fileName.length());
 	printf("filename");
@@ -53,21 +65,59 @@ void MeshFile::LoadFBX(std::string fileName)
 	{
 		FBXMeshNode* pMesh = m_fbxFile->getMeshByIndex(i);
 		assert(pMesh && "Require at least one mesh in your FBX");
-
-		m_internalMeshes.emplace_back();
-		Mesh* pNewMesh = m_internalMeshes.back();
+		
+		Mesh* pNewMesh = new Mesh();
+		m_internalMeshes.push_back(pNewMesh);
 
 		pNewMesh->BuildRenderDataFromLoaderNode(pMesh);
-		pNewMesh->BuildMaterialFromLoaderNode(pMesh->m_materials[0]);
+		pNewMesh->BuildMaterialFromLoaderNode(pMesh->m_materials[0],GetFileName() + "_MaterialMesh" + std::to_string(i));
 	}
 }
 
+//To be moved to a GameObjectGenerator
+//------------------------------------
 void MeshFile::CreateEntitys()
 {
+	if (m_pGameObjects.size() != 0)
+		return;
+
 	for (unsigned int i = 0; i < m_fbxFile->getMeshCount(); ++i)
 	{
-		//TODO
-		//Create an entity for each mesh
-		//Set each entitys mesh renderer's mesh to internal mesh
+		m_pGameObjects.push_back(m_pEntityManager->CreateEntity());
+		GameObject* tempObject = m_pGameObjects.back();
+		tempObject->AddComponent<Transform>();
+		tempObject->AddComponent<MeshRenderer>();
+		tempObject->GetComponent<MeshRenderer>()->SetMesh(m_internalMeshes[i]);
+		tempObject->GetComponent<MeshRenderer>()->SetMaterial(m_internalMeshes[i]->GetMaterial());
+		tempObject->GetComponent<MeshRenderer>()->SetShader(m_pShader);
+	}
+	for (unsigned int i = 0; i < m_fbxFile->getMeshCount(); ++i)
+	{
+		if (m_fbxFile->getMeshByIndex(i)->m_children.size() != 0)
+		{
+			SetChildren(m_fbxFile->getMeshByIndex(i), i);
+		}
 	}
 }
+
+void MeshFile::SetChildren(FBXNode* mesh, int parentIndex)
+{
+	for (unsigned int i = 0; i < mesh->m_children.size(); ++i)
+	{
+		int childIndex;
+		for (unsigned int j = 0; j < m_fbxFile->getMeshCount(); ++j)
+		{
+			if (m_fbxFile->getMeshByIndex(j)->m_name == mesh->m_children[i]->m_name)
+			{
+				childIndex = j;
+				break;
+			}
+		}
+
+		m_pGameObjects[parentIndex]->GetComponent<Transform>()->AddChild(m_pGameObjects[childIndex]->GetComponent<Transform>());
+
+		SetChildren(mesh->m_children[i], childIndex);
+	}
+}
+
+//------------------------------------

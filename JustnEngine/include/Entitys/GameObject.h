@@ -31,14 +31,9 @@ private:
 };
 
 template<typename T>
-void GameObject::AddComponent()
-{
-	m_componentIndex[typeid(T).hash_code()] = m_pComponentManager->AddComponent<T>();
-}
-template<typename T>
 T* GameObject::GetComponent()
 {
-	m_pComponentManager->GetComponent<T>(m_componentIndex[GetID<T>()])
+	return m_pComponentManager->GetComponent<T>(m_componentIndex[GetID<T>()]);
 }
 
 template<typename T>

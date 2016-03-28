@@ -45,41 +45,52 @@ void MeshRenderer::Unbind()
 	m_pShader->Unbind();
 }
 
-void MeshRenderer::Render(Transform transform, Camera camera, std::vector<Light> lights, int shadowMap, bool setUniforms)
+void MeshRenderer::Render(Transform transform, Camera camera, std::vector<Light> lights, int shadowMap)
 {
-	if (setUniforms)
-	{
-		m_pShader->SetModelUniform(transform.GetMatrix());
 
-		m_pShader->SetCameraPositionUniform(camera.GetPosition());
-		m_pShader->SetProjectionUniform(camera.GetProjection());
-		m_pShader->SetViewUniform(camera.GetView());
-		m_pShader->SetProjectionViewUniform(camera.GetProjectionView());
-		m_pShader->SetProjectionViewModelUniform(camera.GetProjectionView());
+	m_pShader->SetModelUniform(transform.GetMatrix());
 
-		m_pShader->SetUniform("specPow", m_specularPower);
+	m_pShader->SetCameraPositionUniform(camera.GetPosition());
+	m_pShader->SetProjectionUniform(camera.GetProjection());
+	m_pShader->SetViewUniform(camera.GetView());
+	m_pShader->SetProjectionViewUniform(camera.GetProjectionView());
+	m_pShader->SetProjectionViewModelUniform(camera.GetProjectionView());
+	
+	m_pShader->SetUniform("specPow", m_specularPower);
 
-		//m_pShader->SetUniform("lights", lights);
-		m_pShader->SetUniform("shadowMap", shadowMap);
-	}
+	//Only For single light
+	//-----------------------------------------------------------------------------------
+	m_pShader->SetUniform("lightProjectionView", lights[0].GetProjectionView());
+	m_pShader->SetUniform("lightDir", lights[0].GetPosition());
+	m_pShader->SetUniform("lightColour",glm::vec3(1,1,1));
+
+	//m_pShader->SetUniform("lights", lights);
+	int textureID = (int)lights[0].GetFBO().GetDepthBuffer()->GetID();
+	m_pShader->SetUniform("shadowMap", textureID);
+	int bias = 1;
+	m_pShader->SetUniform("shadowBias", bias);
+	//-----------------------------------------------------------------------------------
+
+	lights[0].GetFBO().GetDepthBuffer()->Bind();
 
 	Bind();
 	m_pMesh->Render();
 	Unbind();
+
+	lights[0].GetFBO().GetDepthBuffer()->Unbind();
 }
 
-void MeshRenderer::Render(Light light, bool setUniforms)
+void MeshRenderer::Render(Light light)
 {
 	Shader* shader = light.GetShader();
 
-	if (setUniforms)
-	{
-		shader->SetCameraPositionUniform(light.GetPosition());
-		shader->SetProjectionUniform(light.GetProjection());
-		shader->SetViewUniform(light.GetView());
-		shader->SetProjectionViewUniform(light.GetProjectionView());
-		shader->SetProjectionViewModelUniform(light.GetProjectionView());
-	}
+
+	shader->SetCameraPositionUniform(light.GetPosition());
+	shader->SetProjectionUniform(light.GetProjection());
+	shader->SetViewUniform(light.GetView());
+	shader->SetProjectionViewUniform(light.GetProjectionView());
+	shader->SetProjectionViewModelUniform(light.GetProjectionView());
+
 
 	shader->Bind();
 	m_pMesh->Bind();

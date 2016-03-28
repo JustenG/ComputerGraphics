@@ -51,3 +51,8 @@ void Mesh::BuildRenderDataFromLoaderNode(FBXMeshNode* pMesh)
 
 	m_pRenderObject->CreateVAO<FBXVertex>(pMesh->m_vertices.size(), pMesh->m_indices.size(), pMesh->m_vertices.data(), pMesh->m_indices.data());
 }
+
+void Mesh::BuildRenderDataFromLoaderNode(GLuint vertexCount, GLuint indicesCount, Vertex* vertexData, GLuint* indicesData)
+{
+	m_pRenderObject->CreateVAO<Vertex>(vertexCount, indicesCount, vertexData, indicesData);
+}

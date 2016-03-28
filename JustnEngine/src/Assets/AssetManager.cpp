@@ -57,21 +57,33 @@ void AssetManager::CreateMaterial(std::string name)
 template<>
 MeshFile* AssetManager::GetAsset<MeshFile>(std::string name)
 {
-	return m_meshFiles[name];
+	if (m_meshFiles.find(name) == m_meshFiles.end())
+		return nullptr;
+	else
+		return  m_meshFiles[name];
 }
 template<>
 Material* AssetManager::GetAsset<Material>(std::string name)
 {
-	return m_materials[name];
+	if (m_materials.find(name) == m_materials.end())
+		return nullptr;
+	else
+		return m_materials[name];
 }
 template<>
 Shader* AssetManager::GetAsset<Shader>(std::string name)
 {
-	return m_shaders[name];
+	if (m_shaders.find(name) == m_shaders.end())
+		return nullptr;
+	else
+		return m_shaders[name];
 }
 template<>
 Texture* AssetManager::GetAsset<Texture>(std::string name)
 {
-	return m_textures[name];
+	if (m_textures.find(name) == m_textures.end())
+		return nullptr;
+	else
+		return m_textures[name];
 }
 

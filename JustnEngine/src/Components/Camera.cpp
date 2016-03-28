@@ -49,7 +49,6 @@ void Camera::SetToMain()
 {
 	m_isMainCamera = true;
 	m_renderToTexture = false;
-	SetResolution(glm::ivec2(1024));
 	m_FBO.Reset(GetResolution());
 }
 
@@ -92,7 +91,7 @@ void Camera::SetLookAt(vec3 from, vec3 to, vec3 up)
 
 void Camera::UpdateProjectionViewTransform()
 {
-	projectionViewTransform = projectionTransform * GetView();
+	projectionViewTransform = GetProjection() * GetView();
 }
 
 vec3 Camera::GetPosition()

@@ -6,15 +6,12 @@
 #include <string>
 #include "gl_core_4_4.h"
 
+#include "Assets\Material.h"
 
 class VertexArrayObject;
-class Shader;
 class Material;
 class FBXMeshNode;
-class Transform;
-class Camera;
-class Component;
-class Light;
+class Vertex;
 
 class Mesh : public Asset
 {
@@ -25,15 +22,18 @@ public:
 	void Update();
 	void Render();
 
+	Material* GetMaterial() { return m_pMaterial; };
+
 	void BuildRenderDataFromLoaderNode(FBXMeshNode* pMesh);
+	void BuildRenderDataFromLoaderNode(GLuint vertexCount, GLuint indicesCount, Vertex* vertexData, GLuint* indicesData);
+
 	template<typename T>
-	void BuildMaterialFromLoaderNode(T* pLoaderMaterial)
+	void BuildMaterialFromLoaderNode(T* pLoaderMaterial, std::string name)
 	{
-		m_pAssetManager->CreateMaterial(GetFileName());
-		m_pMaterial = m_pAssetManager->GetAsset<Material>(GetFileName());
+		m_pAssetManager->CreateMaterial(name);
+		m_pMaterial = m_pAssetManager->GetAsset<Material>(name);
 
 		m_pMaterial->InitializeFromLoaderMaterial(pLoaderMaterial);
-
 	}
 
 private:

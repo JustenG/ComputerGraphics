@@ -1,5 +1,6 @@
 #include "Rendering\VertexArrayObject.h"
 
+#include "Rendering\Vertex.h"
 #include <vector>
 
 VertexArrayObject::VertexArrayObject()
@@ -74,6 +75,16 @@ void VertexArrayObject::SetUpAttributes<FBXVertex>()
 	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(FBXVertex), (void*)FBXVertex::Offsets::BiNormalOffset);
 	glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(FBXVertex), (void*)FBXVertex::Offsets::IndicesOffset);
 	glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, sizeof(FBXVertex), (void*)FBXVertex::Offsets::WeightsOffset);
+}
+
+template<>
+void VertexArrayObject::SetUpAttributes<Vertex>()
+{
+	glEnableVertexAttribArray(0); //position
+	glEnableVertexAttribArray(2); //colour
+
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec4)));
 }
 
 void VertexArrayObject::DrawObject()

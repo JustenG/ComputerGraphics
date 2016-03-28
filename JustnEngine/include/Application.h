@@ -61,6 +61,7 @@ private:
 	GLFWwindow* m_pWindow;
 	GLuint* m_fbo;
 	//------------------------
+	glm::vec3 mainCameraPos;
 
 	EntityManager* m_entityManager;
 	ComponentManager* m_componentManager;

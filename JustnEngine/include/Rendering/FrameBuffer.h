@@ -25,8 +25,8 @@ public:
 
 	GLuint GetId() const { return m_fboId; }
 	const glm::ivec2& GetSize() const { return m_fboSize; }
-	const Texture* GetTexture() const { return m_fboTexture; }
-	const Texture* GetDepthBufferId() const { return m_fboDepthTex; }
+	Texture* GetTexture() const { return m_fboTexture; }
+	Texture* GetDepthBuffer() const { return m_fboDepthTex; }
 	Shader* GetShader() { return m_fboProgram; }
 
 private:
