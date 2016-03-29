@@ -8,11 +8,8 @@ out vec4 vColour;
 out vec2 vTexCoords;
 out vec4 vShadowCoord;
 
-uniform mat4 projection;
-uniform mat4 view;
 uniform mat4 model;
 uniform mat4 projectionView;
-uniform mat4 projectionViewModel;
 
 uniform mat4 lightProjectionView;
 

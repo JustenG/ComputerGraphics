@@ -44,7 +44,7 @@ void TestEngineApp::Initialise()
 	m_entity = GetEntityManager()->CreateEntity();
 	m_entity->AddComponent<Transform>();
 	m_entity->AddComponent<Camera>();
-	entityTransform = m_entity->GetComponent<Transform>();
+	entityTransform = m_entity->GetComponent<Transform>(); 
 	entityTransform->SetPosition(0, 2, 5);
 
 	//Light
@@ -52,7 +52,8 @@ void TestEngineApp::Initialise()
 	m_entity->AddComponent<Transform>();
 	m_entity->AddComponent<Light>();
 	entityTransform = m_entity->GetComponent<Transform>();
-	entityTransform->SetPosition(0, 0.5f, 0.5f);
+	entityTransform->SetPosition(5, 3, -5);
+	entityTransform->SetRotation(0, 0, 0);
 
 }
 

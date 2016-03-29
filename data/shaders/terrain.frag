@@ -11,11 +11,17 @@ void main()
 {
 	
 	vec3 diffuse = vec3(vColour.xyz);
-	if (texture(shadowMap, vShadowCoord.xy).r  <  vShadowCoord.z - 0.01f) 
+	
+	float shadowValue = texture(shadowMap, vShadowCoord.xy).r;
+	float shadowBias = vShadowCoord.z - 0.01f;
+	
+	
+	if (shadowValue <  shadowBias) 
 	{
 		diffuse = vec3(0,0,0);
 	}
 	
 	vec4 result = vec4(diffuse,1);
-	FragColor =  result;
+	
+	FragColor = vec4(vShadowCoord.xy,0,1);// result;
 }

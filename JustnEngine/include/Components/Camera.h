@@ -31,7 +31,8 @@ public:
 	void SetShader(Shader* shader) { m_FBO.SetShaderProgram(shader); };	
 	void SetResolution(glm::ivec2 resolution);
 
-	void SetPerspective(float fieldOfView, float aspectRatio, float _near, float _far);
+	void SetPerspective();
+	void SetOrthograpghic();
 	void SetLookAt(glm::vec3 from, glm::vec3 to, glm::vec3 up);
 	void UpdateProjectionViewTransform();
 	glm::vec3 GetPosition();
@@ -47,8 +48,19 @@ public:
 
 protected:
 	glm::mat4 worldTransform;
+
+	bool m_orthographic;
 	glm::mat4 projectionTransform;
 	glm::mat4 projectionViewTransform;
+	//Perspective
+	float m_fieldOfView;
+	float m_aspectRatio;
+	//Orthographic
+	float m_width;
+	float m_height;
+	//Planes
+	float m_nearPlane;
+	float m_farPlane;
 
 	glm::ivec2 m_resolution;
 

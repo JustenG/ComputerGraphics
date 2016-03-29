@@ -9,13 +9,28 @@ using glm::mat4;
 
 Camera::Camera()
 {
-	SetPerspective(45, 16 / 9.0f, 1, 1000);
+	m_fieldOfView	= 45;
+	m_aspectRatio	= 16/9.0f;
+	m_width			= 10;
+	m_height		= 10;
+	m_nearPlane		= 1;
+	m_farPlane		= 1000;
+
+	SetPerspective();
 	SetLookAt(vec3(0, 10, 10), vec3(0), vec3(0, 1, 0));
 }
 Camera::Camera(glm::ivec2 resolution)
 {
-	SetPerspective(45, 16 / 9.0f, 1, 1000);
+	m_fieldOfView = 45;
+	m_aspectRatio = 16 / 9.0f;
+	m_width = 10;
+	m_height = 10;
+	m_nearPlane = 1;
+	m_farPlane = 1000;
+
+	SetPerspective();
 	SetLookAt(vec3(0, 10, 10), vec3(0), vec3(0, 1, 0));
+
 	SetResolution(resolution);
 }
 
@@ -50,6 +65,8 @@ void Camera::SetToMain()
 	m_isMainCamera = true;
 	m_renderToTexture = false;
 	m_FBO.Reset(GetResolution());
+
+	SetPerspective();
 }
 
 void Camera::SetToCamera()
@@ -59,6 +76,8 @@ void Camera::SetToCamera()
 	SetResolution(glm::ivec2(1024));
 	m_FBO.Reset(GetResolution());
 	m_FBO.CreateBuffer(true, true);
+
+	SetPerspective();
 }
 
 void Camera::SetToLight()
@@ -68,6 +87,8 @@ void Camera::SetToLight()
 	SetResolution(glm::ivec2(1024));
 	m_FBO.Reset(GetResolution());
 	m_FBO.CreateBuffer(false, true);
+
+	SetOrthograpghic();
 }
 
 void Camera::SetResolution(glm::ivec2 resolution)
@@ -79,9 +100,16 @@ glm::ivec2 Camera::GetResolution()
 	return m_resolution;
 }
 
-void Camera::SetPerspective(float fieldOfView, float aspectRatio, float _near, float _far)
+void Camera::SetPerspective()
 {
-	projectionTransform = glm::perspective(fieldOfView * glm::pi<float>() / 180.f, aspectRatio, _near, _far);
+	m_orthographic = false;
+	projectionTransform = glm::perspective(m_fieldOfView, m_aspectRatio, m_nearPlane, m_farPlane);
+}
+
+void Camera::SetOrthograpghic()
+{
+	m_orthographic = true;
+	projectionTransform = glm::ortho<float>(-m_width, m_width, -m_height, m_height, m_nearPlane, m_farPlane); 
 }
 
 void Camera::SetLookAt(vec3 from, vec3 to, vec3 up)
@@ -94,9 +122,10 @@ void Camera::UpdateProjectionViewTransform()
 	projectionViewTransform = GetProjection() * GetView();
 }
 
+
 vec3 Camera::GetPosition()
 {
-	return vec3(worldTransform[3][0], worldTransform[3][1], worldTransform[3][2]);
+	return vec3(worldTransform[3]);
 }
 
 //void Camera::MovePos(vec3 pos)

@@ -1,6 +1,8 @@
 #include "Components\Light.h"
 #include "Assets\AssetManager.h"
 
+#include "Components\Transform.h"
+
 Light::Light() : Camera()
 {
 	SetToLight();
@@ -18,4 +20,19 @@ Light::Light() : Camera()
 
 Light::~Light()
 {
+
+}
+
+void Light::Update(Transform transform)
+{
+	//glm::vec3 forward = transform.GetMatrix()[3];
+	//forward = glm::normalize(forward);
+	worldTransform = transform.GetMatrix();
+	UpdateLightProjectionViewTransform();
+}
+
+void Light::UpdateLightProjectionViewTransform()
+{
+	glm::mat4 lightView = glm::lookAt(GetPosition(), glm::vec3(0), glm::vec3(0, 1, 0));
+	projectionViewTransform = GetProjection() * lightView;
 }

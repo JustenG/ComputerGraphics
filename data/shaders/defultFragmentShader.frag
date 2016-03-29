@@ -39,9 +39,9 @@ void main()
 	spec = pow(spec, specPow);
 	vec3 specular = specularStrength * spec * lightColour;
 	
-	if (texture(shadowMap, vShadowCoord.xy).r  <  vShadowCoord.z - 0.01f) 
+	if (texture(shadowMap, vShadowCoord.xy).r  <  vShadowCoord.z - 0.1f) 
 	{
-		diffuse = vec3(0,0,0);
+		//diffuse = vec3(0,0,0);
 	}
 	
 	vec4 result = vec4(ambient + diffuse + specular,1) * texture(DiffuseTexture, vTexCoords);

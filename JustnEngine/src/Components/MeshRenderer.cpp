@@ -6,6 +6,8 @@
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 
+#include "GLFW\glfw3.h"
+
 #include "Assets\Mesh.h"
 #include "Assets\Shader.h"
 #include "Assets\Material.h"
@@ -13,6 +15,8 @@
 #include "Components\Transform.h"
 #include "Components\Camera.h"
 #include "Components\Light.h"
+
+#include "Gizmos.h"
 
 MeshRenderer::MeshRenderer()
 {
@@ -60,15 +64,37 @@ void MeshRenderer::Render(Transform transform, Camera camera, std::vector<Light>
 
 	//Only For single light
 	//-----------------------------------------------------------------------------------
-	m_pShader->SetUniform("lightProjectionView", lights[0].GetProjectionView());
-	m_pShader->SetUniform("lightDir", lights[0].GetPosition());
+	// bind the light matrix
+	glm::mat4 textureSpaceOffset(
+		0.5f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.5f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.5f, 0.0f,
+		0.5f, 0.5f, 0.5f, 1.0f
+		);
+
+	glm::mat4 lightMatrix = textureSpaceOffset * lights[0].GetProjectionView();
+
+	auto lightPos = glm::vec3(sin(glfwGetTime()), 1, -sin(glfwGetTime())) * 20;
+
+
+	Gizmos::addSphere(lightPos, 1.0f, 10, 10, glm::vec4(1));
+
+	const float lightOrthoSize = 12;
+	glm::mat4 lightProjection = glm::ortho(-lightOrthoSize, lightOrthoSize, -lightOrthoSize, lightOrthoSize, -lightOrthoSize, lightOrthoSize);
+	glm::mat4 lightViewInverse = glm::lookAt(lightPos, glm::vec3(0), glm::vec3(0, 1, 0));
+	glm::mat4 textureOffsetTransform(0.5f);
+	textureOffsetTransform[3] = glm::vec4(0.5f, 0.5f, 0.5f, 1.f);
+	glm::mat4 lightProjectionViewNDC = lightProjection * lightViewInverse;
+	glm::mat4 lightProjectionView = textureOffsetTransform * lightProjectionViewNDC;
+
+	m_pShader->SetUniform("lightProjectionView", lightProjectionView);
+	m_pShader->SetUniform("lightDir", glm::normalize(glm::vec3(-lights[0].GetWorldTransform()[3])));
 	m_pShader->SetUniform("lightColour",glm::vec3(1,1,1));
 
 	//m_pShader->SetUniform("lights", lights);
-	int textureID = (int)lights[0].GetFBO().GetDepthBuffer()->GetID();
+	//int textureID = (int)lights[0].GetFBO().GetDepthBuffer()->GetID();
+	int textureID = 0;
 	m_pShader->SetUniform("shadowMap", textureID);
-	int bias = 1;
-	m_pShader->SetUniform("shadowBias", bias);
 	//-----------------------------------------------------------------------------------
 
 	lights[0].GetFBO().GetDepthBuffer()->Bind();
@@ -84,13 +110,7 @@ void MeshRenderer::Render(Light light)
 {
 	Shader* shader = light.GetShader();
 
-
-	shader->SetCameraPositionUniform(light.GetPosition());
-	shader->SetProjectionUniform(light.GetProjection());
-	shader->SetViewUniform(light.GetView());
 	shader->SetProjectionViewUniform(light.GetProjectionView());
-	shader->SetProjectionViewModelUniform(light.GetProjectionView());
-
 
 	shader->Bind();
 	m_pMesh->Bind();
