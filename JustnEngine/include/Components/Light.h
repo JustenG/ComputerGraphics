@@ -10,6 +10,7 @@ public:
 
 	void Update(Transform transform);
 	void UpdateLightProjectionViewTransform();
+	glm::mat4 GetLightView();
 
 private:
 

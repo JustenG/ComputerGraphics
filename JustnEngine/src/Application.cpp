@@ -8,6 +8,8 @@
 #include "Components\Transform.h"
 #include "Components\Camera.h"
 
+#include "all_includes.h"
+
 Application::Application()
 {
 }
@@ -31,7 +33,7 @@ int Application::Startup(int width, int height)
 	m_isGizmosActive = true;
 	m_isGUIActive = true;
 
-	m_componentManager->SetMainCamResolution(glm::ivec2(width, height));
+	m_componentManager->SetMainCamResolution(ivec2(width, height));
 
 	//If GL fails to initalise
 	if (glfwInit() == false)
@@ -139,14 +141,26 @@ void Application::UpdateImGui()
 	ImGui_ImplGlfwGL3_NewFrame();
 
 	//Update ImGuiS
-	GUI::Begin("My rendering options");
+	GUI::Begin("GameObjects");
+	if (GUI::TreeNode("test"))
+	{
+		GUI::TextWrapped("Your");
+		ImGui::TreePop();
+	}
 
-	Transform* cameraTran = m_componentManager->GetComponent<Transform>(m_componentManager->GetMainCamera()->GetTransformIndex());
-	mainCameraPos = cameraTran->GetPosition();
-	GUI::InputFloat3("Camera Position", glm::value_ptr(mainCameraPos));
+//
+//	for (int i = 0; i < GetEntityManager()->GetEntityCount(); ++i)
+//	{
+//	}
+//	Transform* cameraTran = m_componentManager->GetComponent<Transform>(m_componentManager->GetMainCamera()->GetTransformIndex());
+//	mainCameraPos = cameraTran->GetPosition();
+//	mainCameraRot = cameraTran->GetRotation() * 180;
+//	GUI::DragFloat3("Camera Position", glm::value_ptr(mainCameraPos));
+//	GUI::DragFloat3("Camera Rotation", glm::value_ptr(mainCameraRot));
 	GUI::End();
 
-	cameraTran->SetPosition(mainCameraPos);
+//	cameraTran->SetPosition(mainCameraPos);
+//	cameraTran->SetRotation(mainCameraRot/180);
 
 }
 
@@ -168,7 +182,7 @@ void Application::DrawGizmos()
 {
 	if (m_componentManager->GetMainCamera() != nullptr)
 	{
-		glm::mat4 projectionView = m_componentManager->GetMainCamera()->GetProjectionView();
+		mat4 projectionView = m_componentManager->GetMainCamera()->GetProjectionView();
 		Gizmos::draw(projectionView);
 	}
 }

@@ -24,5 +24,7 @@ private:
 	MeshFile* m_pModel;
 	Camera* m_pFlyCam;
 
+	glm::vec3 m_lightPos;
+
 };
 

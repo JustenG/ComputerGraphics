@@ -62,6 +62,7 @@ private:
 	GLuint* m_fbo;
 	//------------------------
 	glm::vec3 mainCameraPos;
+	glm::vec3 mainCameraRot;
 
 	EntityManager* m_entityManager;
 	ComponentManager* m_componentManager;

@@ -19,6 +19,8 @@ TestEngineApp::~TestEngineApp()
 
 void TestEngineApp::Initialise()
 {
+	Transform* entityTransform;
+
 	//Model
 	GetAssetManager()->LoadMeshFile("data/models/soulspear/soulspear.fbx", "spear");
 	m_pModel = GetAssetManager()->GetAsset<MeshFile>("spear");
@@ -26,7 +28,6 @@ void TestEngineApp::Initialise()
 	m_pModel->SetShader(GetAssetManager()->GetAsset<Shader>("DefultShader"));
 	m_pModel->CreateEntitys();
 
-	Transform* entityTransform;
 	//Terrain
 	m_entity = GetEntityManager()->CreateEntity();
 	m_entity->AddComponent<Transform>();
@@ -38,21 +39,21 @@ void TestEngineApp::Initialise()
 	entityTerrain->SetMaterial(GetAssetManager()->GetAsset<Material>("terrainMaterial"));
 	entityTerrain->GenerateGrid(64,64);
 	entityTransform = m_entity->GetComponent<Transform>();
-	entityTransform->SetPosition(-16,0,-16);
+	entityTransform->SetPosition(-16,-10,-16); 
 
 	//Camera
 	m_entity = GetEntityManager()->CreateEntity();
 	m_entity->AddComponent<Transform>();
-	m_entity->AddComponent<Camera>();
+	m_entity->AddComponent<Camera>(); 
 	entityTransform = m_entity->GetComponent<Transform>(); 
-	entityTransform->SetPosition(0, 2, 5);
+	entityTransform->SetPosition(0, 2, 10);
 
-	//Light
+	//Light 
 	m_entity = GetEntityManager()->CreateEntity();
 	m_entity->AddComponent<Transform>();
 	m_entity->AddComponent<Light>();
 	entityTransform = m_entity->GetComponent<Transform>();
-	entityTransform->SetPosition(5, 3, -5);
+	entityTransform->SetPosition(5, 10, -5);
 	entityTransform->SetRotation(0, 0, 0);
 
 }
@@ -69,7 +70,8 @@ void TestEngineApp::EarlyUpdate()
 
 void TestEngineApp::Update()
 {
-
+	m_lightPos = glm::vec3(sin(glfwGetTime()), 1, -cos(glfwGetTime())) * 10;
+	m_entity->GetComponent<Transform>()->SetPosition(m_lightPos);
 }
 
 void TestEngineApp::LateUpdate()

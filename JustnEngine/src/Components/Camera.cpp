@@ -11,26 +11,15 @@ Camera::Camera()
 {
 	m_fieldOfView	= 45;
 	m_aspectRatio	= 16/9.0f;
-	m_width			= 10;
-	m_height		= 10;
 	m_nearPlane		= 1;
 	m_farPlane		= 1000;
+	m_orthoSize		= 128;
 
 	SetPerspective();
 	SetLookAt(vec3(0, 10, 10), vec3(0), vec3(0, 1, 0));
 }
-Camera::Camera(glm::ivec2 resolution)
+Camera::Camera(glm::ivec2 resolution) : Camera()
 {
-	m_fieldOfView = 45;
-	m_aspectRatio = 16 / 9.0f;
-	m_width = 10;
-	m_height = 10;
-	m_nearPlane = 1;
-	m_farPlane = 1000;
-
-	SetPerspective();
-	SetLookAt(vec3(0, 10, 10), vec3(0), vec3(0, 1, 0));
-
 	SetResolution(resolution);
 }
 
@@ -84,10 +73,10 @@ void Camera::SetToLight()
 {
 	m_isMainCamera = false;
 	m_renderToTexture = true;
-	SetResolution(glm::ivec2(1024));
+	SetResolution(glm::ivec2(m_orthoSize * 64));
 	m_FBO.Reset(GetResolution());
 	m_FBO.CreateBuffer(false, true);
-
+	 
 	SetOrthograpghic();
 }
 
@@ -109,7 +98,7 @@ void Camera::SetPerspective()
 void Camera::SetOrthograpghic()
 {
 	m_orthographic = true;
-	projectionTransform = glm::ortho<float>(-m_width, m_width, -m_height, m_height, m_nearPlane, m_farPlane); 
+	projectionTransform = glm::ortho<float>(-m_orthoSize, m_orthoSize, -m_orthoSize, m_orthoSize, -m_orthoSize, m_orthoSize);
 }
 
 void Camera::SetLookAt(vec3 from, vec3 to, vec3 up)

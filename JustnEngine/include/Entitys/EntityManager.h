@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+#include <gl_core_4_4.h>
+#include "Entitys\GameObject.h"
 
 class GameObject;
 
@@ -13,6 +15,8 @@ public:
 	void operator=(EntityManager const&) = delete;
 
 	GameObject* CreateEntity();
+	std::vector<GameObject> GetEntitys() { return m_entitys; };
+	GLuint GetEntityCount();
 
 private:
 	EntityManager();

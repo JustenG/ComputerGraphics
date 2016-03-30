@@ -1,33 +1,47 @@
 #pragma once
 #include <vector>
 
-#include "gl_core_4_4.h"
+#include "global_includes.h"
 #include "FBXFile.h"
 
 #include "Rendering\VertexBuffer.h"
 #include "Rendering\IndexBuffer.h"	
 
+static uint VAO_NUM_FLOATS;
+static uint VAO_NUM_ATTRIBUTES;
+
+#define subscribe(vertex_t, attribute_name) \
+{ \
+	auto offset = ((size_t)&reinterpret_cast<char const volatile&>((((vertex_t*)0)->attribute_name))); \
+	PushAttribute(sizeof(vertex_t::attribute_name) / sizeof(float), sizeof(vertex_t), offset);\
+}
+
+void PushAttribute(uint attributeSize, uint vertexSize, size_t offset);
+void ClearVAOMetadata();
 class VertexBuffer;
 class IndexBuffer;
 
 class VertexArrayObject
 {
 public:
+
 	VertexArrayObject();
 	~VertexArrayObject();
 
 	template<typename T>
-	void CreateVAO(GLuint VBO_Size, GLuint IBO_Size, T* VBO_Data, GLuint* IBO_Data);
+	void CreateVAO(uint VBO_Size, uint IBO_Size, T* VBO_Data, uint* IBO_Data);
 
-	void GenerateBuffer(GLuint* data);
+	void GenerateBuffer(uint* data);
 	void Bind();
-	void BindVAO(GLuint data);
+	void BindVAO(uint data);
 	void Unbind();
 	void UnbindVAO();
-	void DeleteBuffers(GLuint VAO, GLuint VBO, GLuint IBO);
+	void DeleteBuffers(uint VAO, uint VBO, uint IBO);
 
 	template<typename T>
 	void SetUpAttributes();
+
+	//void PushAttribute(uint attributeSize, uint vertexSize, size_t offset);
 
 	void DrawObject();
 
@@ -36,11 +50,13 @@ private:
 	VertexBuffer* m_VertexBuffer;
 	IndexBuffer* m_IndexBuffer;
 
-	GLuint m_pData[3];
+	uint m_pData[3];
+
+	uint m_numAttributes;
 };
 
 template<typename T>
-void VertexArrayObject::CreateVAO(GLuint VBO_Size, GLuint IBO_Size, T* VBO_Data, GLuint* IBO_Data)
+void VertexArrayObject::CreateVAO(uint VBO_Size, uint IBO_Size, T* VBO_Data, uint* IBO_Data)
 {
 	memset(m_pData, 0, 3);
 	m_VertexBuffer = new VertexBuffer();

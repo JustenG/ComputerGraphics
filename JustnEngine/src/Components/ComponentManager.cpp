@@ -72,13 +72,13 @@ void ComponentManager::RenderAllComponents()
 
 			MeshRenderers[j].Render(Lights[i]);
 		}
-		//for (int j = 0; j < (int)Terrains.size(); ++j)
-		//{
-		//	int index = Terrains[i].GetTransformIndex();
-		//	Transform transform = Transforms[index];
+		for (int j = 0; j < (int)Terrains.size(); ++j)
+		{
+			int index = Terrains[i].GetTransformIndex();
+			Transform transform = Transforms[index];
 
-		//	Terrains[j].Render(Lights[i]);
-		//}
+			Terrains[j].Render(Lights[i]);
+		}
 
 
 		Lights[i].Unbind();

@@ -73,6 +73,8 @@ SET(HEADERS
 
 SET(EXTRA_SOURCES
     ${CMAKE_SOURCE_DIR}/deps/gl/gl_core_4_4.c
+	${CMAKE_SOURCE_DIR}/deps/utilities/all_includes.cpp
+	${CMAKE_SOURCE_DIR}/deps/utilities/global_includes.cpp
     ${CMAKE_SOURCE_DIR}/deps/utilities/Gizmos.cpp
     ${CMAKE_SOURCE_DIR}/deps/memalign/memaligned.cpp
     ${CMAKE_SOURCE_DIR}/deps/imgui/imgui.cpp

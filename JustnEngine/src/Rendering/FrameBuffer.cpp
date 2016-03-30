@@ -1,4 +1,5 @@
 #include "Rendering\FrameBuffer.h"
+#include "all_includes.h"
 
 
 FrameBuffer::FrameBuffer()
@@ -75,12 +76,12 @@ bool FrameBuffer::CreateBuffer(bool colour, bool depth)
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_fboDepth);
 		*/
 
-		GLuint fboDepthId;
+		uint fboDepthId;
 		glGenTextures(1, &fboDepthId);
 		glBindTexture(GL_TEXTURE_2D, fboDepthId);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, m_fboSize.x, m_fboSize.y, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
@@ -100,12 +101,12 @@ bool FrameBuffer::CreateBuffer(bool colour, bool depth)
 	return true;
 }
 
-void FrameBuffer::Reset(glm::ivec2 size)
+void FrameBuffer::Reset(ivec2 size)
 {
 	Destroy();
 	glDeleteFramebuffers(1, &m_fboId);
 	m_fboId = 0;
-	m_fboSize = glm::ivec2(size);
+	m_fboSize = ivec2(size);
 }
 
 void FrameBuffer::Destroy()

@@ -65,30 +65,19 @@ void MeshRenderer::Render(Transform transform, Camera camera, std::vector<Light>
 	//Only For single light
 	//-----------------------------------------------------------------------------------
 	// bind the light matrix
-	glm::mat4 textureSpaceOffset(
-		0.5f, 0.0f, 0.0f, 0.0f,
-		0.0f, 0.5f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.5f, 0.0f,
-		0.5f, 0.5f, 0.5f, 1.0f
-		);
 
-	glm::mat4 lightMatrix = textureSpaceOffset * lights[0].GetProjectionView();
+	glm::vec3 lightPosition(lights[0].GetPosition());
+	glm::vec3 lightDir = glm::normalize(glm::vec3(-lightPosition));
 
-	auto lightPos = glm::vec3(sin(glfwGetTime()), 1, -sin(glfwGetTime())) * 20;
+	Gizmos::addSphere(lightPosition, 1.0f, 10, 10, glm::vec4(1));
+	Gizmos::addLine(lightPosition, lightDir, glm::vec4(1, 1, 1, 1));
 
-
-	Gizmos::addSphere(lightPos, 1.0f, 10, 10, glm::vec4(1));
-
-	const float lightOrthoSize = 12;
-	glm::mat4 lightProjection = glm::ortho(-lightOrthoSize, lightOrthoSize, -lightOrthoSize, lightOrthoSize, -lightOrthoSize, lightOrthoSize);
-	glm::mat4 lightViewInverse = glm::lookAt(lightPos, glm::vec3(0), glm::vec3(0, 1, 0));
 	glm::mat4 textureOffsetTransform(0.5f);
 	textureOffsetTransform[3] = glm::vec4(0.5f, 0.5f, 0.5f, 1.f);
-	glm::mat4 lightProjectionViewNDC = lightProjection * lightViewInverse;
-	glm::mat4 lightProjectionView = textureOffsetTransform * lightProjectionViewNDC;
+	glm::mat4 lightProjectionView = textureOffsetTransform * lights[0].GetProjectionView();
 
 	m_pShader->SetUniform("lightProjectionView", lightProjectionView);
-	m_pShader->SetUniform("lightDir", glm::normalize(glm::vec3(-lights[0].GetWorldTransform()[3])));
+	m_pShader->SetUniform("lightDir", lightDir);
 	m_pShader->SetUniform("lightColour",glm::vec3(1,1,1));
 
 	//m_pShader->SetUniform("lights", lights);
@@ -97,7 +86,7 @@ void MeshRenderer::Render(Transform transform, Camera camera, std::vector<Light>
 	m_pShader->SetUniform("shadowMap", textureID);
 	//-----------------------------------------------------------------------------------
 
-	lights[0].GetFBO().GetDepthBuffer()->Bind();
+	lights[0].GetFBO().GetDepthBuffer()->Bind(); 
 
 	Bind();
 	m_pMesh->Render();

@@ -20,11 +20,11 @@ void Terrain::GenerateGrid(unsigned int rows, unsigned int cols)
 	{
 		for (unsigned int c = 0; c < cols; ++c)
 		{
-			aoVertices[r * cols + c].Position = glm::vec4((float)c, 0, (float)r, 1);
+			aoVertices[r * cols + c].position = glm::vec4((float)c, 0, (float)r, 1);
 			// create some arbitrary colour based off something
 			// that might not be related to tiling a texture
 			glm::vec3 Colour = glm::vec3(sinf((c / (float)(cols - 1)) * (r / (float)(rows - 1))));
-			aoVertices[r * cols + c].Colour = glm::vec4(1,1,1, 1);
+			aoVertices[r * cols + c].colour = glm::vec4(1,1,1, 1);
 		}
 	}
 

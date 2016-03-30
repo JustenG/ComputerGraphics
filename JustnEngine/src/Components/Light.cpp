@@ -3,6 +3,12 @@
 
 #include "Components\Transform.h"
 
+using glm::mat4;
+using glm::mat3;
+using glm::vec4;
+using glm::vec3;
+using glm::vec2;
+
 Light::Light() : Camera()
 {
 	SetToLight();
@@ -33,6 +39,11 @@ void Light::Update(Transform transform)
 
 void Light::UpdateLightProjectionViewTransform()
 {
-	glm::mat4 lightView = glm::lookAt(GetPosition(), glm::vec3(0), glm::vec3(0, 1, 0));
-	projectionViewTransform = GetProjection() * lightView;
+	//glm::mat4 lightView = glm::lookAt(GetPosition(), glm::vec3(0), glm::vec3(0, 1, 0));
+	projectionViewTransform = GetProjection() * GetLightView();
+}
+
+mat4 Light::GetLightView()
+{
+	return worldTransform * glm::lookAt(GetPosition(), vec3(0), vec3(0, 1, 0));
 }

@@ -56,8 +56,7 @@ protected:
 	float m_fieldOfView;
 	float m_aspectRatio;
 	//Orthographic
-	float m_width;
-	float m_height;
+	float m_orthoSize;
 	//Planes
 	float m_nearPlane;
 	float m_farPlane;

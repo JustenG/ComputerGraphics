@@ -1,19 +1,15 @@
 #include "Rendering\VertexArrayObject.h"
-
 #include "Rendering\Vertex.h"
-#include <vector>
-
-VertexArrayObject::VertexArrayObject()
-{
-}
+#include "all_includes.h"
 
 
+#pragma region Locals
+VertexArrayObject::VertexArrayObject() 
+{}
 VertexArrayObject::~VertexArrayObject()
-{
+{}
 
-}
-
-void VertexArrayObject::GenerateBuffer(GLuint* data)
+void VertexArrayObject::GenerateBuffer(uint* data)
 {
 	glGenVertexArrays(1, data);
 }
@@ -32,7 +28,7 @@ void VertexArrayObject::Unbind()
 	m_IndexBuffer->Unbind();
 }
 
-void VertexArrayObject::BindVAO(GLuint data)
+void VertexArrayObject::BindVAO(uint data)
 {
 	glBindVertexArray(data);
 }
@@ -41,8 +37,7 @@ void VertexArrayObject::UnbindVAO()
 	glBindVertexArray(0);
 }
 
-
-void VertexArrayObject::DeleteBuffers(GLuint VAO, GLuint VBO, GLuint IBO)
+void VertexArrayObject::DeleteBuffers(uint VAO, uint VBO, uint IBO)
 {
 	glDeleteVertexArrays(1, &VAO);
 	m_VertexBuffer->DeleteBuffers(VBO);
@@ -53,43 +48,51 @@ void VertexArrayObject::DeleteBuffers(GLuint VAO, GLuint VBO, GLuint IBO)
 	delete[] m_pData;
 }
 
+void VertexArrayObject::DrawObject()
+{
+	glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetBufferSize(), GL_UNSIGNED_INT, 0);
+}
+#pragma endregion
+
+#pragma region Globals
+void PushAttribute(uint attributeSize, uint vertexSize, size_t offset)
+{
+	glEnableVertexAttribArray(VAO_NUM_ATTRIBUTES);
+	glVertexAttribPointer(VAO_NUM_ATTRIBUTES, attributeSize, GL_FLOAT, GL_FALSE, vertexSize, (void*)offset);
+
+	VAO_NUM_ATTRIBUTES++;
+	VAO_NUM_FLOATS += attributeSize;
+}
+
+void ClearVAOMetadata()
+{
+	VAO_NUM_FLOATS = 0;
+	VAO_NUM_ATTRIBUTES = 0;
+}
+#pragma endregion
+
+#pragma region Templates
 template<>
 void VertexArrayObject::SetUpAttributes<FBXVertex>()
 {
-	glEnableVertexAttribArray(0); //position
-	glEnableVertexAttribArray(1); //normal data
-	glEnableVertexAttribArray(2); //colour data
-	glEnableVertexAttribArray(3); //texcoord1 data
-	glEnableVertexAttribArray(4); //texcoord2 data
-	glEnableVertexAttribArray(5); //tangent data
-	glEnableVertexAttribArray(6); //binormal data
-	glEnableVertexAttribArray(7); //indicies data
-	glEnableVertexAttribArray(8); //weights data
-
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(FBXVertex), (void*)FBXVertex::Offsets::PositionOffset);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(FBXVertex), (void*)FBXVertex::Offsets::NormalOffset);
-	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(FBXVertex), (void*)FBXVertex::Offsets::ColourOffset);
-	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(FBXVertex), (void*)FBXVertex::Offsets::TexCoord1Offset);
-	glVertexAttribPointer(4, 2, GL_FLOAT, GL_FALSE, sizeof(FBXVertex), (void*)FBXVertex::Offsets::TexCoord2Offset);
-	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(FBXVertex), (void*)FBXVertex::Offsets::TangentOffset);
-	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(FBXVertex), (void*)FBXVertex::Offsets::BiNormalOffset);
-	glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(FBXVertex), (void*)FBXVertex::Offsets::IndicesOffset);
-	glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, sizeof(FBXVertex), (void*)FBXVertex::Offsets::WeightsOffset);
+	ClearVAOMetadata();
+	subscribe(FBXVertex, position);
+	subscribe(FBXVertex, normal);
+	subscribe(FBXVertex, colour);
+	subscribe(FBXVertex, texCoord1);
+	subscribe(FBXVertex, texCoord2);
+	subscribe(FBXVertex, tangent);
+	subscribe(FBXVertex, binormal);
+	subscribe(FBXVertex, indices);
+	subscribe(FBXVertex, weights);
 }
 
 template<>
 void VertexArrayObject::SetUpAttributes<Vertex>()
 {
-	glEnableVertexAttribArray(0); //position
-	glEnableVertexAttribArray(2); //colour
-
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(glm::vec4)));
+	ClearVAOMetadata();
+	subscribe(Vertex, position);
+	subscribe(Vertex, colour);
 }
-
-void VertexArrayObject::DrawObject()
-{
-	glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetBufferSize(), GL_UNSIGNED_INT, 0);
-}
-
+#pragma endregion
 
