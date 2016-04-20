@@ -4,6 +4,7 @@
 #include "Components\Light.h"
 #include "Components\MeshRenderer.h"
 #include "Components\Terrain.h"
+#include "Entitys\GameObject.h"
 
 ComponentManager* ComponentManager::m_instance = new ComponentManager();
 
@@ -46,13 +47,13 @@ void ComponentManager::UpdateAllComponents()
 
 	for (int i = 0; i < (int)Cameras.size(); ++i)
 	{
-		int index = Cameras[i].GetTransformIndex();
+		int index = Cameras[i].GetGameObject()->GetComponentIndex<Transform>();
 		Transform transform = Transforms[index];
 		Cameras[i].Update(transform);
 	}
 	for (int i = 0; i < Lights.size(); ++i)
 	{
-		int index = Lights[i].GetTransformIndex();
+		int index = Lights[i].GetGameObject()->GetComponentIndex<Transform>();
 		Transform transform = Transforms[index];
 		Lights[i].Update(transform);
 	}
@@ -67,14 +68,14 @@ void ComponentManager::RenderAllComponents()
 
 		for (int j = 0; j < (int)MeshRenderers.size(); ++j)
 		{
-			int index = MeshRenderers[i].GetTransformIndex();
+			int index = MeshRenderers[i].GetGameObject()->GetComponentIndex<Transform>();
 			Transform transform = Transforms[index];
 
 			MeshRenderers[j].Render(Lights[i]);
 		}
 		for (int j = 0; j < (int)Terrains.size(); ++j)
 		{
-			int index = Terrains[i].GetTransformIndex();
+			int index = Terrains[i].GetGameObject()->GetComponentIndex<Transform>();
 			Transform transform = Transforms[index];
 
 			Terrains[j].Render(Lights[i]);
@@ -91,14 +92,14 @@ void ComponentManager::RenderAllComponents()
 
 		for (int j = 0; j < (int)MeshRenderers.size(); ++j)
 		{
-			int index = MeshRenderers[i].GetTransformIndex();
+			int index = MeshRenderers[i].GetGameObject()->GetComponentIndex<Transform>();
 			Transform transform = Transforms[index];
 
 			MeshRenderers[j].Render(Transforms[index],Cameras[i],Lights,0);
 		}
 		for (int j = 0; j < (int)Terrains.size(); ++j)
 		{
-			int index = Terrains[i].GetTransformIndex();
+			int index = Terrains[i].GetGameObject()->GetComponentIndex<Transform>();
 			Transform transform = Transforms[index];
 
 			Terrains[j].Render(Transforms[index], Cameras[i], Lights, 0);

@@ -19,6 +19,7 @@ class Asset;
 class EntityManager;
 class ComponentManager;
 class AssetManager;
+class GameObject;
 
 class Application
 {
@@ -55,6 +56,8 @@ public:
 	GLFWwindow* GetWindow();
 
 private:
+
+	void PrintObject(GameObject* object);
 	
 	//WINDOW
 	//------------------------

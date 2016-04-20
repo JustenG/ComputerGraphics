@@ -1,9 +1,7 @@
 #pragma once
-#include <map>
-#include <typeinfo>
+#include "global_includes.h"
 #include "Components\ComponentManager.h"
-
-class Component;
+#include "Components\Component.h"
 
 class GameObject
 {
@@ -15,6 +13,10 @@ public:
 	void AddComponent();
 	template<typename T>
 	T* GetComponent();
+	template<typename T>
+	int GetComponentIndex();
+
+	std::string GetName() { return m_name; };
 
 private:
 
@@ -22,7 +24,9 @@ private:
 
 	std::map<size_t, int> m_componentIndex;
 	template<typename T>
-	size_t GetID();
+	size_t GetTypeID();
+
+	std::string m_name;
 
 	bool m_hasTransform;
 	bool m_hasCamera;
@@ -30,14 +34,36 @@ private:
 	bool m_hasLight;
 };
 
-template<typename T>
-T* GameObject::GetComponent()
+template<class TComponent>
+void GameObject::AddComponent()
 {
-	return m_pComponentManager->GetComponent<T>(m_componentIndex[GetID<T>()]);
+	if (!TComponent::CheckRequirements(this))
+		return;
+
+	if (m_componentIndex.find(GetTypeID<TComponent>()) != m_componentIndex.end())
+	{
+		//Already has this component
+		if (TComponent::IsSingular()) return;
+	}
+
+	m_componentIndex[GetTypeID<TComponent>()] = m_pComponentManager->AddComponent<TComponent>(this);
 }
 
+template<class TComponent>
+T* GameObject::GetComponent()
+{
+	return m_pComponentManager->GetComponent<TComponent>(m_componentIndex[GetTypeID<TComponent>()]);
+}
+
+template<class TComponent>
+int GameObject::GetComponentIndex()
+{
+	return m_componentIndex[GetTypeID<TComponent>()];
+}
+
+
 template<typename T>
-size_t GameObject::GetID()
+size_t GameObject::GetTypeID()
 {
 	return typeid(T).hash_code();
 }

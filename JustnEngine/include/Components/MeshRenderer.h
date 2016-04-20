@@ -13,7 +13,7 @@ class Transform;
 class Camera;
 class Light;
 
-class MeshRenderer : public Component
+class MeshRenderer : public Component<Transform>
 {
 public:
 	MeshRenderer();

@@ -7,7 +7,7 @@
 
 class ComponentManager;
 
-class Transform : public Component
+class Transform : public Component<>
 {
 public:
 	Transform();

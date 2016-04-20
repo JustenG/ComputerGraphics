@@ -148,21 +148,48 @@ void Application::UpdateImGui()
 		ImGui::TreePop();
 	}
 
-//
-//	for (int i = 0; i < GetEntityManager()->GetEntityCount(); ++i)
-//	{
-//	}
-//	Transform* cameraTran = m_componentManager->GetComponent<Transform>(m_componentManager->GetMainCamera()->GetTransformIndex());
-//	mainCameraPos = cameraTran->GetPosition();
-//	mainCameraRot = cameraTran->GetRotation() * 180;
-//	GUI::DragFloat3("Camera Position", glm::value_ptr(mainCameraPos));
-//	GUI::DragFloat3("Camera Rotation", glm::value_ptr(mainCameraRot));
+	//
+	//	for (int i = 0; i < GetEntityManager()->GetEntityCount(); ++i)
+	//	{
+	//	}
+	//	Transform* cameraTran = m_componentManager->GetComponent<Transform>(m_componentManager->GetMainCamera()->GetTransformIndex());
+	//	mainCameraPos = cameraTran->GetPosition();
+	//	mainCameraRot = cameraTran->GetRotation() * 180;
+	//	GUI::DragFloat3("Camera Position", glm::value_ptr(mainCameraPos));
+	//	GUI::DragFloat3("Camera Rotation", glm::value_ptr(mainCameraRot));
 	GUI::End();
 
-//	cameraTran->SetPosition(mainCameraPos);
-//	cameraTran->SetRotation(mainCameraRot/180);
+	//	cameraTran->SetPosition(mainCameraPos);
+	//	cameraTran->SetRotation(mainCameraRot/180);
+	for (int i = 0; i < GetEntityManager()->GetEntityCount(); ++i)
+	{
+		GameObject* object = &m_entityManager->GetEntitys()[i];
+		if (object->GetComponent<Transform>()->GetParent())
+		{
+			PrintObject(object);
+		}
 
+	}
 }
+
+void Application::PrintObject(GameObject* object)
+{
+	std::string name(object->GetName());
+
+	Transform* parent = object->GetComponent<Transform>()->GetParent();
+
+	if(GUI::TreeNode(name.c_str()))
+	{
+		for (int i = 0; i < parent->GetChildren().size(); ++i)
+		{
+			GameObject* child = parent->GetChildren()[i]->GetGameObject();
+			PrintObject(child);
+		}
+		GUI::TreePop();
+	}
+	return;
+}
+
 
  void Application::Render()
  {

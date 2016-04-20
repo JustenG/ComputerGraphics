@@ -7,10 +7,12 @@
 #include "Components\Component.h"
 #include "Rendering\FrameBuffer.h"
 
-struct GLFWwindow;
-class Transform;
+#include "Transform.h"
 
-class Camera : public Component
+struct GLFWwindow;
+//class Transform;
+
+class Camera : public Component<Transform>
 {
 public:
 	Camera();
