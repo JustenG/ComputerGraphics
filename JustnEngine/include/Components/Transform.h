@@ -10,6 +10,8 @@ class ComponentManager;
 class Transform : public Component<>
 {
 public:
+	static bool IsSingular() { return true; };
+
 	Transform();
 	~Transform();
 

@@ -9,6 +9,7 @@
 #include "Components\Transform.h"
 #include "Components\Camera.h"
 #include "Components\Terrain.h"
+#include "Components\Light.h"
 
 #include "Entitys\EntityManager.h"
 #include "Entitys\GameObject.h"

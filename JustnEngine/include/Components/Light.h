@@ -5,6 +5,8 @@
 class Light : public Camera
 {
 public:
+	static bool IsSingular() { return true; };
+
 	Light();
 	~Light();
 

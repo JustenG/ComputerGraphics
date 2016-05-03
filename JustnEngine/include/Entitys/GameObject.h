@@ -3,6 +3,9 @@
 #include "Components\ComponentManager.h"
 #include "Components\Component.h"
 
+#include <type_traits>
+
+
 class GameObject
 {
 public:
@@ -11,10 +14,25 @@ public:
 
 	template<typename T>
 	void AddComponent();
+
 	template<typename T>
 	T* GetComponent();
+
 	template<typename T>
 	int GetComponentIndex();
+
+	template<typename T>
+	bool HasComponent();
+
+	bool HasComponent(uint hashCode)
+	{
+		if (m_componentIndex.find(hashCode) != m_componentIndex.end())
+			return true;
+
+		return false;
+	}
+
+	uint GetComponentCount() { return m_componentIndex.size(); };
 
 	std::string GetName() { return m_name; };
 
@@ -34,13 +52,15 @@ private:
 	bool m_hasLight;
 };
 
-template<class TComponent>
+template<typename TComponent> 
+//typename std::enable_if<std::is_base_of<Component<>, TComponent>::value,bool>::type
 void GameObject::AddComponent()
 {
+
 	if (!TComponent::CheckRequirements(this))
 		return;
 
-	if (m_componentIndex.find(GetTypeID<TComponent>()) != m_componentIndex.end())
+	if (HasComponent<TComponent>())
 	{
 		//Already has this component
 		if (TComponent::IsSingular()) return;
@@ -49,18 +69,26 @@ void GameObject::AddComponent()
 	m_componentIndex[GetTypeID<TComponent>()] = m_pComponentManager->AddComponent<TComponent>(this);
 }
 
-template<class TComponent>
-T* GameObject::GetComponent()
+template<typename TComponent>
+TComponent* GameObject::GetComponent()
 {
 	return m_pComponentManager->GetComponent<TComponent>(m_componentIndex[GetTypeID<TComponent>()]);
 }
 
-template<class TComponent>
+template<typename TComponent>
 int GameObject::GetComponentIndex()
 {
 	return m_componentIndex[GetTypeID<TComponent>()];
 }
 
+template<typename TComponent>
+bool GameObject::HasComponent()
+{
+	if (m_componentIndex.find(GetTypeID<TComponent>()) != m_componentIndex.end())
+		return true;
+
+	return false;
+}
 
 template<typename T>
 size_t GameObject::GetTypeID()

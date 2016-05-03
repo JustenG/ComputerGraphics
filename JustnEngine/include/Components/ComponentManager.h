@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
+class GameObject;
 class Transform;
 class Camera;
 class Light;
@@ -21,7 +22,7 @@ public:
 	void RenderAllComponents();
 
 	template<typename T>
-	int AddComponent();
+	int AddComponent(GameObject* gameObject);
 	template<typename T>
 	T* GetComponent(int index);
 

@@ -167,15 +167,15 @@ Camera* ComponentManager::GetMainCamera()
 // Set Component
 //-------------------------------------------------------------------
 template<>
-int ComponentManager::AddComponent<Transform>()
+int ComponentManager::AddComponent<Transform>(GameObject* gameObject)
 {
-	Transforms.emplace_back();
+	Transforms.emplace_back(gameObject);
 	return Transforms.size()-1;
 }
 template<>
-int ComponentManager::AddComponent<Camera>()
+int ComponentManager::AddComponent<Camera>(GameObject* gameObject)
 {
-	Cameras.emplace_back();
+	Cameras.emplace_back(gameObject);
 
 	if (Cameras.size() == 1)
 		SetMainCamera(0);
@@ -183,21 +183,21 @@ int ComponentManager::AddComponent<Camera>()
 	return Cameras.size() - 1;
 }
 template<>
-int ComponentManager::AddComponent<Light>()
+int ComponentManager::AddComponent<Light>(GameObject* gameObject)
 {
-	Lights.emplace_back();
+	Lights.emplace_back(gameObject);
 	return Lights.size() - 1;
 }
 template<>
-int ComponentManager::AddComponent<MeshRenderer>()
+int ComponentManager::AddComponent<MeshRenderer>(GameObject* gameObject)
 {
-	MeshRenderers.emplace_back();
+	MeshRenderers.emplace_back(gameObject);
 	return MeshRenderers.size() - 1;
 }
 template<>
-int ComponentManager::AddComponent<Terrain>()
+int ComponentManager::AddComponent<Terrain>(GameObject* gameObject)
 {
-	Terrains.emplace_back();
+	Terrains.emplace_back(gameObject);
 	return Terrains.size() - 1;
 }
 //-------------------------------------------------------------------
