@@ -45,6 +45,9 @@ void ComponentManager::UpdateAllComponents()
 			Transforms[i].UpdateWorldTransform(Transforms[ParentIndexBuffer[i]].GetMatrix());
 	}
 
+	m_componentsMap[0] = (std::vector<BaseComponent>*)&Lights;
+
+
 	for (int i = 0; i < (int)Cameras.size(); ++i)
 	{
 		int index = Cameras[i].GetGameObject()->GetComponentIndex<Transform>();
@@ -169,7 +172,8 @@ Camera* ComponentManager::GetMainCamera()
 template<>
 int ComponentManager::AddComponent<Transform>(GameObject* gameObject)
 {
-	Transforms.emplace_back(gameObject);
+	Transforms.emplace_back();
+	Transforms.back().Init(gameObject);
 	return Transforms.size()-1;
 }
 template<>
@@ -179,6 +183,11 @@ int ComponentManager::AddComponent<Camera>(GameObject* gameObject)
 
 	if (Cameras.size() == 1)
 		SetMainCamera(0);
+
+	std::tuple<std::vector<Camera>,std::vector<Light>> t = std::tie(Cameras, Lights);
+	std::vector<Camera> cams = std::get<0>(t); // cameras 
+
+
 
 	return Cameras.size() - 1;
 }

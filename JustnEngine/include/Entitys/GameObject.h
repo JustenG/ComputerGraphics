@@ -52,11 +52,10 @@ private:
 	bool m_hasLight;
 };
 
-template<typename TComponent> 
 //typename std::enable_if<std::is_base_of<Component<>, TComponent>::value,bool>::type
+template<typename TComponent> 
 void GameObject::AddComponent()
 {
-
 	if (!TComponent::CheckRequirements(this))
 		return;
 

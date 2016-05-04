@@ -51,6 +51,7 @@ SET(HEADERS
 	include/Assets/Shader.h
 	include/Assets/Texture.h
 
+	include/Components/BaseComponent.h
 	include/Components/Camera.h
 	include/Components/Component.h
 	include/Components/ComponentManager.h

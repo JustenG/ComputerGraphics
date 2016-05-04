@@ -1,5 +1,6 @@
 #pragma once
 #include "global_includes.h"
+#include "Components\BaseComponent.h"
 #include <tuple>
 class GameObject;
 
@@ -15,12 +16,13 @@ std::vector<size_t> GetTypes()
 //-----------------------------
 
 template <class... TRequirements>
-class Component
+class Component : public BaseComponent
 {
 public:
 	Component();
-	Component(GameObject* gameObject);
 	~Component();
+
+	void Init(GameObject* gameObject) { m_gameObject = gameObject; };
 
 	static bool CheckRequirements(GameObject* gameObject);
 
@@ -43,14 +45,12 @@ private:
 template <class... TRequirements>
 Component<TRequirements...>::Component()
 {
-	requirements = GetTypes<TRequirements...>();
 }
  
 template <class... TRequirements>
 Component<TRequirements...>::Component(GameObject* gameObject)
 {
 	m_gameObject = gameObject;
-	requirements = GetTypes<TRequirements...>();
 }
 
 template <class... TRequirements>

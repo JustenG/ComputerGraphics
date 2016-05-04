@@ -1,5 +1,5 @@
 #pragma once
-#include <vector>
+#include "global_includes.h"
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
@@ -9,6 +9,9 @@ class Camera;
 class Light;
 class MeshRenderer;
 class Terrain;
+
+template<typename T>
+using VT = std::vector<T>;
 
 class ComponentManager
 {
@@ -49,9 +52,18 @@ private:
 	std::vector<short> ParentIndexBuffer;
 	bool m_transformsInline;
 
-	std::vector<Camera> Cameras;
-	std::vector<Light> Lights;
-	std::vector<MeshRenderer> MeshRenderers;
-	std::vector<Terrain> Terrains;
+
+	//std::map<T,std::vector<T>> map;
+//	std::vector<Camera> Cameras;
+//	std::vector<Light> Lights;
+//	std::vector<MeshRenderer> MeshRenderers;
+//	std::vector<Terrain> Terrains;
+
+	//std::map<uint, ICompenntenColleciton*> m_componentsMap;
+	//compnenetMap.add(new vector<Light>())
 
 };
+
+//CompoentnentCollection<T> : ICompenntenColleciton {
+//	vector<T>
+}
