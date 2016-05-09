@@ -21,12 +21,11 @@ class Component : public BaseComponent
 public:
 	Component();
 	~Component();
+	virtual void Update() = 0;
 
 	void Init(GameObject* gameObject) { m_gameObject = gameObject; };
 
 	static bool CheckRequirements(GameObject* gameObject);
-
-	virtual void Update() = 0;
 
 	void SetTransformIndex(int transformIndex);
 	int GetTransformIndex();
@@ -46,17 +45,10 @@ template <class... TRequirements>
 Component<TRequirements...>::Component()
 {
 }
- 
-template <class... TRequirements>
-Component<TRequirements...>::Component(GameObject* gameObject)
-{
-	m_gameObject = gameObject;
-}
 
 template <class... TRequirements>
 Component<TRequirements...>::~Component()
 {
-	
 }
 
 template <class... TRequirements>

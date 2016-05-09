@@ -15,7 +15,7 @@ public:
 	void operator=(EntityManager const&) = delete;
 
 	GameObject* CreateEntity();
-	std::vector<GameObject> GetEntitys() { return m_entitys; };
+	std::vector<GameObject>* GetEntitys() { return &m_entitys; };
 	GLuint GetEntityCount();
 
 private:

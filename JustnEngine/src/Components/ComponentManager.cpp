@@ -33,11 +33,11 @@ void ComponentManager::UpdateAllComponents()
 		ReorderTransforms();
 	}
 
-	for (size_t i = 0; i < Transforms.size(); ++i)
+	for (uint i = 0; i < Transforms.size(); ++i)
 	{
 		Transforms[i].Update();
 	}
-	for (size_t i = 0; i < Transforms.size(); ++i)
+	for (uint i = 0; i < Transforms.size(); ++i)
 	{
 		if (ParentIndexBuffer[i] == -1)
 			Transforms[i].UpdateWorldTransform();
@@ -45,16 +45,14 @@ void ComponentManager::UpdateAllComponents()
 			Transforms[i].UpdateWorldTransform(Transforms[ParentIndexBuffer[i]].GetMatrix());
 	}
 
-	m_componentsMap[0] = (std::vector<BaseComponent>*)&Lights;
-
-
-	for (int i = 0; i < (int)Cameras.size(); ++i)
+	for (uint i = 0; i < Cameras.size(); ++i)
 	{
-		int index = Cameras[i].GetGameObject()->GetComponentIndex<Transform>();
+		GameObject* go = Cameras[i].GetGameObject();
+		int index = go->GetComponentIndex<Transform>();
 		Transform transform = Transforms[index];
 		Cameras[i].Update(transform);
 	}
-	for (int i = 0; i < Lights.size(); ++i)
+	for (uint i = 0; i < Lights.size(); ++i)
 	{
 		int index = Lights[i].GetGameObject()->GetComponentIndex<Transform>();
 		Transform transform = Transforms[index];
@@ -179,34 +177,33 @@ int ComponentManager::AddComponent<Transform>(GameObject* gameObject)
 template<>
 int ComponentManager::AddComponent<Camera>(GameObject* gameObject)
 {
-	Cameras.emplace_back(gameObject);
+	Cameras.emplace_back();
+	Cameras.back().Init(gameObject);
 
 	if (Cameras.size() == 1)
 		SetMainCamera(0);
-
-	std::tuple<std::vector<Camera>,std::vector<Light>> t = std::tie(Cameras, Lights);
-	std::vector<Camera> cams = std::get<0>(t); // cameras 
-
-
 
 	return Cameras.size() - 1;
 }
 template<>
 int ComponentManager::AddComponent<Light>(GameObject* gameObject)
 {
-	Lights.emplace_back(gameObject);
+	Lights.emplace_back();
+	Lights.back().Init(gameObject);
 	return Lights.size() - 1;
 }
 template<>
 int ComponentManager::AddComponent<MeshRenderer>(GameObject* gameObject)
 {
-	MeshRenderers.emplace_back(gameObject);
+	MeshRenderers.emplace_back();
+	MeshRenderers.back().Init(gameObject);
 	return MeshRenderers.size() - 1;
 }
 template<>
 int ComponentManager::AddComponent<Terrain>(GameObject* gameObject)
 {
-	Terrains.emplace_back(gameObject);
+	Terrains.emplace_back();
+	Terrains.back().Init(gameObject);
 	return Terrains.size() - 1;
 }
 //-------------------------------------------------------------------

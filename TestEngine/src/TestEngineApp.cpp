@@ -22,7 +22,7 @@ void TestEngineApp::Initialise()
 {
 	Transform* entityTransform;
 
-	////Model
+	//Model
 	//GetAssetManager()->LoadMeshFile("data/models/soulspear/soulspear.fbx", "spear");
 	//m_pModel = GetAssetManager()->GetAsset<MeshFile>("spear");
 	//GetAssetManager()->LoadShader("data/shaders/defultVertexShader.vert", "data/shaders/defultFragmentShader.frag", "DefultShader");
@@ -44,14 +44,15 @@ void TestEngineApp::Initialise()
 
 	//Camera
 	m_entity = GetEntityManager()->CreateEntity();
+	m_entity->SetName("Camera");
 	m_entity->AddComponent<Transform>();
-	//m_entity->AddComponent<Camera>(); 
+	m_entity->AddComponent<Camera>(); 
 	entityTransform = m_entity->GetComponent<Transform>(); 
 	entityTransform->SetPosition(0, 2, 10);
 
-	////Light 
-	//m_entity = GetEntityManager()->CreateEntity();
-	//m_entity->AddComponent<Transform>();
+	//Light 
+	m_entity = GetEntityManager()->CreateEntity();
+	m_entity->AddComponent<Transform>();
 	//m_entity->AddComponent<Light>();
 	//entityTransform = m_entity->GetComponent<Transform>();
 	//entityTransform->SetPosition(5, 10, -5);
@@ -61,7 +62,7 @@ void TestEngineApp::Initialise()
 
 void TestEngineApp::Destroy()
 {
-	delete m_pModel;
+	//delete m_pModel;
 }
 
 void TestEngineApp::EarlyUpdate()

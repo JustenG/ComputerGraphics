@@ -12,7 +12,7 @@ class Transform : public Component<>
 public:
 	static bool IsSingular() { return true; };
 
-	Transform(GameObject* gameObject);
+	Transform();
 	~Transform();
 
 	glm::mat4 GetMatrix() { return m_globalTransformMatrix; };

@@ -53,11 +53,11 @@ private:
 	bool m_transformsInline;
 
 
-	//std::map<T,std::vector<T>> map;
-//	std::vector<Camera> Cameras;
-//	std::vector<Light> Lights;
-//	std::vector<MeshRenderer> MeshRenderers;
-//	std::vector<Terrain> Terrains;
+	//std::map<T,std::vector<T>> map; 
+	std::vector<Camera> Cameras;
+	std::vector<Light> Lights;
+	std::vector<MeshRenderer> MeshRenderers;
+	std::vector<Terrain> Terrains;
 
 	//std::map<uint, ICompenntenColleciton*> m_componentsMap;
 	//compnenetMap.add(new vector<Light>())
@@ -66,4 +66,4 @@ private:
 
 //CompoentnentCollection<T> : ICompenntenColleciton {
 //	vector<T>
-}
+//}

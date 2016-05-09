@@ -1,7 +1,7 @@
 #pragma once
 #include "global_includes.h"
 #include "Components\ComponentManager.h"
-#include "Components\Component.h"
+#include "Components\BaseComponent.h"
 
 #include <type_traits>
 
@@ -10,10 +10,12 @@ class GameObject
 {
 public:
 	GameObject();
+	GameObject(const GameObject &obj);  // copy constructor
 	~GameObject();
 
-	template<typename T>
-	void AddComponent();
+	template<class T>
+	typename std::enable_if<std::is_base_of<BaseComponent, T>::value>::type
+	AddComponent();
 
 	template<typename T>
 	T* GetComponent();
@@ -34,27 +36,22 @@ public:
 
 	uint GetComponentCount() { return m_componentIndex.size(); };
 
+	void SetName(std::string name) {  m_name = name; };
 	std::string GetName() { return m_name; };
 
 private:
 
-	ComponentManager* m_pComponentManager;
-
-	std::map<size_t, int> m_componentIndex;
 	template<typename T>
 	size_t GetTypeID();
 
+	ComponentManager* m_pComponentManager;
+	std::map<size_t, int> m_componentIndex;
 	std::string m_name;
-
-	bool m_hasTransform;
-	bool m_hasCamera;
-	bool m_hasMesh;
-	bool m_hasLight;
 };
 
-//typename std::enable_if<std::is_base_of<Component<>, TComponent>::value,bool>::type
-template<typename TComponent> 
-void GameObject::AddComponent()
+template<class TComponent>
+typename std::enable_if<std::is_base_of<BaseComponent, TComponent>::value>::type
+GameObject::AddComponent()
 {
 	if (!TComponent::CheckRequirements(this))
 		return;

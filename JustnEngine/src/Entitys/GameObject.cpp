@@ -8,11 +8,19 @@
 GameObject::GameObject()
 {
 	m_pComponentManager = ComponentManager::GetInstance();
+}
 
-	m_hasTransform = false;
-	m_hasCamera = false;
-	m_hasMesh = false;
-	m_hasLight = false;
+GameObject::GameObject(const GameObject &obj)
+{
+	m_pComponentManager = obj.m_pComponentManager;
+	m_componentIndex	= obj.m_componentIndex;
+	m_name				= obj.m_name;
+
+	for (int i = 0; i < obj.m_componentIndex.size(); ++i)
+	{
+		//init all old components
+	}
+
 }
 
 GameObject::~GameObject()
