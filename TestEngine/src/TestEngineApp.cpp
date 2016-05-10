@@ -50,9 +50,9 @@ void TestEngineApp::Initialise()
 	entityTransform = m_entity->GetComponent<Transform>(); 
 	entityTransform->SetPosition(0, 2, 10);
 
-	//Light 
-	m_entity = GetEntityManager()->CreateEntity();
-	m_entity->AddComponent<Transform>();
+	////Light 
+	//m_entity = GetEntityManager()->CreateEntity();
+	//m_entity->AddComponent<Transform>();
 	//m_entity->AddComponent<Light>();
 	//entityTransform = m_entity->GetComponent<Transform>();
 	//entityTransform->SetPosition(5, 10, -5);

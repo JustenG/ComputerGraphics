@@ -1,4 +1,5 @@
 #include "Components\ComponentManager.h"
+#include "Components\ComponentCollection.h"
 #include "Components\Transform.h"
 #include "Components\Camera.h"
 #include "Components\Light.h"
@@ -12,6 +13,14 @@ ComponentManager::ComponentManager()
 {
 	m_transformsInline = false;
 	m_mainCameraIndex = -1;
+
+	m_collectionsMap[typeid(Transform).hash_code()]		= (IComponentCollection*)&m_transforms;
+	m_collectionsMap[typeid(Camera).hash_code()]		= (IComponentCollection*)&m_cameras;
+	m_collectionsMap[typeid(Light).hash_code()]			= (IComponentCollection*)&m_lights;
+	m_collectionsMap[typeid(MeshRenderer).hash_code()]	= (IComponentCollection*)&m_meshRenderers;
+	m_collectionsMap[typeid(Terrain).hash_code()]		= (IComponentCollection*)&m_terrains;
+
+
 }
 
 ComponentManager::~ComponentManager()
@@ -33,80 +42,80 @@ void ComponentManager::UpdateAllComponents()
 		ReorderTransforms();
 	}
 
-	for (uint i = 0; i < Transforms.size(); ++i)
+	for (uint i = 0; i < m_transforms.Size(); ++i)
 	{
-		Transforms[i].Update();
+		m_transforms[i].Update();
 	}
-	for (uint i = 0; i < Transforms.size(); ++i)
+	for (uint i = 0; i < m_transforms.Size(); ++i)
 	{
 		if (ParentIndexBuffer[i] == -1)
-			Transforms[i].UpdateWorldTransform();
+			m_transforms[i].UpdateWorldTransform();
 		else
-			Transforms[i].UpdateWorldTransform(Transforms[ParentIndexBuffer[i]].GetMatrix());
+			m_transforms[i].UpdateWorldTransform(m_transforms[ParentIndexBuffer[i]].GetMatrix());
 	}
 
-	for (uint i = 0; i < Cameras.size(); ++i)
+	for (uint i = 0; i < m_cameras.Size(); ++i)
 	{
-		GameObject* go = Cameras[i].GetGameObject();
+		GameObject* go = m_cameras[i].GetGameObject();
 		int index = go->GetComponentIndex<Transform>();
-		Transform transform = Transforms[index];
-		Cameras[i].Update(transform);
+		Transform transform = m_transforms[index];
+		m_cameras[i].Update(transform);
 	}
-	for (uint i = 0; i < Lights.size(); ++i)
+	for (uint i = 0; i < m_lights.Size(); ++i)
 	{
-		int index = Lights[i].GetGameObject()->GetComponentIndex<Transform>();
-		Transform transform = Transforms[index];
-		Lights[i].Update(transform);
+		int index = m_lights[i].GetGameObject()->GetComponentIndex<Transform>();
+		Transform transform = m_transforms[index];
+		m_lights[i].Update(transform);
 	}
 
 }
 
 void ComponentManager::RenderAllComponents()
 {
-	for (int i = 0; i < (int)Lights.size(); ++i)
+	for (int i = 0; i < (int)m_lights.Size(); ++i)
 	{
-		Lights[i].Bind();
+		m_lights[i].Bind();
 
-		for (int j = 0; j < (int)MeshRenderers.size(); ++j)
+		for (int j = 0; j < (int)m_meshRenderers.Size(); ++j)
 		{
-			int index = MeshRenderers[i].GetGameObject()->GetComponentIndex<Transform>();
-			Transform transform = Transforms[index];
+			int index = m_meshRenderers[i].GetGameObject()->GetComponentIndex<Transform>();
+			Transform transform = m_transforms[index];
 
-			MeshRenderers[j].Render(Lights[i]);
+			m_meshRenderers[j].Render(m_lights[i]);
 		}
-		for (int j = 0; j < (int)Terrains.size(); ++j)
+		for (int j = 0; j < (int)m_terrains.Size(); ++j)
 		{
-			int index = Terrains[i].GetGameObject()->GetComponentIndex<Transform>();
-			Transform transform = Transforms[index];
+			int index = m_terrains[i].GetGameObject()->GetComponentIndex<Transform>();
+			Transform transform = m_transforms[index];
 
-			Terrains[j].Render(Lights[i]);
+			m_terrains[j].Render(m_lights[i]);
 		}
 
 
-		Lights[i].Unbind();
+		m_lights[i].Unbind();
 	}
 
 
-	for (int i = 0; i < (int)Cameras.size(); ++i)
+	for (int i = 0; i < (int)m_cameras.Size(); ++i)
 	{
-		Cameras[i].Bind();
+		m_cameras[i].Bind();
 
-		for (int j = 0; j < (int)MeshRenderers.size(); ++j)
+		for (int j = 0; j < (int)m_meshRenderers.Size(); ++j)
 		{
-			int index = MeshRenderers[i].GetGameObject()->GetComponentIndex<Transform>();
-			Transform transform = Transforms[index];
+			int index = m_meshRenderers[i].GetGameObject()->GetComponentIndex<Transform>();
+			Transform transform = m_transforms[index];
 
-			MeshRenderers[j].Render(Transforms[index],Cameras[i],Lights,0);
+			m_meshRenderers[j].Render(m_transforms[index], m_cameras[i], *m_lights.GetContainer(),0);
 		}
-		for (int j = 0; j < (int)Terrains.size(); ++j)
+		for (int j = 0; j < (int)m_terrains.Size(); ++j)
 		{
-			int index = Terrains[i].GetGameObject()->GetComponentIndex<Transform>();
-			Transform transform = Transforms[index];
+			int index = m_terrains[i].GetGameObject()->GetComponentIndex<Transform>();
+			Transform transform = m_transforms[index];
 
-			Terrains[j].Render(Transforms[index], Cameras[i], Lights, 0);
+			m_terrains[j].Render(m_transforms[index], m_cameras[i], *m_lights.GetContainer(), 0);
 		}
 
-		Cameras[i].Unbind();
+		m_cameras[i].Unbind();
 	}
 }
 
@@ -120,7 +129,7 @@ void ComponentManager::AddChildren(Transform* parent, short &parentsIndex)
 	//Add Children To Buffer or Update
 	for (size_t i = 0; i < parent->GetChildren().size(); i++)
 	{
-		TransformsBuffer.push_back(*parent->GetChildren()[i]);
+		TransformsBuffer.GetContainer()->push_back(*parent->GetChildren()[i]);
 		ParentIndexBuffer.push_back(parentsIndex);
 	}
 
@@ -135,26 +144,26 @@ void ComponentManager::AddChildren(Transform* parent, short &parentsIndex)
 void ComponentManager::ReorderTransforms()
 {
 	short index = 0;
-	for (size_t i = 0; i < Transforms.size(); ++i)
+	for (size_t i = 0; i < m_transforms.Size(); ++i)
 	{
-		if (Transforms[i].GetParent() == nullptr)
+		if (m_transforms[i].GetParent() == nullptr)
 		{
-			TransformsBuffer.push_back(Transforms[i]);
+			TransformsBuffer.GetContainer()->push_back(m_transforms[i]);
 			ParentIndexBuffer.push_back(-1);
-			AddChildren(&Transforms[i], index);
+			AddChildren(&m_transforms[i], index);
 			++index;
 		}
 	}
-	Transforms = TransformsBuffer;
-	TransformsBuffer.empty();
+	m_transforms = TransformsBuffer;
+	TransformsBuffer.GetContainer()->clear();
 	m_transformsInline = true;
 }
 
 void ComponentManager::SetMainCamera(int index)
 {
 	m_mainCameraIndex = index;
-	Cameras[m_mainCameraIndex].SetResolution(m_mainCameraResolution);
-	Cameras[m_mainCameraIndex].SetToMain();
+	m_cameras[m_mainCameraIndex].SetResolution(m_mainCameraResolution);
+	m_cameras[m_mainCameraIndex].SetToMain();
 }
 
 Camera* ComponentManager::GetMainCamera()
@@ -162,77 +171,5 @@ Camera* ComponentManager::GetMainCamera()
 	if (m_mainCameraIndex == -1)
 		return nullptr;
 	else
-		return &Cameras[m_mainCameraIndex];
+		return &m_cameras[m_mainCameraIndex];
 }
-
-// Set Component
-//-------------------------------------------------------------------
-template<>
-int ComponentManager::AddComponent<Transform>(GameObject* gameObject)
-{
-	Transforms.emplace_back();
-	Transforms.back().Init(gameObject);
-	return Transforms.size()-1;
-}
-template<>
-int ComponentManager::AddComponent<Camera>(GameObject* gameObject)
-{
-	Cameras.emplace_back();
-	Cameras.back().Init(gameObject);
-
-	if (Cameras.size() == 1)
-		SetMainCamera(0);
-
-	return Cameras.size() - 1;
-}
-template<>
-int ComponentManager::AddComponent<Light>(GameObject* gameObject)
-{
-	Lights.emplace_back();
-	Lights.back().Init(gameObject);
-	return Lights.size() - 1;
-}
-template<>
-int ComponentManager::AddComponent<MeshRenderer>(GameObject* gameObject)
-{
-	MeshRenderers.emplace_back();
-	MeshRenderers.back().Init(gameObject);
-	return MeshRenderers.size() - 1;
-}
-template<>
-int ComponentManager::AddComponent<Terrain>(GameObject* gameObject)
-{
-	Terrains.emplace_back();
-	Terrains.back().Init(gameObject);
-	return Terrains.size() - 1;
-}
-//-------------------------------------------------------------------
-
-// Get Component
-//-------------------------------------------------------------------
-template<>
-Transform* ComponentManager::GetComponent<Transform>(int index)
-{
-	return &Transforms[index];
-}
-template<>
-Camera* ComponentManager::GetComponent<Camera>(int index)
-{
-	return &Cameras[index];
-}
-template<>
-Light* ComponentManager::GetComponent<Light>(int index)
-{
-	return &Lights[index];
-}
-template<>
-MeshRenderer* ComponentManager::GetComponent<MeshRenderer>(int index)
-{
-	return &MeshRenderers[index];
-}
-template<>
-Terrain* ComponentManager::GetComponent<Terrain>(int index)
-{
-	return &Terrains[index];
-}
-//-------------------------------------------------------------------

@@ -13,16 +13,20 @@ public:
 	GameObject(const GameObject &obj);  // copy constructor
 	~GameObject();
 
+	//Add a component to Game Object
 	template<class T>
 	typename std::enable_if<std::is_base_of<BaseComponent, T>::value>::type
 	AddComponent();
 
+	//Get a component to Game Object
 	template<typename T>
 	T* GetComponent();
 
+	//Get a components index into Component Managers Componenet Collections
 	template<typename T>
 	int GetComponentIndex();
 
+	//Get a components index into Component Managers Componenet Collections
 	template<typename T>
 	bool HasComponent();
 
@@ -45,7 +49,8 @@ private:
 	size_t GetTypeID();
 
 	ComponentManager* m_pComponentManager;
-	std::map<size_t, int> m_componentIndex;
+	std::map<uint, int> m_componentIndex;
+	std::map<uint, BaseComponent*> m_pComponents;
 	std::string m_name;
 };
 
@@ -62,13 +67,14 @@ GameObject::AddComponent()
 		if (TComponent::IsSingular()) return;
 	}
 
-	m_componentIndex[GetTypeID<TComponent>()] = m_pComponentManager->AddComponent<TComponent>(this);
+	m_componentIndex	[GetTypeID<TComponent>()] = m_pComponentManager->AddComponent<TComponent>(this);
+	m_pComponents		[GetTypeID<TComponent>()] = GetComponent<TComponent>();
 }
 
 template<typename TComponent>
 TComponent* GameObject::GetComponent()
 {
-	return m_pComponentManager->GetComponent<TComponent>(m_componentIndex[GetTypeID<TComponent>()]);
+	return m_pComponentManager->GetComponent<TComponent>(GetComponentIndex<TComponent>());
 }
 
 template<typename TComponent>

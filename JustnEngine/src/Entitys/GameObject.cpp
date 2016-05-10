@@ -19,6 +19,9 @@ GameObject::GameObject(const GameObject &obj)
 	for (int i = 0; i < obj.m_componentIndex.size(); ++i)
 	{
 		//init all old components
+
+
+
 	}
 
 }
