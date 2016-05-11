@@ -23,11 +23,8 @@ SET(SOURCES
 	src/Assets/Texture.cpp
 
 	src/Components/Camera.cpp
-	src/Components/Component.cpp
-	src/Components/ComponentCollection.cpp
 	src/Components/ComponentManager.cpp
 	src/Components/FlyCamera.cpp
-	src/Components/IComponentCollection.cpp
 	src/Components/Light.cpp
 	src/Components/MeshRenderer.cpp
 	src/Components/Terrain.cpp
@@ -40,6 +37,8 @@ SET(SOURCES
 	src/Rendering/IndexBuffer.cpp
 	src/Rendering/VertexArrayObject.cpp
 	src/Rendering/VertexBuffer.cpp
+
+	src/Utilities/GUI.cpp
 
 )
 SET(HEADERS
@@ -73,6 +72,9 @@ SET(HEADERS
 	include/Rendering/Vertex.h
 	include/Rendering/VertexArrayObject.h
 	include/Rendering/VertexBuffer.h
+
+	include/Utilities/GUI.h
+	include/Utilities/Utils.h
 
 )
 
@@ -108,6 +110,7 @@ source_group(Assets .*/Assets.*/)
 source_group(Components .*/Components/)
 source_group(Entitys .*/Entitys/)
 source_group(Rendering .*/Rendering/)
+source_group(Utilities .*/Utilities/)
 
 #And we need to link against GLFW
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})

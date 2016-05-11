@@ -1,12 +1,11 @@
 #include "Application.h"
 
-#include "imgui.h"
-#include "imgui_impl_glfw_gl3.h"
 #include "Components\ComponentManager.h"
 #include "Entitys\EntityManager.h"
 #include "Assets\AssetManager.h"
+
 #include "Components\Transform.h"
-#include "Components\Camera.h"
+#include "Utilities\GUI.h"
 
 #include "all_includes.h"
 
@@ -28,9 +27,6 @@ int Application::Startup(int width, int height)
 	currentTime = 0;
 	deltaTime = 0;
 	previousTime = (float)glfwGetTime();
-	white = vec4(0, 0, 0, 1);
-	black = vec4(1, 1, 1, 1);
-	m_isGizmosActive = true;
 	m_isGUIActive = true;
 
 	m_componentManager->SetMainCamResolution(ivec2(width, height));
@@ -62,17 +58,12 @@ int Application::Startup(int width, int height)
 	//SetUp GL input
 	glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	
+	//Activate GUI is on
 	if (m_isGUIActive)
 	{
-		//Initialise GUI
-		ImGui_ImplGlfwGL3_Init(m_pWindow, true);
-
-		ImGuiIO& io = ImGui::GetIO();
-		io.DisplaySize.x = (float)width;
-		io.DisplaySize.y = (float)height;
+		m_GUI = new GUI();
+		m_GUI->Init(m_pWindow, width, height);
 	}
-	//Create Gizmos
-	Gizmos::create();
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -105,8 +96,7 @@ void Application::EngineUpdate()
 {
 	UpdateTime();
 	m_componentManager->UpdateAllComponents();
-	if(m_isGizmosActive) UpdateGizmos();
-	if(m_isGUIActive) UpdateImGui();
+	if(m_isGUIActive) m_GUI->Update();
 }
 
 void Application::UpdateTime()
@@ -119,86 +109,21 @@ void Application::UpdateTime()
 	//-------------------------------------------------------------------
 }
 
-void Application::UpdateGizmos()
-{
-	Gizmos::clear();
-	Gizmos::addTransform(glm::mat4(1));
-
-	//Draw Grid
-	//----------------------------------------------------
-	int gridScale = 5;
-	for (int i = 0; i < 21; ++i)
-	{
-		Gizmos::addLine(vec3(-10 + i, 0, 10) * gridScale, vec3(-10 + i, 0, -10) * gridScale, i == 10 * gridScale ? white : black);
-		Gizmos::addLine(vec3(10, 0, -10 + i) * gridScale, vec3(-10, 0, -10 + i) * gridScale, i == 10 * gridScale ? white : black);
-	}
-	//----------------------------------------------------
-}
-
-void Application::UpdateImGui()
-{
-	//Clear ImGui
-	ImGui_ImplGlfwGL3_NewFrame();
-
-	//Update ImGuiS
-	GUI::Begin("GameObjects");
-	for (int i = 0; i < GetEntityManager()->GetEntityCount(); ++i)
-	{
-		GameObject* object = &(GetEntityManager()->GetEntitys()->data())[i];
-		PrintObject(object);
-	}
-	GUI::End();
-}
-
-void Application::PrintObject(GameObject* object)
-{
-	std::string name(object->GetName());
-
-	Transform* parent = object->GetComponent<Transform>();
-
-	if(GUI::TreeNode(name.c_str()))
-	{
-		if (parent->GetChildren().size() > 0)
-		{
-			for (int i = 0; i < parent->GetChildren().size(); ++i)
-			{
-				GameObject* child = parent->GetChildren()[i]->GetGameObject();
-				PrintObject(child);
-			}
-		}
-		GUI::TreePop();
-	}
-	return;
-}
-
-
  void Application::Render()
  {
-	/* if (m_pCamera == nullptr) 
-	 { 
-		 printf("WARNING: No camera set, unable to render"); 
-		 return; 
-	 }*/
+	 if (m_componentManager->GetMainCamera() == nullptr)
+	 {
+		 printf("WARNING: No camera set, unable to render \n"); 
+	 }
 
 	 m_componentManager->RenderAllComponents();
-	 if(m_isGizmosActive) DrawGizmos();
-	 if(m_isGUIActive) ImGui::Render();
+	 if(m_isGUIActive) m_GUI->Render();
 
  }
 
-void Application::DrawGizmos()
-{
-	if (m_componentManager->GetMainCamera() != nullptr)
-	{
-		mat4 projectionView = m_componentManager->GetMainCamera()->GetProjectionView();
-		Gizmos::draw(projectionView);
-	}
-}
-
 void Application::Shutdown()
 {
-	Gizmos::destroy();
-	ImGui_ImplGlfwGL3_Shutdown();
+	if (m_isGUIActive)	delete m_GUI;
 	glfwDestroyWindow(m_pWindow);
 	glfwTerminate();
 }
@@ -231,9 +156,9 @@ void Application::SetCamera(Camera* camera)
 	//m_pCamera = camera;
 }
 
-void Application::SetGizmos(bool active)
+void Application::SetGUI(bool active)
 {
-	m_isGizmosActive = active;
+	m_isGUIActive = active;
 }
 
 

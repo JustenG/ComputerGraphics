@@ -4,22 +4,17 @@
 #include <GLFW\glfw3.h>
 #include <stdio.h>
 
-#include <Gizmos.h>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
-#define GUI ImGui
-using glm::vec3;
-using glm::vec4;
-using glm::mat4;
+#include"global_includes.h"
 
-class FlyCamera;
-class Camera;
-class Asset;
 class EntityManager;
 class ComponentManager;
 class AssetManager;
-class GameObject;
+
+class Camera;
+class GUI;
 
 class Application
 {
@@ -38,15 +33,11 @@ public:
 	void Run(int windowWidth, int windowHeight);
 	void EngineUpdate();
 	void UpdateTime();
-	void UpdateGL();
-	void UpdateGizmos();
-	void UpdateImGui();
 	void Render();
-	void DrawGizmos();
 	void Shutdown();
 
 	void SetCamera(Camera* camera);
-	void SetGizmos(bool active);
+	void SetGUI(bool active);
 
 	EntityManager* GetEntityManager();
 	ComponentManager* GetComponentManager();
@@ -56,29 +47,23 @@ public:
 	GLFWwindow* GetWindow();
 
 private:
-
-	void PrintObject(GameObject* object);
 	
 	//WINDOW
 	//------------------------
 	GLFWwindow* m_pWindow;
-	GLuint* m_fbo;
+	uint* m_fbo;
 	//------------------------
-	glm::vec3 mainCameraPos;
-	glm::vec3 mainCameraRot;
 
 	EntityManager* m_entityManager;
 	ComponentManager* m_componentManager;
 	AssetManager* m_assetManager;
+	GUI* m_GUI;
 
 	//TIME
 	//-----------------------
 	float currentTime, deltaTime, previousTime;
 	//-----------------------
 
-	bool m_isGizmosActive;
 	bool m_isGUIActive;
-
-	vec4 white, black;
 };
 

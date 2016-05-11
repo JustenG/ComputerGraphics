@@ -29,7 +29,6 @@ public:
 	//Get a components index into Component Managers Componenet Collections
 	template<typename T>
 	bool HasComponent();
-
 	bool HasComponent(uint hashCode)
 	{
 		if (m_componentIndex.find(hashCode) != m_componentIndex.end())
@@ -39,7 +38,6 @@ public:
 	}
 
 	uint GetComponentCount() { return m_componentIndex.size(); };
-
 	void SetName(std::string name) {  m_name = name; };
 	std::string GetName() { return m_name; };
 
