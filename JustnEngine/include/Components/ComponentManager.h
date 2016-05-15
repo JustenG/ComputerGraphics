@@ -3,7 +3,6 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
-#include <unordered_map>
 #include "Components\ComponentCollection.h"
 
 class GameObject;
@@ -32,7 +31,7 @@ public:
 	template<typename T>
 	int AddComponent(GameObject* gameObject)
 	{
-		ComponentCollection<T>* container = (ComponentCollection<T>*)m_collectionsMap[typeid(T).hash_code()];
+		ComponentCollection<T>* container = (ComponentCollection<T>*)m_pCollectionsMap[typeid(T).hash_code()];
 
 		container->GetContainer()->emplace_back();
 		container->Back().Init(gameObject);
@@ -40,9 +39,9 @@ public:
 	}
 
 	template<typename T>
-	T* GetComponent(int index)
+	T* GetComponent(uint index)
 	{
-		ComponentCollection<T>* container = (ComponentCollection<T>*)m_collectionsMap[typeid(T).hash_code()];
+		ComponentCollection<T>* container = (ComponentCollection<T>*)m_pCollectionsMap[typeid(T).hash_code()];
 		return &(*container->GetContainer())[index];
 	}
 
@@ -50,12 +49,7 @@ public:
 	Camera* GetMainCamera();
 	void SetMainCamResolution(glm::ivec2 resolution) { m_mainCameraResolution = resolution; };
 
-	void RequestTransformUpdate();
-
 private:
-
-	void AddChildren(Transform* parent, short &parentsIndex);
-	void ReorderTransforms();
 
 	ComponentManager();
 	static ComponentManager* m_instance;
@@ -64,18 +58,12 @@ private:
 	glm::ivec2 m_mainCameraResolution;
 
 	//A Vector of every componenet in-game
-	ComponentCollection<Transform> m_transforms;
-	ComponentCollection<Transform> TransformsBuffer;
-	std::vector<short> ParentIndexBuffer;
-	bool m_transformsInline;
-
-
-	//std::map<T,std::vector<T>> map; 
+	ComponentCollection<Transform>		m_transforms;
 	ComponentCollection<Camera>			m_cameras;
 	ComponentCollection<Light>			m_lights;
 	ComponentCollection<MeshRenderer>	m_meshRenderers;
 	ComponentCollection<Terrain>		m_terrains;
 
-	std::map<int, IComponentCollection*> m_collectionsMap;
+	std::map<uint, IComponentCollection*>	m_pCollectionsMap;
 
 };

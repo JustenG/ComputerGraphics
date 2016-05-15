@@ -48,7 +48,6 @@ private:
 
 	ComponentManager* m_pComponentManager;
 	std::map<uint, int> m_componentIndex;
-	std::map<uint, BaseComponent*> m_pComponents;
 	std::string m_name;
 };
 
@@ -59,14 +58,11 @@ GameObject::AddComponent()
 	if (!TComponent::CheckRequirements(this))
 		return;
 
+	//Already has this component
 	if (HasComponent<TComponent>())
-	{
-		//Already has this component
-		if (TComponent::IsSingular()) return;
-	}
+		return;
 
-	m_componentIndex	[GetTypeID<TComponent>()] = m_pComponentManager->AddComponent<TComponent>(this);
-	m_pComponents		[GetTypeID<TComponent>()] = GetComponent<TComponent>();
+	m_componentIndex[GetTypeID<TComponent>()] = m_pComponentManager->AddComponent<TComponent>(this);
 }
 
 template<typename TComponent>

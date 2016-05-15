@@ -6,8 +6,6 @@
 class Terrain : public MeshRenderer
 {
 public:
-	static bool IsSingular() { return true; };
-
 	Terrain();
 	~Terrain();
 

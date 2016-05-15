@@ -28,7 +28,6 @@ void TestEngineApp::Initialise()
 	GetAssetManager()->LoadShader("data/shaders/defultVertexShader.vert", "data/shaders/defultFragmentShader.frag", "DefultShader");
 	m_pModel->SetShader(GetAssetManager()->GetAsset<Shader>("DefultShader"));
 	m_pModel->CreateEntitys();
-	//m_entity->SetName("");
 
 	//Terrain
 	m_entity = GetEntityManager()->CreateEntity();

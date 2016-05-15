@@ -16,8 +16,6 @@ class Light;
 class MeshRenderer : public Component<Transform>
 {
 public:
-	static bool IsSingular() { return true; };
-
 	MeshRenderer();
 	~MeshRenderer();
 

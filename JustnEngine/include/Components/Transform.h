@@ -10,8 +10,6 @@ class ComponentManager;
 class Transform : public Component<>
 {
 public:
-	static bool IsSingular() { return true; };
-
 	Transform();
 	~Transform();
 
@@ -22,10 +20,10 @@ public:
 
 	void SetPosition(glm::vec3 position) { m_position = position; };
 	void SetRotation(glm::vec3 rotation) { m_rotation = rotation; };
-	void SetScale	(glm::vec3 scale)	 { m_scale = scale; };
-	void SetPosition(float x, float y, float z) { m_position = glm::vec3(x,y,z); };
+	void SetScale	(glm::vec3 scale)	 { m_scale	  = scale; };
+	void SetPosition(float x, float y, float z) { m_position = glm::vec3(x, y, z); };
 	void SetRotation(float x, float y, float z) { m_rotation = glm::vec3(x, y, z); };
-	void SetScale	(float x, float y, float z) { m_scale = glm::vec3(x, y, z); };
+	void SetScale	(float x, float y, float z) { m_scale	 = glm::vec3(x, y, z); };
 
 	Transform* GetParent() { return m_pParent; };
 	std::vector<Transform*> GetChildren() { return m_pChildren; };
@@ -37,9 +35,10 @@ public:
 
 	void Update();
 	void UpdateWorldTransform();
-	void UpdateWorldTransform(glm::mat4 parentsTransform);
 
 private:
+
+	bool m_isDirty;
 
 	glm::mat4 m_localTransformMatrix;
 	glm::mat4 m_globalTransformMatrix;

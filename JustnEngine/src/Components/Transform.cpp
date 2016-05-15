@@ -22,8 +22,6 @@ void Transform::AddChild(Transform* newChild)
 {
 	newChild->m_pParent = this;
 	m_pChildren.push_back(newChild);
-
-	m_pComponentManager->RequestTransformUpdate();
 }
 
 void Transform::RemoveChild(int childsIndex)
@@ -41,8 +39,6 @@ void Transform::RemoveChild(int childsIndex)
 	}
 
 	m_pChildren.pop_back();
-
-	m_pComponentManager->RequestTransformUpdate();
 }
 
 void Transform::SwapChild(int first, int second)
@@ -80,6 +76,9 @@ void Transform::MoveChild(int childIndex, int newIndex)
 
 void Transform::Update()
 {
+	if (!m_isDirty)
+		return;
+
 	glm::mat4 localTransform(1);
 
 	localTransform *= glm::translate(localTransform, m_position);
@@ -95,12 +94,10 @@ void Transform::Update()
 	m_localTransformMatrix = localTransform;
 }
 
-void Transform::UpdateWorldTransform(glm::mat4 parentsTransform)
-{
-	m_globalTransformMatrix = parentsTransform * m_localTransformMatrix;
-}
-
 void Transform::UpdateWorldTransform()
 {
-	m_globalTransformMatrix = m_localTransformMatrix;
+	if(m_pParent != nullptr)
+		m_globalTransformMatrix = m_pParent->GetMatrix() * m_localTransformMatrix;
+	else
+		m_globalTransformMatrix = m_localTransformMatrix;
 }

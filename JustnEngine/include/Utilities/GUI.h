@@ -22,11 +22,16 @@ public:
 
 private:
 
-	void PrintObject(GameObject* object);
+	void DrawHierarchy();
+	void DrawComponents();
+	void DrawGameObject(GameObject* object);
 
 	EntityManager* m_entityManager;
 	ComponentManager* m_componentManager;
 	AssetManager* m_assetManager;
+
+	std::vector<GameObject*> m_selectedObjects;
+	GameObject* m_selectedObject;
 
 	bool m_isImGuiActive;
 	bool m_isGizmosActive;

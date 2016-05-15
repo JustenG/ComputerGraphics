@@ -1,10 +1,7 @@
 #include "Assets\MeshFile.h"
 
 #include <FBXFile.h>
-#include "gl_core_4_4.h"
-
-#include "glm/glm.hpp"
-#include "glm/ext.hpp"
+#include "all_includes.h"
 
 #include "Assets\Mesh.h"
 //To be moved to a GameObjectGenerator
@@ -46,6 +43,7 @@ void MeshFile::LoadFile(std::string fileName)
 
 	int startOfExtension = fileName.find_last_of('.');
 	std::string fileType = fileName.substr(startOfExtension + 1, fileName.length());
+
 	printf("filename");
 
 	if (fileType == "fbx")
@@ -85,6 +83,15 @@ void MeshFile::CreateEntitys()
 	{
 		m_pGameObjects.push_back(m_pEntityManager->CreateEntity());
 		GameObject* tempObject = m_pGameObjects.back();
+		//Get Mesh Name
+		std::string name = m_fbxFile->getMeshByIndex(i)->m_name;
+		std::string fileName = GetFileName();
+		//If Mesh has no name, use file name
+		if (name == "")
+			name = fileName.substr(0, fileName.find('.'));
+		//Set Game Objects Name
+		tempObject->SetName(name);
+		//Add required components
 		tempObject->AddComponent<Transform>();
 		tempObject->AddComponent<MeshRenderer>();
 		tempObject->GetComponent<MeshRenderer>()->SetMesh(m_internalMeshes[i]);

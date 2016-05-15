@@ -15,8 +15,6 @@ struct GLFWwindow;
 class Camera : public Component<Transform>
 {
 public:
-	static bool IsSingular() { return true; };
-
 	Camera();
 	Camera(glm::ivec2 resolution);
 	virtual ~Camera();

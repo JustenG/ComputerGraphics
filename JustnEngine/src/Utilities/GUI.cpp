@@ -1,5 +1,6 @@
 #include "Utilities\GUI.h"
 #include "all_includes.h"
+#include <algorithm>    // std::find
 
 #include "imgui.h"
 #include "imgui_internal.h"
@@ -60,73 +61,106 @@ void GUI::UpdateImGui()
 	ImGui_ImplGlfwGL3_NewFrame();
 
 	//Update ImGui
-	ImGui::Begin("GameObjects");
-	for (int i = 0; i < m_entityManager->GetEntityCount(); ++i)
-	{
-		GameObject* object = &(m_entityManager->GetEntitys()->data())[i];
-		PrintObject(object);
-	}
-
-
-	//TEST
-	//------------------------------------------
-	//------------------------------------------
-	ShowHelpMarker("Click to select, CTRL+Click to toggle, double-click to open");
-	static int selection_mask = 0x02;   // Dumb representation of what may be user-side selection state. You may carry selection state inside or outside your objects in whatever format you see fit.
-
-	int node_clicked = -1;
-	for (int i = 0; i < 5; i++)
-	{
-		ImGuiTreeNodeFlags node_flags = ((selection_mask & (1 << i)) ? ImGuiTreeNodeFlags_Selected: 0) | ImGuiTreeNodeFlags_OpenOnDoubleClick;
-		bool opened = ImGui::TreeNodeEx((void*)(intptr_t)i, node_flags, "Selectable Child %d", i);
-		if (ImGui::IsItemClicked())
-			node_clicked = i;
-		if (opened)
-		{
-			ImGui::Text("blah blah");
-			ImGui::TreePop();
-		}
-	}
-	if (node_clicked != -1)
-	{
-		// Update selection state. Process outside of tree loop to avoid visual inconsistencies during the clicking-frame.
-		if (ImGui::GetIO().KeyCtrl)
-			selection_mask ^= (1 << node_clicked);  // CTRL+click to toggle
-		else
-			selection_mask = (1 << node_clicked);   // Click to single-select
-	}
-	//------------------------------------------
-	//------------------------------------------
-
-	ImGui::End();
-
-
+	DrawHierarchy();
+	
 
 	//-------------------------------------------------
 	//-------------------------------------------------
 }
 
-void GUI::PrintObject(GameObject* object)
+void GUI::DrawHierarchy()
 {
-	std::string name(object->GetName());
+	ImGui::Begin("Hierarchy");
 
-	Transform* parent = object->GetComponent<Transform>();
+	//Reset selected object to nullptr
+	m_selectedObject = nullptr;
 
-	if (ImGui::TreeNode(name.c_str()))
+	for (int i = 0; i < m_entityManager->GetEntityCount(); ++i)
 	{
-		if (parent->GetChildren().size() > 0)
+		GameObject* object = &(m_entityManager->GetEntitys()->data())[i];
+		DrawGameObject(object);
+	}
+	if (m_selectedObject != nullptr)
+	{
+		// Update selection state. Process outside of tree loop to avoid visual inconsistencies during the clicking-frame.
+		if (ImGui::GetIO().KeyCtrl)
+			m_selectedObjects.push_back(m_selectedObject);  // CTRL+click to toggle
+		else
 		{
-			for (int i = 0; i < parent->GetChildren().size(); ++i)
-			{
-				GameObject* child = parent->GetChildren()[i]->GetGameObject();
-				PrintObject(child);
-			}
+			m_selectedObjects.clear();
+			m_selectedObjects.push_back(m_selectedObject);    // Click to single-select
 		}
+	}
+
+	ImGui::End();
+}
+
+void GUI::DrawGameObject(GameObject* object)
+{
+	Transform* objTrans = object->GetComponent<Transform>();
+	if (objTrans->GetParent() != nullptr)	return;
+
+	std::string name(object->GetName());
+	uint childCount = objTrans->GetChildren().size();
+
+	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+
+	if (childCount == 0)
+	{
+		//No Childern, Keep open
+		node_flags |= ImGuiTreeNodeFlags_AlwaysOpen;
+
+		//If selected
+		if (std::find(m_selectedObjects.begin(), m_selectedObjects.end(), object) != m_selectedObjects.end())
+			node_flags |= ImGuiTreeNodeFlags_Selected;
+
+		//Push Tree Node
+		ImGui::TreeNodeEx((void*)object, node_flags, name.c_str());
+		
+		//If item clicked
+		if (ImGui::IsItemClicked())	m_selectedObject = object;
+
+		//Pop Tree Node
+		ImGui::TreePop();
+	}
+	else
+	{
+		//Push Tree Node
+		bool node_open = ImGui::TreeNodeEx((void*)object, node_flags, name.c_str());
+
+		//If item clicked
+		if (ImGui::IsItemClicked())	m_selectedObject = object;
+
+		//If Opened
+		if (node_open)
+		{
+			for (int i = 0; i < childCount; ++i)
+			{
+				GameObject* child = objTrans->GetChildren()[i]->GetGameObject();
+				DrawGameObject(child);
+			}
+
+		}
+		//Pop Tree Node
 		ImGui::TreePop();
 	}
 	return;
 }
 
+void GUI::DrawComponents()
+{
+	ImGui::Begin("Inspector");
+
+	if (m_selectedObjects.size() <= 0 || m_selectedObjects.size() > 1)
+	{
+		ImGui::End();
+		return;
+	}
+
+	//TODO
+	//Make a componenet displayer 
+
+}
 
 void GUI::UpdateGizmos()
 {
