@@ -1,3 +1,4 @@
+#pragma once
 #include "glm\glm.hpp"
 #include "glm\ext.hpp""
 #include "global_includes.h"

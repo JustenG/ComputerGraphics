@@ -2,18 +2,9 @@
 #include "global_includes.h"
 #include "Components\BaseComponent.h"
 #include <tuple>
-class GameObject;
+#include "Utilities\Utils.h"
 
-//TODO 
-//Move TO Utils.h
-//-----------------------------
-template <typename... TArgs>
-std::vector<size_t> GetTypes()
-{
-	std::vector<size_t> result = { typeid(TArgs).hash_code()... };
-	return result;
-}
-//-----------------------------
+class GameObject;
 
 template <class... TRequirements>
 class Component : public BaseComponent
@@ -28,7 +19,7 @@ public:
 template <class... TRequirements>
 bool Component<TRequirements...>::CheckRequirements(GameObject* gameObject)
 {
-	for( auto& req : GetTypes<TRequirements...>() )
+	for( auto& req : Utils::GetTypes<TRequirements...>() )
 	{
 		if (!gameObject->HasComponent(req))
 		{

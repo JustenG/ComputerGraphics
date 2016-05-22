@@ -160,6 +160,24 @@ void GUI::DrawComponents()
 	//TODO
 	//Make a componenet displayer 
 
+	//Transform*			component = m_selectedObjects[0]->GetComponent<Transform>();
+	//if (component != nullptr)
+	//{
+	//	for (int i = 0; i < component->ToData()->Size(); ++i)
+	//	{
+	//		DrawData(component->ToData()->GetData(i))
+	//	}
+	//}
+
+	//Transform*			component = m_selectedObjects[0]->GetComponent<Transform>();
+	//Camera*				component = m_selectedObjects[0]->GetComponent<Camera>();
+	//Light*				component = m_selectedObjects[0]->GetComponent<Light>();
+	//MeshRenderer*		component = m_selectedObjects[0]->GetComponent<MeshRenderer>();
+	//Terrain*			component = m_selectedObjects[0]->GetComponent<Terrain>();
+
+
+
+
 }
 
 void GUI::UpdateGizmos()

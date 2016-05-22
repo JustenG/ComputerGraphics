@@ -73,6 +73,7 @@ SET(HEADERS
 	include/Rendering/VertexArrayObject.h
 	include/Rendering/VertexBuffer.h
 
+	include/Utilities/Data.h
 	include/Utilities/GUI.h
 	include/Utilities/Utils.h
 

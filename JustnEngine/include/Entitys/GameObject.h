@@ -2,15 +2,14 @@
 #include "global_includes.h"
 #include "Components\ComponentManager.h"
 #include "Components\BaseComponent.h"
-
+#include "Utilities\Utils.h"
 #include <type_traits>
-
 
 class GameObject
 {
 public:
 	GameObject();
-	GameObject(const GameObject &obj);  // copy constructor
+	GameObject(GameObject &obj);  // copy constructor
 	~GameObject();
 
 	//Add a component to Game Object
@@ -19,7 +18,7 @@ public:
 	AddComponent();
 
 	//Get a component to Game Object
-	template<typename T>
+	template<class T>
 	T* GetComponent();
 
 	//Get a components index into Component Managers Componenet Collections
@@ -43,9 +42,6 @@ public:
 
 private:
 
-	template<typename T>
-	size_t GetTypeID();
-
 	ComponentManager* m_pComponentManager;
 	std::map<uint, int> m_componentIndex;
 	std::string m_name;
@@ -62,33 +58,32 @@ GameObject::AddComponent()
 	if (HasComponent<TComponent>())
 		return;
 
-	m_componentIndex[GetTypeID<TComponent>()] = m_pComponentManager->AddComponent<TComponent>(this);
+	m_componentIndex[Utils::GetTypeID<TComponent>()] = m_pComponentManager->AddComponent<TComponent>(this);
 }
 
-template<typename TComponent>
+template<class TComponent>
 TComponent* GameObject::GetComponent()
 {
-	return m_pComponentManager->GetComponent<TComponent>(GetComponentIndex<TComponent>());
+	if (GetComponentIndex<TComponent>() >= 0)
+		return m_pComponentManager->GetComponent<TComponent>(GetComponentIndex<TComponent>());
+	else
+		return nullptr;
 }
 
 template<typename TComponent>
 int GameObject::GetComponentIndex()
 {
-	return m_componentIndex[GetTypeID<TComponent>()];
+	if (m_componentIndex.find(Utils::GetTypeID<TComponent>()) != m_componentIndex.end())
+		return m_componentIndex[Utils::GetTypeID<TComponent>()];
+	else
+		return -1;
 }
 
 template<typename TComponent>
 bool GameObject::HasComponent()
 {
-	if (m_componentIndex.find(GetTypeID<TComponent>()) != m_componentIndex.end())
+	if (m_componentIndex.find(Utils::GetTypeID<TComponent>()) != m_componentIndex.end())
 		return true;
 
 	return false;
 }
-
-template<typename T>
-size_t GameObject::GetTypeID()
-{
-	return typeid(T).hash_code();
-}
-
