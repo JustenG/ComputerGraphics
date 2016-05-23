@@ -8,9 +8,11 @@
 #include "Rendering\FrameBuffer.h"
 
 #include "Transform.h"
+#include "Utilities\Data.h"
 
 struct GLFWwindow;
 //class Transform;
+
 
 class Camera : public Component<Transform>
 {
@@ -49,11 +51,17 @@ public:
 	glm::mat4 GetWorldTransform();
 
 protected:
-	glm::mat4 worldTransform;
 
-	bool m_orthographic;
+	FrameBuffer m_FBO;
+
+	glm::mat4 worldTransform;
 	glm::mat4 projectionTransform;
 	glm::mat4 projectionViewTransform;
+
+	bool m_isMainCamera;
+	bool m_renderToTexture;
+
+	bool m_orthographic;
 	//Perspective
 	float m_fieldOfView;
 	float m_aspectRatio;
@@ -65,10 +73,39 @@ protected:
 
 	glm::ivec2 m_resolution;
 
-	bool m_isMainCamera;
-	bool m_renderToTexture;
+//-----------------------------------------
+//-----------------------------------------
 
-	FrameBuffer m_FBO;
+//Data of Class
+//-----------------------------------------
+//-----------------------------------------
+public:
+	//Data Type
+	typedef decltype(CreateDataType(
+		m_isMainCamera,
+		m_renderToTexture,
+		m_orthographic,
+		m_fieldOfView,
+		m_aspectRatio,
+		m_orthoSize,
+		m_nearPlane,
+		m_farPlane,
+		m_resolution))
+		CameraData;
 
+	CameraData* GetData() { return m_data; };
+
+	void SetData(const CameraData& data)
+	{
+		delete m_data;
+		m_data = new CameraData(data);
+	};
+
+private:
+	CameraData* m_data;
+
+//-----------------------------------------
+//-----------------------------------------
 };
+
 

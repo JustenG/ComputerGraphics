@@ -160,14 +160,14 @@ void GUI::DrawComponents()
 	//TODO
 	//Make a componenet displayer 
 
-	//Transform*			component = m_selectedObjects[0]->GetComponent<Transform>();
-	//if (component != nullptr)
-	//{
-	//	for (int i = 0; i < component->ToData()->Size(); ++i)
-	//	{
-	//		DrawData(component->ToData()->GetData(i))
-	//	}
-	//}
+	Camera*			component = m_selectedObjects[0]->GetComponent<Camera>();
+	if (component != nullptr)
+	{
+		for (int i = 0; i < component->GetData()->Size(); ++i)
+		{
+			DrawData(component->GetData()->GetDataAtIndex(i));
+		}
+	}
 
 	//Transform*			component = m_selectedObjects[0]->GetComponent<Transform>();
 	//Camera*				component = m_selectedObjects[0]->GetComponent<Camera>();
@@ -225,3 +225,15 @@ void GUI::Render()
 	//-----------------------------------------------
 	//-----------------------------------------------
 }
+
+//Draw Data
+//-------------------------------------------------------
+//-------------------------------------------------------
+template<>
+void GUI::DrawData<int>(int data)
+{
+
+}
+
+//-------------------------------------------------------
+//-------------------------------------------------------

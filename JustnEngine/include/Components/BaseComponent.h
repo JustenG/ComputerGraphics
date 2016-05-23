@@ -1,5 +1,6 @@
 #pragma once
 #include "global_includes.h"
+#include "Utilities\Data.h"
 class GameObject;
 
 class BaseComponent
@@ -23,5 +24,6 @@ private:
 
 	GameObject* m_gameObject;
 	int m_transformIndex;
+
 };
 
