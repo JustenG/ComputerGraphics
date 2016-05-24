@@ -1,7 +1,7 @@
 #pragma once
 #include <gl_core_4_4.h>
 #include <glm/glm.hpp>
-#include <glm/ext.hpp>
+
 #include "global_includes.h"
 
 #include "Components\Component.h"
@@ -79,8 +79,8 @@ protected:
 //-----------------------------------------
 //-----------------------------------------
 public:
-//	//Data Type
-	typedef decltype(Make::CreateDataBinderType(
+	//Data Type
+	using CameraData = decltype(Make::CreateDataBinderType(
 		m_isMainCamera,
 		m_renderToTexture,
 		m_orthographic,
@@ -89,8 +89,7 @@ public:
 		m_orthoSize,
 		m_nearPlane,
 		m_farPlane,
-		m_resolution))
-		CameraData;
+		m_resolution));
 
 private:
 	CameraData* m_dataBinder;

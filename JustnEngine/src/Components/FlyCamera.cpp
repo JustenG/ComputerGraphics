@@ -64,16 +64,16 @@ void FlyCamera::MouseContol(float deltaTime, GLFWwindow* window)
 
 	if (prevMouseX == 0 && prevMouseY == 0)
 	{
-		prevMouseX = x;
-		prevMouseY = y;
+		prevMouseX = (int)x;
+		prevMouseY = (int)y;
 	}
 	else
 	{
 		int movmentX = prevMouseX - (int)x;
 		int movmentY = prevMouseY - (int)y;
 
-		prevMouseX = x;
-		prevMouseY = y;
+		prevMouseX = (int)x;
+		prevMouseY = (int)y;
 
 		if (movmentX != 0.0f)
 		{

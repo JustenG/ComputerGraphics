@@ -31,7 +31,7 @@ template<typename... TData>
 class DataBinder
 {
 public:
-	DataBinder(TData&... data) { m_tupleData = std::make_tuple(data...); };
+	DataBinder(TData&... data) { m_tupleData = std::make_tuple(&data...); };
 	~DataBinder() {};
 
 	std::tuple<TData*...>& GetData() { return m_tupleData; };
@@ -40,8 +40,9 @@ public:
 
 	BaseData* MakeBaseData() 
 	{ 
-		Make::BaseDataObject(m_tupleData);
-		return m_tupleData;
+		//BaseData* baseData = Make::BaseDataObject(m_tupleData);
+		//return baseData;
+		return nullptr;
 	};
 private:
 	std::tuple<TData*...> m_tupleData;	
@@ -99,11 +100,12 @@ namespace Make
 	template<typename... TData>
 	BaseData* BaseDataObject(TData... data)
 	{
-		return (BaseData*)(new Data<TData...>(data...));
+		return new Data<TData...>(data...);
 	}
 
 	template<typename... TArgs>
-	auto CreateDataBinderType(TArgs&&... values)->DataBinder<std::remove_reference_t<decltype(values)>...>;
+	auto CreateDataBinderType(TArgs&&... values)->DataBinder<std::remove_reference_t<TArgs>...> {};
+	
 }
 //----------------------------------------
 //----------------------------------------

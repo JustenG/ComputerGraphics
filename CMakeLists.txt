@@ -22,6 +22,7 @@ include_directories(${CMAKE_SOURCE_DIR}/deps/fbx)
 include_directories(${CMAKE_SOURCE_DIR}/deps/stb)
 
 add_definitions(-DGLM_SWIZZLE)
+add_definitions(-DGLM_FORCE_PURE)
 include_directories(${CMAKE_SOURCE_DIR}/deps/glm)
 
 add_subdirectory (JustnEngine)

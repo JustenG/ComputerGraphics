@@ -2,11 +2,7 @@
 
 #include <GLFW\glfw3.h>
 #include "Components\Transform.h"
-
-
-using glm::vec3;
-using glm::vec4;
-using glm::mat4;
+#include "all_includes.h"
 
 Camera::Camera()
 {
@@ -30,6 +26,7 @@ Camera::Camera()
 		m_farPlane,
 		m_resolution);
 
+	m_data = m_dataBinder->MakeBaseData();
 }
 Camera::Camera(glm::ivec2 resolution) : Camera()
 {
@@ -86,7 +83,7 @@ void Camera::SetToLight()
 {
 	m_isMainCamera = false;
 	m_renderToTexture = true;
-	SetResolution(glm::ivec2(m_orthoSize * 64));
+	SetResolution(glm::ivec2((int)m_orthoSize * 64));
 	m_FBO.Reset(GetResolution());
 	m_FBO.CreateBuffer(false, true);
 	 
