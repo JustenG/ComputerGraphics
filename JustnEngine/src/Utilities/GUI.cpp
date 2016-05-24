@@ -162,7 +162,7 @@ void GUI::DrawComponents()
 	Camera*			component = m_selectedObjects[0]->GetComponent<Camera>();
 	if (component != nullptr)
 	{
-		component->GetData()->Render();
+		component->ToData()->Render();
 	}
 
 	//Transform*			component = m_selectedObjects[0]->GetComponent<Transform>();
@@ -221,15 +221,3 @@ void GUI::Render()
 	//-----------------------------------------------
 	//-----------------------------------------------
 }
-
-//Draw Data
-//-------------------------------------------------------
-//-------------------------------------------------------
-template<>
-void GUI::DrawData<int>(int data)
-{
-
-}
-
-//-------------------------------------------------------
-//-------------------------------------------------------

@@ -7,25 +7,6 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
-//Data Binder
-//----------------------------------------
-//----------------------------------------
-template<typename... TData>
-class DataBinder
-{
-public:
-	DataBinder(TData&... data) { m_data = std::make_tuple(data...); };
-	~DataBinder() {};
-
-	std::tuple<TData*...>& GetData() { return m_data; };
-	void SetData(TData&... data) { m_data = data; };
-	uint Size() { return (uint)std::tuple_size<TData...>::value; };
-
-private:
-	std::tuple<TData*...> m_data;	
-};
-//----------------------------------------
-//----------------------------------------
 
 //BaseData
 //----------------------------------------
@@ -40,6 +21,30 @@ public:
 
 protected:
 	std::vector<BaseData*> children;
+};
+//----------------------------------------
+//----------------------------------------
+//Data Binder
+//----------------------------------------
+//----------------------------------------
+template<typename... TData>
+class DataBinder
+{
+public:
+	DataBinder(TData&... data) { m_tupleData = std::make_tuple(data...); };
+	~DataBinder() {};
+
+	std::tuple<TData*...>& GetData() { return m_tupleData; };
+	void SetData(TData&... data) { m_tupleData = data; };
+	uint Size() { return (uint)std::tuple_size<TData...>::value; };
+
+	BaseData* MakeBaseData() 
+	{ 
+		Make::BaseDataObject(m_tupleData);
+		return m_tupleData;
+	};
+private:
+	std::tuple<TData*...> m_tupleData;	
 };
 //----------------------------------------
 //----------------------------------------
@@ -92,13 +97,13 @@ public:
 namespace Make
 {
 	template<typename... TData>
-	BaseData* DataObject(TData... data)
+	BaseData* BaseDataObject(TData... data)
 	{
 		return (BaseData*)(new Data<TData...>(data...));
 	}
 
 	template<typename... TArgs>
-	auto CreateDataType(TArgs&&... values)->Data<std::remove_reference_t<decltype(values)>...> {};	
+	auto CreateDataBinderType(TArgs&&... values)->DataBinder<std::remove_reference_t<decltype(values)>...>;
 }
 //----------------------------------------
 //----------------------------------------

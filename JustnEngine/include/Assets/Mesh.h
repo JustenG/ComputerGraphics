@@ -11,7 +11,7 @@
 class VertexArrayObject;
 class Material;
 class FBXMeshNode;
-class Vertex;
+struct Vertex;
 
 class Mesh : public Asset
 {

@@ -26,8 +26,6 @@ private:
 	void DrawHierarchy();
 	void DrawComponents();
 	void DrawGameObject(GameObject* object);
-	template<typename T>
-	void DrawData(T data);
 
 	EntityManager* m_entityManager;
 	ComponentManager* m_componentManager;

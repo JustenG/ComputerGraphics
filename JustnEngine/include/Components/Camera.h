@@ -8,10 +8,10 @@
 #include "Rendering\FrameBuffer.h"
 
 #include "Transform.h"
+#include "Utilities\Data.h"
 
 struct GLFWwindow;
 //class Transform;
-
 
 class Camera : public Component<Transform>
 {
@@ -78,26 +78,22 @@ protected:
 //Data of Class
 //-----------------------------------------
 //-----------------------------------------
-//public:
+public:
 //	//Data Type
-//	BaseData* GetData() { return m_data; };
-//
-//	/*void SetData(const CameraData& data)
-//	{
-//		delete m_data;
-//		m_data = new CameraData(data);
-//	};*/
-//
-//private:
-//	BaseData* m_data = Make::DataObject(m_isMainCamera,
-//		m_renderToTexture,
-//		m_orthographic,
-//		m_fieldOfView,
-//		m_aspectRatio,
-//		m_orthoSize,
-//		m_nearPlane,
-//		m_farPlane,
-//		m_resolution);
+	typedef decltype(Make::CreateDataBinderType(
+		m_isMainCamera,
+		m_renderToTexture,
+		m_orthographic,
+		m_fieldOfView,
+		m_aspectRatio,
+		m_orthoSize,
+		m_nearPlane,
+		m_farPlane,
+		m_resolution))
+		CameraData;
+
+private:
+	CameraData* m_dataBinder;
 
 //-----------------------------------------
 //-----------------------------------------

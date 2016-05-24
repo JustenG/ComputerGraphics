@@ -45,7 +45,6 @@ void VertexArrayObject::DeleteBuffers(uint VAO, uint VBO, uint IBO)
 
 	delete m_IndexBuffer;
 	delete m_VertexBuffer;
-	delete[] m_pData;
 }
 
 void VertexArrayObject::DrawObject()

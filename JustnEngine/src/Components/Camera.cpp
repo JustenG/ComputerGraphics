@@ -3,6 +3,7 @@
 #include <GLFW\glfw3.h>
 #include "Components\Transform.h"
 
+
 using glm::vec3;
 using glm::vec4;
 using glm::mat4;
@@ -17,6 +18,17 @@ Camera::Camera()
 
 	SetPerspective();
 	SetLookAt(vec3(0, 10, 10), vec3(0), vec3(0, 1, 0));
+
+	m_dataBinder = new CameraData(
+		m_isMainCamera,
+		m_renderToTexture,
+		m_orthographic,
+		m_fieldOfView,
+		m_aspectRatio,
+		m_orthoSize,
+		m_nearPlane,
+		m_farPlane,
+		m_resolution);
 
 }
 Camera::Camera(glm::ivec2 resolution) : Camera()
