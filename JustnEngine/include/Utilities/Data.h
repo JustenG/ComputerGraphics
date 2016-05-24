@@ -6,7 +6,7 @@
 #include <functional>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
-
+#include "Utilities\TupleIterator.h"
 
 //BaseData
 //----------------------------------------
@@ -24,52 +24,6 @@ protected:
 };
 //----------------------------------------
 //----------------------------------------
-//Data Binder
-//----------------------------------------
-//----------------------------------------
-template<typename... TData>
-class DataBinder
-{
-public:
-	DataBinder(TData&... data) { m_tupleData = std::make_tuple(&data...); };
-	~DataBinder() {};
-
-	std::tuple<TData*...>& GetData() { return m_tupleData; };
-	void SetData(TData&... data) { m_tupleData = data; };
-	uint Size() { return (uint)std::tuple_size<TData...>::value; };
-
-	BaseData* MakeBaseData() 
-	{ 
-		//BaseData* baseData = Make::BaseDataObject(m_tupleData);
-		//return baseData;
-		return nullptr;
-	};
-private:
-	std::tuple<TData*...> m_tupleData;	
-};
-//----------------------------------------
-//----------------------------------------
-
-//Data Converter
-//----------------------------------------
-//----------------------------------------
-static std::map<uint, std::function<BaseData*()>> dataMap;
-
-template<typename Primitive, typename Data>
-BaseData* BindPrimitive()
-{
-	dataMap[Utils::GetTypeID<Primitive>()] = CreateData<Primitive, Data>;
-}
-
-template<typename TPrimitive, typename TData>
-BaseData* CreateData(const TPrimitive& value)
-{
-	auto* data = new TData();
-	data->value = value;
-	return (BaseData*)data;
-}
-//----------------------------------------
-//----------------------------------------
 
 //Data Variadic Interface
 //----------------------------------------
@@ -84,29 +38,52 @@ public:
 	template<typename T>
 	void AddDataValue(T x)
 	{
-		auto found = std::find(dataMap.begin(), dataMap.end(), Utils::GetTypeID<T>());
-		if (found != dataMap.end())
+		auto found = std::find(DataMap.begin(), DataMap.end(), Utils::GetTypeID<T>());
+		if (found != DataMap.end())
 			children.add(found->second(x));
+		else
+			x->ToData();
 	}
 };
 //----------------------------------------
 //----------------------------------------
 
-//Maker Tools
+//Data Binder
 //----------------------------------------
 //----------------------------------------
-namespace Make
+template<typename... TData>
+class DataBinder
 {
-	template<typename... TData>
-	BaseData* BaseDataObject(TData... data)
-	{
-		return new Data<TData...>(data...);
-	}
+public:
+	DataBinder(TData&... data) { m_tupleData = std::make_tuple(&data...); };
+	~DataBinder() {};
 
-	template<typename... TArgs>
-	auto CreateDataBinderType(TArgs&&... values)->DataBinder<std::remove_reference_t<TArgs>...> {};
-	
-}
+	//TODO
+	//BaseData* Get() 
+	//{ 
+	//	BaseData* data = new Data<TData...>();
+
+	//	const size_t tupleSize = sizeof...(TData);
+	//	auto fTuple = std::forward_as_tuple(...); //Cant Get Data
+	//	auto function = [](const auto& elem) { data->AddDataValue(elem); };
+	//	for (int i = 0; i < Size(); ++i)
+	//	{
+	//		tuple_functor<tupleSize>::iterator(i, fTuple, function);
+	//	}
+	//	return m_tupleData; 
+	//};
+	template<typename... Ts>
+	BaseData* Get(Ts... rawData) 
+	{ 
+		BaseData* data = new Data(rawData...);
+		return data;
+	};
+	void Set(BaseData* data) { m_tupleData = data; };
+
+	uint Size() { return (uint)std::tuple_size<TData...>::value; };
+private:
+	std::tuple<TData*...> m_tupleData;	
+};
 //----------------------------------------
 //----------------------------------------
 
@@ -141,7 +118,61 @@ class Vector3Data : BaseData
 //----------------------------------------
 //----------------------------------------
 
+//Data Converter
+//----------------------------------------
+//----------------------------------------
+class DataConverter
+{
+public:
+	static std::map<uint, std::function<BaseData*()>> DataMap;
 
+	template<typename Primitive, typename Data>
+	static BaseData* BindPrimitive()
+	{
+		DataMap[Utils::GetTypeID<Primitive>()] = CreateData<Primitive, Data>;
+	}
+
+	template<typename TPrimitive, typename TData>
+	static BaseData* CreateData(const TPrimitive& value)
+	{
+		auto* data = new TData();
+		data->value = value;
+		return (BaseData*)data;
+	}
+
+	static void Init()
+	{
+		if (DataConverter::DataMap.size() > 0)
+			return;
+
+		DataConverter::BindPrimitive<float, FloatData>();
+		DataConverter::BindPrimitive<int, IntData>();
+		DataConverter::BindPrimitive<uint, UIntData>();
+		DataConverter::BindPrimitive<bool, BoolData>();
+		DataConverter::BindPrimitive<glm::vec3, Vector3Data>();
+	}
+};
+//----------------------------------------
+//----------------------------------------
+
+
+//Maker Tools
+//----------------------------------------
+//----------------------------------------
+namespace Make
+{
+	template<typename... TData>
+	BaseData* NewData(TData... data)
+	{
+		return new Data<TData...>(data...);
+	}
+
+	template<typename... TArgs>
+	auto CreateDataBinderType(TArgs&&... values)->DataBinder<std::remove_reference_t<TArgs>...> {};
+
+}
+//----------------------------------------
+//----------------------------------------
 
 
 

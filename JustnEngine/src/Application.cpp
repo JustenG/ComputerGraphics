@@ -8,6 +8,7 @@
 #include "Utilities\GUI.h"
 
 #include "all_includes.h"
+#include "Utilities\Data.h"
 
 Application::Application()
 {
@@ -22,6 +23,7 @@ int Application::Startup(int width, int height)
 	m_entityManager = EntityManager::GetInstance();
 	m_componentManager = ComponentManager::GetInstance();
 	m_assetManager = AssetManager::GetInstance();
+	DataConverter::Init();
 
 	//Setup Data
 	currentTime = 0;
