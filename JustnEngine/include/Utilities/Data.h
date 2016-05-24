@@ -3,38 +3,33 @@
 #include <tuple>    
 #include "Utilities\Utils.h"
 #include <type_traits>
+#include <functional>
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
 
+//Data Binder
+//----------------------------------------
+//----------------------------------------
 template<typename... TData>
 class DataBinder
 {
 public:
-	DataBinder() {};
-	DataBinder(TData...& data) 
-	{
-		//TODO
-		//Set all m_data to data
-	};
-	~Data() {};
+	DataBinder(TData&... data) { m_data = std::make_tuple(data...); };
+	~DataBinder() {};
 
-	std::tuple<TData...*>& GetData()
-	{
-		return m_data;
-	};
-
-	void SetData(TData...& data)
-	{
-		m_data = data;
-	};
-
+	std::tuple<TData*...>& GetData() { return m_data; };
+	void SetData(TData&... data) { m_data = data; };
+	uint Size() { return (uint)std::tuple_size<TData...>::value; };
 
 private:
-	std::tuple<TData...*> m_data;
-
+	std::tuple<TData*...> m_data;	
 };
+//----------------------------------------
+//----------------------------------------
 
-template<typename... TArgs>
-auto CreateDataType(TArgs&&... values)->DataBinder<std::remove_reference_t<decltype(values)>...> {};
-
+//BaseData
+//----------------------------------------
+//----------------------------------------
 class BaseData
 {
 public:
@@ -43,36 +38,101 @@ public:
 
 	virtual void Render() {}; // Renders all children in ImGUIList
 
-private:
+protected:
 	std::vector<BaseData*> children;
 };
+//----------------------------------------
+//----------------------------------------
 
+//Data Converter
+//----------------------------------------
+//----------------------------------------
+static std::map<uint, std::function<BaseData*()>> dataMap;
+
+template<typename Primitive, typename Data>
+BaseData* BindPrimitive()
+{
+	dataMap[Utils::GetTypeID<Primitive>()] = CreateData<Primitive, Data>;
+}
+
+template<typename TPrimitive, typename TData>
+BaseData* CreateData(const TPrimitive& value)
+{
+	auto* data = new TData();
+	data->value = value;
+	return (BaseData*)data;
+}
+//----------------------------------------
+//----------------------------------------
+
+//Data Variadic Interface
+//----------------------------------------
+//----------------------------------------
 template<typename... TData>
 class Data : public BaseData
 {
 public:
-	Data(TData...) {}; // Add each TData using TData.ToData() or default to (FloatData, Vec3Data, etc)
+	Data(TData... data) { AddDataValue(data)...; };
 	~Data() {};
+
+	template<typename T>
+	void AddDataValue(T x)
+	{
+		auto found = std::find(dataMap.begin(), dataMap.end(), Utils::GetTypeID<T>());
+		if (found != dataMap.end())
+			children.add(found->second(x));
+	}
 };
+//----------------------------------------
+//----------------------------------------
+
+//Maker Tools
+//----------------------------------------
+//----------------------------------------
+namespace Make
+{
+	template<typename... TData>
+	BaseData* DataObject(TData... data)
+	{
+		return (BaseData*)(new Data<TData...>(data...));
+	}
+
+	template<typename... TArgs>
+	auto CreateDataType(TArgs&&... values)->Data<std::remove_reference_t<decltype(values)>...> {};	
+}
+//----------------------------------------
+//----------------------------------------
 
 //Data Types
+//----------------------------------------
+//----------------------------------------
 class FloatData : BaseData
 {
 	float value;
 	void Render() override {}; // Renders float value
 };
-
+class IntData : BaseData
+{
+	int value;
+	void Render() override {}; // Renders int value
+};
+class UIntData : BaseData
+{
+	uint value;
+	void Render() override {}; // Renders uint value
+};
 class BoolData : BaseData
 {
 	bool value;
 	void Render() override {}; // Renders bool value
 };
-
 class Vector3Data : BaseData
 {
 	glm::vec3 value;
 	void Render() override {}; // Renders Vec3 value
 };
+//----------------------------------------
+//----------------------------------------
 
 
 

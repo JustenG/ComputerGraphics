@@ -1,6 +1,9 @@
 #include "Utilities\GUI.h"
 #include "all_includes.h"
 #include <algorithm>    // std::find
+#include <gl_core_4_4.h>
+#include <GLFW\glfw3.h>
+#include <Gizmos.h>
 
 #include "imgui.h"
 #include "imgui_internal.h"
@@ -11,10 +14,6 @@
 #include "Assets\AssetManager.h"
 
 #include "Components\Camera.h"
-
-#include <gl_core_4_4.h>
-#include <GLFW\glfw3.h>
-#include <Gizmos.h>
 
 
 GUI::GUI()
@@ -163,10 +162,7 @@ void GUI::DrawComponents()
 	Camera*			component = m_selectedObjects[0]->GetComponent<Camera>();
 	if (component != nullptr)
 	{
-		for (int i = 0; i < component->GetData()->Size(); ++i)
-		{
-			DrawData(component->GetData()->GetDataAtIndex(i));
-		}
+		component->GetData()->Render();
 	}
 
 	//Transform*			component = m_selectedObjects[0]->GetComponent<Transform>();
@@ -174,7 +170,7 @@ void GUI::DrawComponents()
 	//Light*				component = m_selectedObjects[0]->GetComponent<Light>();
 	//MeshRenderer*		component = m_selectedObjects[0]->GetComponent<MeshRenderer>();
 	//Terrain*			component = m_selectedObjects[0]->GetComponent<Terrain>();
-
+	ImGui::End();
 
 
 

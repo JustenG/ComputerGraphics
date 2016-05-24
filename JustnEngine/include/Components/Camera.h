@@ -1,14 +1,13 @@
 #pragma once
-
 #include <gl_core_4_4.h>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
+#include "global_includes.h"
 
 #include "Components\Component.h"
 #include "Rendering\FrameBuffer.h"
 
 #include "Transform.h"
-#include "Utilities\Data.h"
 
 struct GLFWwindow;
 //class Transform;
@@ -79,30 +78,26 @@ protected:
 //Data of Class
 //-----------------------------------------
 //-----------------------------------------
-public:
-	//Data Type
-	typedef decltype(CreateDataType(
-		m_isMainCamera,
-		m_renderToTexture,
-		m_orthographic,
-		m_fieldOfView,
-		m_aspectRatio,
-		m_orthoSize,
-		m_nearPlane,
-		m_farPlane,
-		m_resolution))
-		CameraData;
-
-	CameraData* GetData() { return m_data; };
-
-	void SetData(const CameraData& data)
-	{
-		delete m_data;
-		m_data = new CameraData(data);
-	};
-
-private:
-	CameraData* m_data;
+//public:
+//	//Data Type
+//	BaseData* GetData() { return m_data; };
+//
+//	/*void SetData(const CameraData& data)
+//	{
+//		delete m_data;
+//		m_data = new CameraData(data);
+//	};*/
+//
+//private:
+//	BaseData* m_data = Make::DataObject(m_isMainCamera,
+//		m_renderToTexture,
+//		m_orthographic,
+//		m_fieldOfView,
+//		m_aspectRatio,
+//		m_orthoSize,
+//		m_nearPlane,
+//		m_farPlane,
+//		m_resolution);
 
 //-----------------------------------------
 //-----------------------------------------

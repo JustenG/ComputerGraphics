@@ -1,6 +1,6 @@
 #pragma once
-#include"global_includes.h"
-#include "Utilities\Utils.h
+#include "global_includes.h"
+#include "Utilities\Utils.h"
 
 class EntityManager;
 class ComponentManager;
