@@ -94,6 +94,10 @@ public:
 private:
 	CameraData* m_dataBinder;
 
+	BaseData* ToData() override;
+	void FromData(BaseData* newData) override;
+	bool Validate(BaseData* newData);
+
 //-----------------------------------------
 //-----------------------------------------
 };

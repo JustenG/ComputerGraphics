@@ -159,7 +159,7 @@ void GUI::DrawComponents()
 	//TODO
 	//Make a componenet displayer 
 
-	Camera*			component = m_selectedObjects[0]->GetComponent<Camera>();
+	BaseComponent*			component = m_selectedObjects[0]->GetComponent<Camera>();
 	if (component != nullptr)
 	{
 		component->ToData()->Render();
