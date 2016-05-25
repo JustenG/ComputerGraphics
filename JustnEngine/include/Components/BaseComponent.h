@@ -20,11 +20,8 @@ public:
 
 	GameObject* GetGameObject() { return m_gameObject; };
 
-	BaseData* ToData() { return m_data; };
-
-protected:
-
-	BaseData* m_data;
+	virtual BaseData* ToData() {};
+	virtual void FromData(BaseData* newData) {};
 
 
 

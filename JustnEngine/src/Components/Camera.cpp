@@ -25,12 +25,25 @@ Camera::Camera()
 		m_nearPlane,
 		m_farPlane,
 		m_resolution);
-
-	m_data = m_dataBinder->MakeBaseData();
 }
 Camera::Camera(glm::ivec2 resolution) : Camera()
 {
 	SetResolution(resolution);
+}
+BaseData* Camera::ToData()
+{
+	m_dataBinder->Get();
+}
+void Camera::FromData(BaseData* newData)
+{
+	if(Validate(newData))
+		m_dataBinder->Set(newData);
+	else;
+		//Data not valid
+}
+bool Camera::Validate(BaseData* newData)
+{
+	
 }
 
 Camera::~Camera()
