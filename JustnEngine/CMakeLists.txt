@@ -75,7 +75,6 @@ SET(HEADERS
 
 	include/Utilities/Data.h
 	include/Utilities/GUI.h
-	include/Utilities/TupleIterator.h
 	include/Utilities/Utils.h
 
 )
