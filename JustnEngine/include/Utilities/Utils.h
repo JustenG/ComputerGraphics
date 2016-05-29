@@ -44,4 +44,22 @@ namespace Tuple
 		f(std::get<I>(t),I);
 		for_each<I + 1, FuncT, Ts...>(t, f);
 	}
+
+	template<std::size_t I = 0, typename FuncT, typename... Ts1, typename... Ts2>
+	inline typename std::enable_if<I == sizeof...(Ts1), void>::type
+		for_each(std::tuple<Ts1...> &, std::tuple<Ts2...> &, FuncT) // Unused arguments are given no names.
+	{ }
+
+	template<std::size_t I = 0, typename FuncT, typename... Ts1, typename... Ts2>
+	inline typename std::enable_if<I < sizeof...(Ts1), void>::type
+		for_each(std::tuple<Ts1...>& t1, std::tuple<Ts2...>& t2, FuncT f)
+	{
+		f(std::get<I>(t1), std::get<I>(t2), I);
+		for_each<I + 1, FuncT, Ts1..., Ts2...>(t1,t2, f);
+	}
+
+	template<std::size_t I = 0, typename FuncT, typename... Ts>
+	inline typename std::enable_if<I == sizeof...(Ts), void>::type
+		set_each(std::tuple<Ts...> &, FuncT) // Unused arguments are given no names.
+	{ }
 }

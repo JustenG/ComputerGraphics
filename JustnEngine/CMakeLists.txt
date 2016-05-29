@@ -38,6 +38,7 @@ SET(SOURCES
 	src/Rendering/VertexArrayObject.cpp
 	src/Rendering/VertexBuffer.cpp
 
+	src/Utilities/Data.cpp
 	src/Utilities/GUI.cpp
 
 )

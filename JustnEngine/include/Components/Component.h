@@ -15,7 +15,7 @@ public:
 
 	static bool CheckRequirements(GameObject* gameObject);
 
-	virtual BaseData* ToData() {};
+	virtual BaseData* ToData() { return nullptr; };
 	virtual void FromData(BaseData* newData) {};
 };
 

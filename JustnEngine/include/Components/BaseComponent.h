@@ -20,7 +20,7 @@ public:
 
 	GameObject* GetGameObject() { return m_gameObject; };
 
-	virtual BaseData* ToData() {};
+	virtual BaseData* ToData() { return nullptr; };
 	virtual void FromData(BaseData* newData) {};
 
 

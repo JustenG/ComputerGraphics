@@ -1,11 +1,9 @@
 #pragma once
 #include "global_includes.h"
-#include <tuple>    
 #include "Utilities\Utils.h"
+#include <tuple>    
 #include <type_traits>
-#include <functional>
 #include <glm/glm.hpp>
-#include <glm/ext.hpp>
 
 //BaseData
 //----------------------------------------
@@ -17,12 +15,34 @@ public:
 	~BaseData() {};
 
 	virtual void Render() {}; // Renders all children in ImGUIList
+	std::vector<BaseData*>& GetChildren() { return m_children; };
 
 protected:
-	std::vector<BaseData*> children;
+	std::vector<BaseData*> m_children;
 };
 //----------------------------------------
 //----------------------------------------
+
+//Data Variadic Interface
+//----------------------------------------
+//----------------------------------------
+template<typename... TData>
+class Data : public BaseData
+{
+public:
+	Data() {};
+	Data(TData... data) { AddDataValue(data)...; };
+	~Data() {};
+
+	template<typename T>
+	void AddDataValue(T x)
+	{
+		DataConverter::CreateData(x);
+	}
+};
+//----------------------------------------
+//----------------------------------------
+
 //Data Binder
 //----------------------------------------
 //----------------------------------------
@@ -36,74 +56,77 @@ public:
 	BaseData* Get() 
 	{ 
 		Data<TData...>* data = new Data<TData...>();
-		auto function = [data](const auto& tupleElement, uint index) { data->AddDataValue(tupleElement); };
+		auto function = [data](const auto& tupleElement, uint index) { data->AddDataValue(*tupleElement); };
 		Tuple::for_each(m_tupleData, function);
 		return data;
 	};
 
-	void Set(BaseData* data) 
-	{ 
-		auto function = [GetDataMap, data](const auto& tupleElement, uint index) { tupleElement = GetData<decltype(tupleElement)>(data->children[index]);};
+	void Set(BaseData* newData)
+	{
+		auto function = [newData](const auto& tupleElement, uint index)
+		{ 
+			*tupleElement = DataConverter::GetPrimitive<decltype(*tupleElement)>(newData->GetChildren()[index]); 
+		};
 		Tuple::for_each(m_tupleData, function);
 	};
 
-	uint Size() { return (uint)std::tuple_size<TData...>::value; };
 private:
 	std::tuple<TData*...> m_tupleData;
 };
 //----------------------------------------
 //----------------------------------------
 
-//Data Variadic Interface
-//----------------------------------------
-//----------------------------------------
-template<typename... TData>
-class Data : public BaseData
-{
-public:
-	Data(TData... data) { AddDataValue(data)...; };
-	~Data() {};
-
-	template<typename T>
-	void AddDataValue(T x)
-	{
-		auto found = std::find(CreateDataMap.begin(), CreateDataMap.end(), Utils::GetTypeID<T>());
-		if (found != CreateDataMap.end())
-			children.add(found->second(x));
-		else
-			x->ToData();
-	}
-};
-//----------------------------------------
-//----------------------------------------
 
 //Data Types
 //----------------------------------------
 //----------------------------------------
+class NullData : BaseData
+{
+public:
+	int value;
+	void Render() override {}; // Renders float value
+};
 class FloatData : BaseData
 {
+public:
 	float value;
-	void Render() override {}; // Renders float value
+	void Render() override; // Renders float value
 };
 class IntData : BaseData
 {
+public:
 	int value;
-	void Render() override {}; // Renders int value
+	void Render() override; // Renders int value
 };
 class UIntData : BaseData
 {
+public:
 	uint value;
-	void Render() override {}; // Renders uint value
+	void Render() override; // Renders uint value
 };
 class BoolData : BaseData
 {
+public:
 	bool value;
-	void Render() override {}; // Renders bool value
+	void Render() override; // Renders bool value
+};
+class Vector2Data : BaseData
+{
+public:
+	glm::vec2 value;
+	void Render() override; // Renders Vec3 value
+};
+class Vector2iData : BaseData
+{
+public:
+	glm::ivec2 value;
+	void Render() override; // Renders Vec3 value
 };
 class Vector3Data : BaseData
 {
+public:
 	glm::vec3 value;
-	void Render() override {}; // Renders Vec3 value
+	void Render() override; // Renders Vec3 value
 };
 //----------------------------------------
 //----------------------------------------
@@ -114,48 +137,32 @@ class Vector3Data : BaseData
 class DataConverter
 {
 public:
-
-	static std::map<uint, std::function<BaseData*()>> CreateDataMap;
-	static std::map<uint, std::function<void*()>> GetDataMap;
-
-	template<typename Primitive, typename Data>
-	static BaseData* BindPrimitive()
-	{
-		CreateDataMap[Utils::GetTypeID<Primitive>()] = CreateData<Primitive, Data>;
-		CreateDataMap[Utils::GetTypeID<Primitive>()] = GetPrimitive<Primitive, Data>;
-	}
-
 	template<typename TPrimitive, typename TData>
-	static BaseData* CreateData(const TPrimitive& value)
+	static BaseData* CreateBaseData(const TPrimitive value)
 	{
-		auto* data = new TData();
+		TData* data = new TData();
 		data->value = value;
 		return (BaseData*)data;
 	}
 
-	template<typename TPrimitive, typename TData>
-	static TPrimitive* GetData(const TData& data)
-	{
-		return (TPrimitive*)GetDataMap[Utils::GetTypeID<TPrimitive>()](data);
-	}
+	template<typename TPrimitive>
+	static BaseData* CreateData(const TPrimitive value);
 
-	template<typename TPrimitive, typename TData>
-	static void* GetPrimitive(const TData& data)
-	{
-		return (void*)(((TData*)data)->value);
-	}
+	template<typename TPrimitive> 
+	static TPrimitive GetPrimitive(const BaseData* data);
+};
+template<typename TPrimitive>
+BaseData* DataConverter::CreateData(const TPrimitive value)
+{
+	NullData* nullData = new NullData();
+	return (BaseData*)nullData;
+}
 
-	static void Init()
-	{
-		if (DataConverter::CreateDataMap.size() > 0)
-			return;
-
-		DataConverter::BindPrimitive<float, FloatData>();
-		DataConverter::BindPrimitive<int, IntData>();
-		DataConverter::BindPrimitive<uint, UIntData>();
-		DataConverter::BindPrimitive<bool, BoolData>();
-		DataConverter::BindPrimitive<glm::vec3, Vector3Data>();
-	}
+template<typename TPrimitive>
+TPrimitive DataConverter::GetPrimitive(const BaseData* data)
+{
+	TPrimitive val = (TPrimitive)0;
+	return val;
 };
 //----------------------------------------
 //----------------------------------------
@@ -174,35 +181,32 @@ namespace Make
 
 	template<typename... TArgs>
 	auto CreateDataBinderType(TArgs&&... values)->DataBinder<std::remove_reference_t<TArgs>...> {};
-
 }
 //----------------------------------------
 //----------------------------------------
 
 
 
+	//DataConverter Doesnt Work
+	//------------------------------------------------------------------------------------------------------------
+	//------------------------------------------------------------------------------------------------------------
+	//static std::map<uint, std::function<BaseData*(const void*)>> createDataMap;
 
-
-
-
-	//template<typename T>
-	//T& GetDataAtIndex(uint index)
+	//template<typename Primitive, typename Data>
+	//static BaseData* BindPrimitive()
 	//{
-	//	return std::get<index>(m_data);
+	//	createDataMap[Utils::GetTypeID<Primitive>()] = CreateData<Primitive, Data>;
 	//}
-
-	//template<typename T>
-	//void SetDataAtIndex(T value, uint index)
+	//static void Init()
 	//{
-	//	std::get<index>(m_data) = value;
-	//}
+	//	if (DataConverter::createDataMap.size() > 0)
+	//		return;
 
-	//uint Size()
-	//{
-	//	return (uint)std::tuple_size<m_data>::value;
+	//	DataConverter::BindPrimitive<float, FloatData>();
+	//	DataConverter::BindPrimitive<int, IntData>();
+	//	DataConverter::BindPrimitive<uint, UIntData>();
+	//	DataConverter::BindPrimitive<bool, BoolData>();
+	//	DataConverter::BindPrimitive<glm::vec3, Vector3Data>();
 	//}
-
-	//uint GetDataType(uint index)
-	//{
-	//	return Utils::GetTypeID<std::tuple_element<index, m_data>::type>();
-	//}
+	//------------------------------------------------------------------------------------------------------------
+	//------------------------------------------------------------------------------------------------------------

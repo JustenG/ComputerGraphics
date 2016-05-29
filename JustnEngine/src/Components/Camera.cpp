@@ -26,13 +26,13 @@ Camera::Camera()
 		m_farPlane,
 		m_resolution);
 }
-Camera::Camera(glm::ivec2 resolution) : Camera()
+Camera::Camera(ivec2 resolution) : Camera()
 {
 	SetResolution(resolution);
 }
 BaseData* Camera::ToData()
 {
-	m_dataBinder->Get();
+	return m_dataBinder->Get();
 }
 void Camera::FromData(BaseData* newData)
 {
@@ -43,7 +43,7 @@ void Camera::FromData(BaseData* newData)
 }
 bool Camera::Validate(BaseData* newData)
 {
-	
+	return true;
 }
 
 Camera::~Camera()
