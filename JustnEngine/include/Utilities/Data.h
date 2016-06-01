@@ -5,6 +5,8 @@
 #include <type_traits>
 #include <glm/glm.hpp>
 
+
+
 //BaseData
 //----------------------------------------
 //----------------------------------------
@@ -14,9 +16,17 @@ public:
 	BaseData() {};
 	~BaseData() {};
 
-	virtual void Render() {}; // Renders all children in ImGUIList
-	std::vector<BaseData*>& GetChildren() { return m_children; };
+	virtual void Render() 
+	{
+		 // Renders all children in ImGUIList
+		for (uint i = 0; i < m_children.size(); ++i)
+		{
+			m_children[i]->Render();
+		}
+	};
 
+	std::vector<BaseData*>& GetChildren() { return m_children; };
+	std::string Name;
 protected:
 	std::vector<BaseData*> m_children;
 };
@@ -37,7 +47,14 @@ public:
 	template<typename T>
 	void AddDataValue(T x)
 	{
-		DataConverter::CreateData(x);
+		m_children.push_back(DataConverter::CreateData<T>(x));
+	}
+
+	template<typename T>
+	void AddDataValue(T x, std::string name)
+	{
+		m_children.push_back(DataConverter::CreateData<T>(x));
+		m_children.back()->Name = name;
 	}
 };
 //----------------------------------------
@@ -56,7 +73,8 @@ public:
 	BaseData* Get() 
 	{ 
 		Data<TData...>* data = new Data<TData...>();
-		auto function = [data](const auto& tupleElement, uint index) { data->AddDataValue(*tupleElement); };
+		std::vector<std::string> Names(m_names);
+		auto function = [data, Names](const auto& tupleElement, uint index) { data->AddDataValue(*tupleElement, Names[index]); };
 		Tuple::for_each(m_tupleData, function);
 		return data;
 	};
@@ -65,13 +83,24 @@ public:
 	{
 		auto function = [newData](const auto& tupleElement, uint index)
 		{ 
-			*tupleElement = DataConverter::GetPrimitive<decltype(*tupleElement)>(newData->GetChildren()[index]); 
+			*tupleElement = DataConverter::GetPrimitive<std::remove_reference_t<decltype(*tupleElement)>>(newData->GetChildren()[index]); 
 		};
 		Tuple::for_each(m_tupleData, function);
 	};
 
+	void SetNames(std::vector<std::string> names)
+	{
+		m_names = names;
+	}
+
 private:
 	std::tuple<TData*...> m_tupleData;
+	std::vector<std::string> m_names;
+
+	void AddName(std::string name)
+	{
+		m_names.push_back(name);
+	}
 };
 //----------------------------------------
 //----------------------------------------
@@ -150,20 +179,27 @@ public:
 
 	template<typename TPrimitive> 
 	static TPrimitive GetPrimitive(const BaseData* data);
-};
-template<typename TPrimitive>
-BaseData* DataConverter::CreateData(const TPrimitive value)
-{
-	NullData* nullData = new NullData();
-	return (BaseData*)nullData;
-}
 
-template<typename TPrimitive>
-TPrimitive DataConverter::GetPrimitive(const BaseData* data)
-{
-	TPrimitive val = (TPrimitive)0;
-	return val;
+	template<typename TPrimitive>
+	static bool DataEqualsPrimitive(const TPrimitive value,  const BaseData* data)
+	{
+		return DataConverter::GetPrimitive<decltype(value)>(data) == value;
+	}
+
 };
+//template<typename TPrimitive>
+//BaseData* DataConverter::CreateData(const TPrimitive value)
+//{
+//	NullData* nullData = new NullData();
+//	return (BaseData*)nullData;
+//}
+//
+//template<typename TPrimitive>
+//TPrimitive DataConverter::GetPrimitive(const BaseData* data)
+//{
+//	TPrimitive val = (TPrimitive)0;
+//	return val;
+//};
 //----------------------------------------
 //----------------------------------------
 

@@ -13,3 +13,6 @@ using glm::ivec4;
 
 using glm::mat3;
 using glm::mat4;
+
+using std::string;
+using std::vector;

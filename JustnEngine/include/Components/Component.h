@@ -14,9 +14,6 @@ public:
 	~Component() {};
 
 	static bool CheckRequirements(GameObject* gameObject);
-
-	virtual BaseData* ToData() { return nullptr; };
-	virtual void FromData(BaseData* newData) {};
 };
 
 template <class... TRequirements>

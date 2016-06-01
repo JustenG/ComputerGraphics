@@ -61,6 +61,7 @@ void GUI::UpdateImGui()
 
 	//Update ImGui
 	DrawHierarchy();
+	DrawComponents();
 	
 
 	//-------------------------------------------------
@@ -162,7 +163,10 @@ void GUI::DrawComponents()
 	BaseComponent*			component = m_selectedObjects[0]->GetComponent<Camera>();
 	if (component != nullptr)
 	{
-		component->ToData()->Render();
+		BaseData* componentData = component->ToData();
+		componentData->Render();
+		component->FromData(componentData);
+		delete componentData;
 	}
 
 	//Transform*			component = m_selectedObjects[0]->GetComponent<Transform>();
@@ -220,4 +224,35 @@ void GUI::Render()
 	}
 	//-----------------------------------------------
 	//-----------------------------------------------
+}
+
+template<>
+void GUI::RenderData<int>(int& value, string name)
+{
+	ImGui::DragInt(name.c_str(), &value);
+}
+template<>
+void GUI::RenderData<float>(float& value, string name)
+{
+	ImGui::DragFloat(name.c_str(), &value);
+}
+template<>
+void GUI::RenderData<bool>(bool& value, string name)
+{
+	ImGui::Checkbox(name.c_str(), &value);
+}
+template<>
+void GUI::RenderData<vec2>(vec2& value, string name)
+{
+	ImGui::DragFloat2(name.c_str(), glm::value_ptr(value));
+}
+template<>
+void GUI::RenderData<ivec2>(ivec2& value, string name)
+{
+	ImGui::DragInt2(name.c_str(), glm::value_ptr(value));
+}
+template<>
+void GUI::RenderData<vec3>(vec3& value, string name)
+{
+	ImGui::DragFloat3(name.c_str(), glm::value_ptr(value));
 }

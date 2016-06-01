@@ -60,10 +60,12 @@ void ComponentManager::UpdateAllComponents()
 
 void ComponentManager::RenderAllComponents()
 {
+	//Render all Lights
 	for (int i = 0; i < (int)m_lights.Size(); ++i)
 	{
 		m_lights[i].Bind();
 
+		//Render all Meshs for Light
 		for (int j = 0; j < (int)m_meshRenderers.Size(); ++j)
 		{
 			int index = m_meshRenderers[i].GetGameObject()->GetComponentIndex<Transform>();
@@ -71,6 +73,7 @@ void ComponentManager::RenderAllComponents()
 
 			m_meshRenderers[j].Render(m_lights[i]);
 		}
+		//Render all Terrains for light
 		for (int j = 0; j < (int)m_terrains.Size(); ++j)
 		{
 			int index = m_terrains[i].GetGameObject()->GetComponentIndex<Transform>();
@@ -81,11 +84,12 @@ void ComponentManager::RenderAllComponents()
 		m_lights[i].Unbind();
 	}
 
-
+	//Render all Camera
 	for (int i = 0; i < (int)m_cameras.Size(); ++i)
 	{
 		m_cameras[i].Bind();
 
+		//Render all Meshs
 		for (int j = 0; j < (int)m_meshRenderers.Size(); ++j)
 		{
 			int index = m_meshRenderers[i].GetGameObject()->GetComponentIndex<Transform>();
@@ -93,6 +97,7 @@ void ComponentManager::RenderAllComponents()
 
 			m_meshRenderers[j].Render(m_transforms[index], m_cameras[i], *m_lights.GetContainer(),0);
 		}
+		//Render all Terrains
 		for (int j = 0; j < (int)m_terrains.Size(); ++j)
 		{
 			int index = m_terrains[i].GetGameObject()->GetComponentIndex<Transform>();

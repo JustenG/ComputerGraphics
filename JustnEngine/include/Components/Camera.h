@@ -91,12 +91,12 @@ public:
 		m_farPlane,
 		m_resolution));
 
-private:
-	CameraData* m_dataBinder;
-
 	BaseData* ToData() override;
 	void FromData(BaseData* newData) override;
 	bool Validate(BaseData* newData);
+private:
+	CameraData* m_dataBinder;
+
 
 //-----------------------------------------
 //-----------------------------------------

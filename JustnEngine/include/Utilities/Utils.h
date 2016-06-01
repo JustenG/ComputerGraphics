@@ -4,9 +4,12 @@
 #include <utility>
 #include <type_traits>
 
+#define GetVarName(VAR, STR) STR = #VAR; 
+
 class Utils
 {
 public:
+
 	template<typename T>
 	static size_t GetTypeID()
 	{
@@ -29,6 +32,7 @@ public:
 			return false;
 	}
 };
+
 
 namespace Tuple
 {

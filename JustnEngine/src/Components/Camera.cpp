@@ -24,7 +24,20 @@ Camera::Camera()
 		m_orthoSize,
 		m_nearPlane,
 		m_farPlane,
-		m_resolution);
+		m_resolution); 
+
+	vector<string> names;
+	names.push_back("Is Main Camera");
+	names.push_back("Render To Texture");
+	names.push_back("Orthographic");
+	names.push_back("Field Of View");
+	names.push_back("Aspect Ratio");
+	names.push_back("Orthographic Size");
+	names.push_back("Near Plane");
+	names.push_back("Far Plane");
+	names.push_back("Resolution");
+	m_dataBinder->SetNames(names);
+
 }
 Camera::Camera(ivec2 resolution) : Camera()
 {
@@ -43,6 +56,21 @@ void Camera::FromData(BaseData* newData)
 }
 bool Camera::Validate(BaseData* newData)
 {
+	vector<BaseData*> children = newData->GetChildren();
+
+	if (!DataConverter::DataEqualsPrimitive(m_isMainCamera, children[0]))
+	{
+
+	}
+	if (!DataConverter::DataEqualsPrimitive(m_renderToTexture, children[1]))
+	{
+
+	}
+	if (!DataConverter::DataEqualsPrimitive(m_resolution, children[8]))
+	{
+
+	}
+
 	return true;
 }
 

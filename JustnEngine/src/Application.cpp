@@ -151,11 +151,6 @@ GLFWwindow* Application::GetWindow()
 	return m_pWindow;
 }
 
-void Application::SetCamera(Camera* camera)
-{
-	//m_pCamera = camera;
-}
-
 void Application::SetGUI(bool active)
 {
 	m_isGUIActive = active;

@@ -21,6 +21,9 @@ public:
 
 	void Init(GLFWwindow* window, int width, int height);
 
+	template<typename T>
+	static void RenderData(T& value, std::string name);
+
 private:
 
 	void DrawHierarchy();
