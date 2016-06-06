@@ -8,7 +8,7 @@ public:
 	Light();
 	~Light();
 
-	void Update(Transform transform);
+	void Update();
 	void UpdateLightProjectionViewTransform();
 	glm::mat4 GetLightView();
 

@@ -18,7 +18,12 @@ public:
 		AlphaTexture,
 		DisplacementTexture,
 
-		TextureTypes_Count
+		TextureTypes_Count,
+
+		LightMapTexture,
+		PerlinTexture,
+
+
 	};
 
 	Material();

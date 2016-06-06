@@ -12,6 +12,9 @@ ComponentManager* ComponentManager::m_instance = new ComponentManager();
 ComponentManager::ComponentManager()
 {
 	m_mainCameraIndex = -1;
+	m_isFreeCam = false;
+	m_isRunning = true;
+	m_freeCamPosTransform = nullptr;
 
 	m_pCollectionsMap[typeid(Transform).hash_code()]		= (IComponentCollection*)&m_transforms;
 	m_pCollectionsMap[typeid(Camera).hash_code()]			= (IComponentCollection*)&m_cameras;
@@ -22,15 +25,34 @@ ComponentManager::ComponentManager()
 
 ComponentManager::~ComponentManager()
 {
+	if (m_freeCamPosTransform != nullptr)
+		delete m_freeCamPosTransform;
 }
 
 ComponentManager * ComponentManager::GetInstance() 
 {
-	if (!m_instance) 
+	if (!m_instance)
 		m_instance = new ComponentManager();
 
 	return m_instance;
 };
+
+Transform* ComponentManager::GetSceneCamTransform()
+{
+	if (m_freeCamPosTransform == nullptr)
+		m_freeCamPosTransform = new Transform();
+	return m_freeCamPosTransform;
+}
+
+void ComponentManager::SetSceneCamTransform(Transform newTransform)
+{
+	if (m_freeCamPosTransform == nullptr)
+		m_freeCamPosTransform = new Transform();
+
+	m_freeCamPosTransform->SetPosition(newTransform.GetPosition());
+	m_freeCamPosTransform->SetRotation(newTransform.GetRotation());
+	m_freeCamPosTransform->SetScale(newTransform.GetScale());
+}
 
 void ComponentManager::UpdateAllComponents()
 {
@@ -45,15 +67,24 @@ void ComponentManager::UpdateAllComponents()
 
 	for (uint i = 0; i < m_cameras.Size(); ++i)
 	{
-		int index = m_cameras[i].GetGameObject()->GetComponentIndex<Transform>();
-		Transform transform = m_transforms[index];
-		m_cameras[i].Update(transform);
+		m_cameras[i].Update();
 	}
 	for (uint i = 0; i < m_lights.Size(); ++i)
 	{
-		int index = m_lights[i].GetGameObject()->GetComponentIndex<Transform>();
-		Transform transform = m_transforms[index];
-		m_lights[i].Update(transform);
+		m_lights[i].Update();
+	}
+
+	if (m_mainCameraIndex >= 0)
+	{
+		if (m_isRunning)
+		{
+			if (m_isFreeCam)
+				m_cameras[m_mainCameraIndex].Update(*GetSceneCamTransform());
+		}
+		else
+		{
+			m_cameras[m_mainCameraIndex].Update(*GetSceneCamTransform());
+		}
 	}
 
 }
@@ -61,51 +92,39 @@ void ComponentManager::UpdateAllComponents()
 void ComponentManager::RenderAllComponents()
 {
 	//Render all Lights
-	for (int i = 0; i < (int)m_lights.Size(); ++i)
+	for (uint i = 0; i < m_lights.Size(); ++i)
 	{
 		m_lights[i].Bind();
-
-		//Render all Meshs for Light
-		for (int j = 0; j < (int)m_meshRenderers.Size(); ++j)
-		{
-			int index = m_meshRenderers[i].GetGameObject()->GetComponentIndex<Transform>();
-			Transform transform = m_transforms[index];
-
-			m_meshRenderers[j].Render(m_lights[i]);
-		}
-		//Render all Terrains for light
-		for (int j = 0; j < (int)m_terrains.Size(); ++j)
-		{
-			int index = m_terrains[i].GetGameObject()->GetComponentIndex<Transform>();
-			Transform transform = m_transforms[index];
-
-			m_terrains[j].Render(m_lights[i]);
-		}
+		RenderRenderables(i,true);
 		m_lights[i].Unbind();
 	}
 
 	//Render all Camera
-	for (int i = 0; i < (int)m_cameras.Size(); ++i)
+	for (uint i = 0; i < m_cameras.Size(); ++i)
 	{
 		m_cameras[i].Bind();
-
-		//Render all Meshs
-		for (int j = 0; j < (int)m_meshRenderers.Size(); ++j)
-		{
-			int index = m_meshRenderers[i].GetGameObject()->GetComponentIndex<Transform>();
-			Transform transform = m_transforms[index];
-
-			m_meshRenderers[j].Render(m_transforms[index], m_cameras[i], *m_lights.GetContainer(),0);
-		}
-		//Render all Terrains
-		for (int j = 0; j < (int)m_terrains.Size(); ++j)
-		{
-			int index = m_terrains[i].GetGameObject()->GetComponentIndex<Transform>();
-			Transform transform = m_transforms[index];
-
-			m_terrains[j].Render(m_transforms[index], m_cameras[i], *m_lights.GetContainer(), 0);
-		}
+		RenderRenderables(i);
 		m_cameras[i].Unbind();
+	}
+}
+
+void ComponentManager::RenderRenderables(int camIndex, bool isLight)
+{
+	//Render all Meshs
+	for (uint i = 0; i < m_meshRenderers.Size(); ++i)
+	{
+		if(isLight)
+			m_meshRenderers[i].Render(m_lights[camIndex]);
+		else
+			m_meshRenderers[i].Render(m_cameras[camIndex], *m_lights.GetContainer(), 0);
+	}
+	//Render all Terrains
+	for (uint i = 0; i < m_terrains.Size(); ++i)
+	{
+		if(isLight)
+			m_terrains[i].Render(m_lights[camIndex]);
+		else
+			m_terrains[i].Render(m_cameras[camIndex], *m_lights.GetContainer(), 0);
 	}
 }
 

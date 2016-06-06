@@ -23,6 +23,9 @@ public:
 	ComponentManager(ComponentManager const&) = delete;
 	void operator=(ComponentManager const&) = delete;
 
+	Transform* GetSceneCamTransform();
+	void SetSceneCamTransform(Transform newTransform);
+
 	void UpdateAllComponents();
 	void RenderAllComponents();
 
@@ -56,6 +59,11 @@ private:
 
 	int m_mainCameraIndex;
 	glm::ivec2 m_mainCameraResolution;
+
+	void RenderRenderables(int camIndex, bool isLight = false);
+	bool m_isFreeCam;
+	bool m_isRunning;
+	Transform* m_freeCamPosTransform;
 
 	//A Vector of every componenet in-game
 	ComponentCollection<Transform>		m_transforms;

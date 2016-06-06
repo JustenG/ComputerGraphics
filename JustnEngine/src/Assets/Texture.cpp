@@ -72,3 +72,15 @@ void Texture::LoadTexture(std::string& strFilePath)
 
 	stbi_image_free(data);
 }
+
+void Texture::CreateFloatTexture(float *data, int width, int height)
+{
+
+	glGenTextures(1, &m_uiTextureID);
+	glBindTexture(GL_TEXTURE_2D, m_uiTextureID);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, width, height, 0, GL_RED, GL_FLOAT, data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+}

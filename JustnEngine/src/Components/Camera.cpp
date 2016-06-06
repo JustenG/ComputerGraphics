@@ -4,8 +4,12 @@
 #include "Components\Transform.h"
 #include "all_includes.h"
 
+#include "Entitys\GameObject.h"
+
 Camera::Camera()
 {
+	m_isMainCamera	= false;
+	m_orthographic	= false;
 	m_fieldOfView	= 45;
 	m_aspectRatio	= 16/9.0f;
 	m_nearPlane		= 1;
@@ -17,10 +21,8 @@ Camera::Camera()
 
 	m_dataBinder = new CameraData(
 		m_isMainCamera,
-		m_renderToTexture,
 		m_orthographic,
 		m_fieldOfView,
-		m_aspectRatio,
 		m_orthoSize,
 		m_nearPlane,
 		m_farPlane,
@@ -28,10 +30,8 @@ Camera::Camera()
 
 	vector<string> names;
 	names.push_back("Is Main Camera");
-	names.push_back("Render To Texture");
 	names.push_back("Orthographic");
 	names.push_back("Field Of View");
-	names.push_back("Aspect Ratio");
 	names.push_back("Orthographic Size");
 	names.push_back("Near Plane");
 	names.push_back("Far Plane");
@@ -49,29 +49,40 @@ BaseData* Camera::ToData()
 }
 void Camera::FromData(BaseData* newData)
 {
-	if(Validate(newData))
+	if (Validate(newData))
+	{
 		m_dataBinder->Set(newData);
+
+		if (m_isMainCamera)
+			SetToMain();
+		else
+			SetToCamera();
+
+		if (m_orthographic)
+			SetOrthograpghic();
+		else
+			SetPerspective();
+	}
 	else;
 		//Data not valid
 }
 bool Camera::Validate(BaseData* newData)
 {
 	vector<BaseData*> children = newData->GetChildren();
+	bool isDirty = false;
 
-	if (!DataConverter::DataEqualsPrimitive(m_isMainCamera, children[0]))
+	if (!DataConverter::DataEqualsPrimitive(m_isMainCamera, children[0]) ||
+		!DataConverter::DataEqualsPrimitive(m_orthographic, children[1]) ||
+		!DataConverter::DataEqualsPrimitive(m_fieldOfView,	children[2]) ||
+		!DataConverter::DataEqualsPrimitive(m_orthoSize,	children[3]) ||
+		!DataConverter::DataEqualsPrimitive(m_nearPlane,	children[4]) ||
+		!DataConverter::DataEqualsPrimitive(m_farPlane,		children[5]) ||
+		!DataConverter::DataEqualsPrimitive(m_resolution,	children[6]) )
 	{
-
-	}
-	if (!DataConverter::DataEqualsPrimitive(m_renderToTexture, children[1]))
-	{
-
-	}
-	if (!DataConverter::DataEqualsPrimitive(m_resolution, children[8]))
-	{
-
+		isDirty = true;
 	}
 
-	return true;
+	return isDirty;
 }
 
 Camera::~Camera()
@@ -81,7 +92,8 @@ Camera::~Camera()
 
 void Camera::Update()
 {
-
+	worldTransform = GetGameObject()->GetComponent<Transform>()->GetMatrix();
+	UpdateProjectionViewTransform();
 }
 
 void Camera::Update(Transform transform)
@@ -105,8 +117,6 @@ void Camera::SetToMain()
 	m_isMainCamera = true;
 	m_renderToTexture = false;
 	m_FBO.Reset(GetResolution());
-
-	SetPerspective();
 }
 
 void Camera::SetToCamera()
@@ -116,8 +126,6 @@ void Camera::SetToCamera()
 	SetResolution(glm::ivec2(1024));
 	m_FBO.Reset(GetResolution());
 	m_FBO.CreateBuffer(true, true);
-
-	SetPerspective();
 }
 
 void Camera::SetToLight()
@@ -142,13 +150,11 @@ glm::ivec2 Camera::GetResolution()
 
 void Camera::SetPerspective()
 {
-	m_orthographic = false;
-	projectionTransform = glm::perspective(m_fieldOfView, m_aspectRatio, m_nearPlane, m_farPlane);
+	projectionTransform = glm::perspective(glm::radians(m_fieldOfView), m_aspectRatio, m_nearPlane, m_farPlane);
 }
 
 void Camera::SetOrthograpghic()
 {
-	m_orthographic = true;
 	projectionTransform = glm::ortho<float>(-m_orthoSize, m_orthoSize, -m_orthoSize, m_orthoSize, -m_orthoSize, m_orthoSize);
 }
 

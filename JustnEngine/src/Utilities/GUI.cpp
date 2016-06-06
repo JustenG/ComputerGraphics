@@ -70,7 +70,13 @@ void GUI::UpdateImGui()
 
 void GUI::DrawHierarchy()
 {
-	ImGui::Begin("Hierarchy");
+	bool* open = new bool();
+	*open = true;
+
+	int width = 150;
+	int height = ImGui::GetIO().DisplaySize.y;
+	ImGui::SetNextWindowPos(ImVec2(0, 0));
+	ImGui::Begin("Hierarchy", open, ImVec2(width, height), 1.0f, (ImGuiWindowFlags)(ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove));
 
 	//Reset selected object to nullptr
 	m_selectedObject = nullptr;
@@ -149,7 +155,13 @@ void GUI::DrawGameObject(GameObject* object)
 
 void GUI::DrawComponents()
 {
-	ImGui::Begin("Inspector");
+	bool* open = new bool();
+	*open = true;
+
+	int width = 250;
+	int height = ImGui::GetIO().DisplaySize.y;
+	ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - width, 0));
+	ImGui::Begin("Inspector", open, ImVec2(width, height), 1.0f , (ImGuiWindowFlags)(ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove));
 
 	if (m_selectedObjects.size() <= 0 || m_selectedObjects.size() > 1)
 	{
@@ -159,25 +171,12 @@ void GUI::DrawComponents()
 
 	//TODO
 	//Make a componenet displayer 
-
-	BaseComponent*			component = m_selectedObjects[0]->GetComponent<Camera>();
-	if (component != nullptr)
-	{
-		BaseData* componentData = component->ToData();
-		componentData->Render();
-		component->FromData(componentData);
-		delete componentData;
-	}
-
-	//Transform*			component = m_selectedObjects[0]->GetComponent<Transform>();
-	//Camera*				component = m_selectedObjects[0]->GetComponent<Camera>();
+	DrawComponent<Transform>(m_selectedObjects[0]);
+	DrawComponent<Camera>(m_selectedObjects[0]);
 	//Light*				component = m_selectedObjects[0]->GetComponent<Light>();
 	//MeshRenderer*		component = m_selectedObjects[0]->GetComponent<MeshRenderer>();
 	//Terrain*			component = m_selectedObjects[0]->GetComponent<Terrain>();
 	ImGui::End();
-
-
-
 }
 
 void GUI::UpdateGizmos()
@@ -234,7 +233,7 @@ void GUI::RenderData<int>(int& value, string name)
 template<>
 void GUI::RenderData<float>(float& value, string name)
 {
-	ImGui::DragFloat(name.c_str(), &value);
+	ImGui::DragFloat(name.c_str(), &value,0.1f);
 }
 template<>
 void GUI::RenderData<bool>(bool& value, string name)
@@ -244,7 +243,7 @@ void GUI::RenderData<bool>(bool& value, string name)
 template<>
 void GUI::RenderData<vec2>(vec2& value, string name)
 {
-	ImGui::DragFloat2(name.c_str(), glm::value_ptr(value));
+	ImGui::DragFloat2(name.c_str(), glm::value_ptr(value), 0.1f);
 }
 template<>
 void GUI::RenderData<ivec2>(ivec2& value, string name)
@@ -254,5 +253,5 @@ void GUI::RenderData<ivec2>(ivec2& value, string name)
 template<>
 void GUI::RenderData<vec3>(vec3& value, string name)
 {
-	ImGui::DragFloat3(name.c_str(), glm::value_ptr(value));
+	ImGui::DragFloat3(name.c_str(), glm::value_ptr(value), 0.1f);
 }

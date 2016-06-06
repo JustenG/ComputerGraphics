@@ -67,7 +67,9 @@ template<typename... TData>
 class DataBinder
 {
 public:
-	DataBinder(TData&... data) { m_tupleData = std::make_tuple(&data...); };
+	DataBinder(TData&... data) { 
+		m_tupleData = std::make_tuple((&data)...); 
+	};
 	~DataBinder() {};
 
 	BaseData* Get() 
@@ -183,7 +185,7 @@ public:
 	template<typename TPrimitive>
 	static bool DataEqualsPrimitive(const TPrimitive value,  const BaseData* data)
 	{
-		return DataConverter::GetPrimitive<decltype(value)>(data) == value;
+		return DataConverter::GetPrimitive<std::remove_const_t<decltype(value)>>(data) == value;
 	}
 
 };

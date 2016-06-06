@@ -16,6 +16,8 @@
 #include "Components\Camera.h"
 #include "Components\Light.h"
 
+#include "Entitys\GameObject.h"
+
 #include "Gizmos.h"
 
 MeshRenderer::MeshRenderer()
@@ -49,10 +51,9 @@ void MeshRenderer::Unbind()
 	m_pShader->Unbind();
 }
 
-void MeshRenderer::Render(Transform transform, Camera camera, std::vector<Light> lights, int shadowMap)
+void MeshRenderer::Render(Camera camera, std::vector<Light> lights, int shadowMap)
 {
-
-	m_pShader->SetModelUniform(transform.GetMatrix());
+	m_pShader->SetModelUniform(GetGameObject()->GetComponent<Transform>()->GetMatrix());
 
 	m_pShader->SetCameraPositionUniform(camera.GetPosition());
 	m_pShader->SetProjectionUniform(camera.GetProjection());
@@ -82,9 +83,13 @@ void MeshRenderer::Render(Transform transform, Camera camera, std::vector<Light>
 
 	//m_pShader->SetUniform("lights", lights);
 	//int textureID = (int)lights[0].GetFBO().GetDepthBuffer()->GetID();
-	int textureID = 0;
-	m_pShader->SetUniform("shadowMap", textureID);
+
+	int lightTextureID = Material::LightMapTexture;
+	m_pShader->SetUniform("shadowMap", lightTextureID);
+	lights[0].GetFBO().GetDepthBuffer()->SetTextureSlot(lightTextureID);
 	//-----------------------------------------------------------------------------------
+
+	SetShaderUniforms();
 
 	lights[0].GetFBO().GetDepthBuffer()->Bind(); 
 
@@ -106,6 +111,11 @@ void MeshRenderer::Render(Light light)
 	m_pMesh->Render();
 	m_pMesh->Unbind();
 	shader->Unbind();
+}
+
+void MeshRenderer::SetShaderUniforms()
+{
+
 }
 
 void MeshRenderer::SetMesh(Mesh* mesh)

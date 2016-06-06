@@ -36,7 +36,6 @@ public:
 	void Render();
 	void Shutdown();
 
-	void SetCamera(Camera* camera);
 	void SetGUI(bool active);
 
 	EntityManager* GetEntityManager();

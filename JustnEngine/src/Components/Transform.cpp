@@ -1,10 +1,12 @@
 #include "Components\Transform.h"
 #include "Components\ComponentManager.h"
+#include "all_includes.h"
 
 Transform::Transform()
 {
 	m_pComponentManager = ComponentManager::GetInstance();
 	m_pParent = nullptr;
+	m_isDirty = true;
 
 	m_globalTransformMatrix = glm::mat4(1);
 	m_localTransformMatrix = glm::mat4(1);
@@ -12,10 +14,50 @@ Transform::Transform()
 	m_rotation = glm::vec3(0);
 	m_scale = glm::vec3(1);
 
-}
+	m_dataBinder = new TransformData(
+		m_position,
+		m_rotation,
+		m_scale);
 
+	vector<string> names;
+	names.push_back("Position");
+	names.push_back("Rotation");
+	names.push_back("Scale");
+	m_dataBinder->SetNames(names);
+
+}
 Transform::~Transform()
 {
+}
+
+BaseData* Transform::ToData()
+{
+	return m_dataBinder->Get();
+}
+void Transform::FromData(BaseData* newData)
+{
+	if (Validate(newData))
+	{
+		m_dataBinder->Set(newData);
+
+		m_isDirty = true;
+
+	}
+	else;
+	//Data not valid
+}
+bool Transform::Validate(BaseData* newData)
+{
+	vector<BaseData*> children = newData->GetChildren();
+
+	if (!DataConverter::DataEqualsPrimitive(m_position, children[0]) ||
+		!DataConverter::DataEqualsPrimitive(m_rotation, children[1]) ||
+		!DataConverter::DataEqualsPrimitive(m_scale, children[2])	 )
+	{
+		m_isDirty = true;
+	}
+
+	return m_isDirty;
 }
 
 void Transform::AddChild(Transform* newChild)
@@ -73,7 +115,6 @@ void Transform::MoveChild(int childIndex, int newIndex)
 	}
 }
 
-
 void Transform::Update()
 {
 	if (!m_isDirty)
@@ -92,6 +133,8 @@ void Transform::Update()
 	localTransform *= glm::scale(localTransform, m_scale);
 
 	m_localTransformMatrix = localTransform;
+
+	m_isDirty = false;
 }
 
 void Transform::UpdateWorldTransform()

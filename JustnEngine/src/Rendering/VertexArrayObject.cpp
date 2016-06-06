@@ -92,6 +92,8 @@ void VertexArrayObject::SetUpAttributes<Vertex>()
 	ClearVAOMetadata();
 	subscribe(Vertex, position);
 	subscribe(Vertex, colour);
+	subscribe(Vertex, normal);
+	subscribe(Vertex, texCoord);
 }
 #pragma endregion
 

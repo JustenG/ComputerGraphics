@@ -20,7 +20,7 @@ public:
 	~MeshRenderer();
 
 	void Update();
-	void Render(Transform transform, Camera camera, std::vector<Light> lights, int shadowMap);
+	void Render(Camera camera, std::vector<Light> lights, int shadowMap);
 	void Render(Light light);
 
 	void SetShader(Shader* shader);
@@ -34,6 +34,7 @@ protected:
 
 	void Bind();
 	void Unbind();
+	virtual void SetShaderUniforms();
 
 	int m_specularPower = 8;
 

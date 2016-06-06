@@ -2,6 +2,7 @@
 #include "Assets\AssetManager.h"
 
 #include "Components\Transform.h"
+#include "Entitys\GameObject.h"
 
 using glm::mat4;
 using glm::mat3;
@@ -29,11 +30,12 @@ Light::~Light()
 
 }
 
-void Light::Update(Transform transform)
+void Light::Update()
 {
 	//glm::vec3 forward = transform.GetMatrix()[3];
 	//forward = glm::normalize(forward);
-	worldTransform = transform.GetMatrix();
+
+	worldTransform = GetGameObject()->GetComponent<Transform>()->GetMatrix();
 	UpdateLightProjectionViewTransform();
 }
 

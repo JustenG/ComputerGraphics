@@ -6,7 +6,9 @@ template<typename TContainer>
 class ComponentCollection : public IComponentCollection
 {
 public:
-	ComponentCollection() {};
+	//TODO:
+	//Need to change components data binder in-oreder to not loose pointers when copyed
+	ComponentCollection() { m_container.reserve(1000); };
 	~ComponentCollection() {};
 
 	TContainer& operator[](std::size_t index) { return m_container[index]; };

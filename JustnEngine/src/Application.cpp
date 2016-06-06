@@ -7,6 +7,8 @@
 #include "Components\Transform.h"
 #include "Utilities\GUI.h"
 
+#include "Components\Camera.h"
+
 #include "all_includes.h"
 
 Application::Application()
@@ -118,7 +120,6 @@ void Application::UpdateTime()
 
 	 m_componentManager->RenderAllComponents();
 	 if(m_isGUIActive) m_GUI->Render();
-
  }
 
 void Application::Shutdown()

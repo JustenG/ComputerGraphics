@@ -5,6 +5,8 @@
 #include <glm/ext.hpp>
 #include <vector>
 
+#include "Utilities\Data.h"
+
 class ComponentManager;
 
 class Transform : public Component<>
@@ -18,9 +20,9 @@ public:
 	glm::vec3 GetRotation() { return m_rotation; };
 	glm::vec3 GetScale() { return m_scale; };
 
-	void SetPosition(glm::vec3 position) { m_position = position; };
-	void SetRotation(glm::vec3 rotation) { m_rotation = rotation; };
-	void SetScale	(glm::vec3 scale)	 { m_scale	  = scale; };
+	void SetPosition(glm::vec3 position) { m_position = position; m_isDirty = true; };
+	void SetRotation(glm::vec3 rotation) { m_rotation = rotation; m_isDirty = true; };
+	void SetScale	(glm::vec3 scale)	 { m_scale	  = scale; m_isDirty = true; };
 	void SetPosition(float x, float y, float z) { m_position = glm::vec3(x, y, z); };
 	void SetRotation(float x, float y, float z) { m_rotation = glm::vec3(x, y, z); };
 	void SetScale	(float x, float y, float z) { m_scale	 = glm::vec3(x, y, z); };
@@ -51,5 +53,22 @@ private:
 	Transform* m_pParent;
 	std::vector<Transform*> m_pChildren;
 
+//Data of Class
+//-----------------------------------------
+//-----------------------------------------
+public:
+	//Data Type
+	using TransformData = decltype(Make::CreateDataBinderType(
+		m_position,
+		m_rotation,
+		m_scale));
+
+	BaseData* ToData() override;
+	void FromData(BaseData* newData) override;
+	bool Validate(BaseData* newData);
+private:
+	TransformData* m_dataBinder;
+	//-----------------------------------------
+	//-----------------------------------------
 
 };

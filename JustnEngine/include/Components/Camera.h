@@ -82,10 +82,8 @@ public:
 	//Data Type
 	using CameraData = decltype(Make::CreateDataBinderType(
 		m_isMainCamera,
-		m_renderToTexture,
 		m_orthographic,
 		m_fieldOfView,
-		m_aspectRatio,
 		m_orthoSize,
 		m_nearPlane,
 		m_farPlane,
@@ -96,8 +94,6 @@ public:
 	bool Validate(BaseData* newData);
 private:
 	CameraData* m_dataBinder;
-
-
 //-----------------------------------------
 //-----------------------------------------
 };
