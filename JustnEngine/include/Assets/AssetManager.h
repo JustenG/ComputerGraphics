@@ -21,7 +21,7 @@ public:
 	T* GetAsset(std::string name);
 
 	void AssetManager::LoadMeshFile(std::string filePath, std::string name);
-	void AssetManager::LoadTexture(std::string filePath, std::string name);
+	void AssetManager::LoadTexture(std::string filePath, std::string name, bool texWrapping = false);
 	void AssetManager::LoadShader(std::string vertexPath, std::string fragmentPath, std::string name);
 	void AssetManager::CreateMaterial(std::string name);
 

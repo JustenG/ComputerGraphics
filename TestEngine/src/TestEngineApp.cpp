@@ -56,10 +56,19 @@ void TestEngineApp::Initialise()
 	entityTerrain->SetShader(GetAssetManager()->GetAsset<Shader>("terrainShader"));
 	GetAssetManager()->CreateMaterial("terrainMaterial");
 	entityTerrain->SetMaterial(GetAssetManager()->GetAsset<Material>("terrainMaterial"));
-	entityTerrain->GenerateGrid(64, 64);
+	entityTerrain->GenerateGrid();
 	entityTerrain->CreatePerlinMap();
+	//Set Textures
+	GetAssetManager()->LoadTexture("data/textures/water.jpg", "waterTex", true); 
+	GetAssetManager()->LoadTexture("data/textures/grass.jpg","grassTex", true);
+	GetAssetManager()->LoadTexture("data/textures/rock.jpg", "rockTex", true);
+	entityTerrain->GetMaterial()->LoadTexture(GetAssetManager()->GetAsset<Texture>("waterTex"), (Material::TextureSlots)0);
+	entityTerrain->GetMaterial()->LoadTexture(GetAssetManager()->GetAsset<Texture>("grassTex"), (Material::TextureSlots)1);
+	entityTerrain->GetMaterial()->LoadTexture(GetAssetManager()->GetAsset<Texture>("rockTex"), (Material::TextureSlots)2);
 	entityTransform = m_entity->GetComponent<Transform>();
 	entityTransform->SetPosition(-16, -0.1f, -16);
+
+
 	ComponentManager::GetInstance()->SetMainCamera(0);
 
 }

@@ -18,10 +18,10 @@ public:
 		AlphaTexture,
 		DisplacementTexture,
 
-		TextureTypes_Count,
-
 		LightMapTexture,
 		PerlinTexture,
+		TextureTypes_Count,
+
 
 
 	};

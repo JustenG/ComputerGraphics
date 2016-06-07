@@ -14,6 +14,7 @@
 #include "Assets\AssetManager.h"
 
 #include "Components\Camera.h"
+#include "Components\Terrain.h"
 
 
 GUI::GUI()
@@ -173,6 +174,7 @@ void GUI::DrawComponents()
 	//Make a componenet displayer 
 	DrawComponent<Transform>(m_selectedObjects[0]);
 	DrawComponent<Camera>(m_selectedObjects[0]);
+	DrawComponent<Terrain>(m_selectedObjects[0]);
 	//Light*				component = m_selectedObjects[0]->GetComponent<Light>();
 	//MeshRenderer*		component = m_selectedObjects[0]->GetComponent<MeshRenderer>();
 	//Terrain*			component = m_selectedObjects[0]->GetComponent<Terrain>();

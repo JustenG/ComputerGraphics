@@ -122,15 +122,12 @@ void Transform::Update()
 
 	glm::mat4 localTransform(1);
 
-	localTransform *= glm::translate(localTransform, m_position);
-
 	glm::mat4 rotationMatrix(1);
-	rotationMatrix *= glm::axisAngleMatrix(glm::vec3(1, 0, 0), m_rotation.x);
-	rotationMatrix *= glm::axisAngleMatrix(glm::vec3(0, 1, 0), m_rotation.y);
-	rotationMatrix *= glm::axisAngleMatrix(glm::vec3(0, 0, 1), m_rotation.z);
-	localTransform *= rotationMatrix;
+	rotationMatrix *= glm::rotate(glm::radians(m_rotation.z), glm::vec3(0, 0, 1));
+	rotationMatrix *= glm::rotate(glm::radians(m_rotation.y), glm::vec3(0, 1, 0));
+	rotationMatrix *= glm::rotate(glm::radians(m_rotation.x), glm::vec3(1, 0, 0));
 
-	localTransform *= glm::scale(localTransform, m_scale);
+	localTransform = glm::translate(localTransform, m_position) * rotationMatrix * glm::scale(localTransform, m_scale);
 
 	m_localTransformMatrix = localTransform;
 

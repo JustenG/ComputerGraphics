@@ -33,10 +33,10 @@ void AssetManager::LoadMeshFile(std::string filePath, std::string name)
 	m_meshFiles[name] = tempMesh;
 }
 
-void AssetManager::LoadTexture(std::string filePath, std::string name)
+void AssetManager::LoadTexture(std::string filePath, std::string name, bool texWrapping)
 {
 	Texture* tempTexture = new Texture();
-	tempTexture->LoadTexture(filePath);
+	tempTexture->LoadTexture(filePath, texWrapping);
 	m_textures[name] = tempTexture;
 }
 

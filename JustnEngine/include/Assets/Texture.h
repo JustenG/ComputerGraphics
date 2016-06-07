@@ -10,8 +10,8 @@ public:
 	~Texture();
 
 	void SetTextureSlot(unsigned int uiSlot);
-	void LoadTexture(std::string& strFilePath);
-	void CreateFloatTexture(float *data, int width, int height); 
+	void LoadTexture(std::string& strFilePath, bool texWrapping = false);
+	void CreateFloatTexture(float *data, int width, int height, bool texWrapping = false);
 
 	GLuint GetID() { return m_uiTextureID; };
 	void SetID(GLuint textureId) { m_uiTextureID = textureId; };

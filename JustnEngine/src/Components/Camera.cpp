@@ -19,7 +19,7 @@ Camera::Camera()
 	SetPerspective();
 	SetLookAt(vec3(0, 10, 10), vec3(0), vec3(0, 1, 0));
 
-	m_dataBinder = new CameraData(
+	m_dataBinder = new CameraDataBinder(
 		m_isMainCamera,
 		m_orthographic,
 		m_fieldOfView,

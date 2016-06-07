@@ -53,7 +53,9 @@ void MeshRenderer::Unbind()
 
 void MeshRenderer::Render(Camera camera, std::vector<Light> lights, int shadowMap)
 {
-	m_pShader->SetModelUniform(GetGameObject()->GetComponent<Transform>()->GetMatrix());
+	Transform* hax = GetGameObject()->GetComponent<Transform>();
+	glm::mat4 matHax = hax->GetMatrix();
+	m_pShader->SetModelUniform(matHax);
 
 	m_pShader->SetCameraPositionUniform(camera.GetPosition());
 	m_pShader->SetProjectionUniform(camera.GetProjection());
@@ -103,6 +105,9 @@ void MeshRenderer::Render(Camera camera, std::vector<Light> lights, int shadowMa
 void MeshRenderer::Render(Light light)
 {
 	Shader* shader = light.GetShader();
+	Transform* hax = GetGameObject()->GetComponent<Transform>();
+	glm::mat4 matHax = hax->GetMatrix();
+	shader->SetModelUniform(matHax);
 
 	shader->SetProjectionViewUniform(light.GetProjectionView());
 

@@ -23,7 +23,7 @@ void main()
 	vColour = Colour;
 	vTexCoords = TexCoord;
 	
-	vPosition.y += texture(perlinTexture, vTexCoords).r * 5;
+	vPosition.y += texture(perlinTexture, vTexCoords).r;
 
 	vShadowCoord = lightProjectionView * model * vPosition;
 	

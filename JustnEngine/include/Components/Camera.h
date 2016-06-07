@@ -80,7 +80,7 @@ protected:
 //-----------------------------------------
 public:
 	//Data Type
-	using CameraData = decltype(Make::CreateDataBinderType(
+	using CameraDataBinder = decltype(Make::CreateDataBinderType(
 		m_isMainCamera,
 		m_orthographic,
 		m_fieldOfView,
@@ -93,7 +93,7 @@ public:
 	void FromData(BaseData* newData) override;
 	bool Validate(BaseData* newData);
 private:
-	CameraData* m_dataBinder;
+	CameraDataBinder* m_dataBinder;
 //-----------------------------------------
 //-----------------------------------------
 };
