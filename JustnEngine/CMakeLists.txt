@@ -1,7 +1,7 @@
 project (JustnEngine)
 
 find_package(FBX)
-
+find_package(PhysX)
 #Need to find OpenGL link_libraries(
 find_package(OpenGL REQUIRED)
 
@@ -95,26 +95,6 @@ SET(EXTRA_SOURCES
     ${CMAKE_SOURCE_DIR}/deps/imguihelpers/imgui_impl_glfw_gl3.cpp
     )
 
-SET(PHYSX_SOURCES
-	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3_x86.lib
-	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3CharacterKinematic_x86.lib
-	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3Common_x86.lib
-	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3Cooking_x86.lib
-	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3Extensions.lib
-	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3Vehicle.lib
-	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysXVisualDebuggerSDK.lib
-)
-
-SET(PHYSX_SOURCES_D
-	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3DEBUG_x86.lib
-	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3CharacterKinematicDEBUG_x86.lib
-	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3CommonDEBUG_x86.lib
-	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3CookingDEBUG_x86.lib
-	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3ExtensionsDEBUG.lib
-	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3VehicleDEBUG.lib
-	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysXVisualDebuggerSDKDEBUG.lib
-)
-
 IF(FBX_FOUND)
     SET(EXTRA_SOURCES ${EXTRA_SOURCES} ${CMAKE_SOURCE_DIR}/deps/fbx/FBXFile.cpp)
 ENDIF(FBX_FOUND)
@@ -128,7 +108,7 @@ option(GLFW_DOCUMENT_INTERNALS "Include internals in documentation" OFF)
 add_subdirectory(${CMAKE_SOURCE_DIR}/deps/glfw ${CMAKE_BINARY_DIR}/deps/glfw)
   
 #Tell cmake that this will be a library (and not a exectutable)
-add_library(${PROJECT_NAME} ${SOURCES} ${EXTRA_SOURCES} ${HEADERS} ${PHYSX_SOURCES_D})
+add_library(${PROJECT_NAME} ${SOURCES} ${EXTRA_SOURCES} ${HEADERS})
   
 source_group(Base ./)
 source_group(ExtraSources FILES ${EXTRA_SOURCES})
@@ -144,10 +124,6 @@ target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
 
 #and link against OpenGL
 target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES})
-
-#PhysX linking
-target_link_libraries(${PROJECT_NAME} debug ${PHYSX_SOURCES_D})
-target_link_libraries(${PROJECT_NAME} optimized ${PHYSX_SOURCES})
 
 #Finally, we want the compiler to know where to find the headers
 #for this library when compiling it into other projects
@@ -171,4 +147,23 @@ IF(FBX_FOUND)
 ELSE(FBX_FOUND)
     message("No FBX support in this development environement")
 ENDIF(FBX_FOUND)
-    
+
+if(PHYSX_FOUND)
+	message("Found NVIDIA PhysX SDK")
+	include_directories(${PHYSX_INCLUDE_DIR})
+	target_link_libraries(${PROJECT_NAME} debug ${PHYSX_LIBRARY_DEBUG})
+	target_link_libraries(${PROJECT_NAME} debug ${PHYSX_COMMON_LIBRARY_DEBUG})
+	target_link_libraries(${PROJECT_NAME} debug ${PHYSX_COOKING_LIBRARY_DEBUG})
+	target_link_libraries(${PROJECT_NAME} debug ${PHYSX_PROFILE_SDK_LIBRARY_DEBUG})
+	target_link_libraries(${PROJECT_NAME} debug ${PHYSX_EX_LIBRARY_DEBUG})
+	target_link_libraries(${PROJECT_NAME} optimized ${PHYSX_LIBRARY})
+	target_link_libraries(${PROJECT_NAME} optimized ${PHYSX_COMMON_LIBRARY})
+	target_link_libraries(${PROJECT_NAME} optimized ${PHYSX_COOKING_LIBRARY})
+	target_link_libraries(${PROJECT_NAME} optimized ${PHYSX_PROFILE_SDK_LIBRARY})
+	target_link_libraries(${PROJECT_NAME} optimized ${PHYSX_EX_LIBRARY})
+	
+	target_compile_definitions(${PROJECT_NAME} PUBLIC PHYSX_SUPPORTED)
+	
+else(PHYSX_FOUND)
+	message("Missing NVIDIA PhysX SDK")
+endif(PHYSX_FOUND)

@@ -49,8 +49,9 @@ private:
 	void onBind() override;
 	void onUnbind() override;
 
+#ifdef FBX_SUPPORTED
 	void LoadIfExists(TextureSlots slot, FBXMaterial* pMaterial, unsigned int FBXTextureType);
-
+#endif
 	Texture* m_pTextures[TextureSlots::TextureTypes_Count];
 
 };

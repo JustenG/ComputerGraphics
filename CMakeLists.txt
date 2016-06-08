@@ -11,6 +11,11 @@ set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Builds)
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Builds)
 set (ASSETS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/data)
 
+set	(TARGET_PHYSX_DIR ${CMAKE_CURRENT_SOURCE_DIR}/deps/physx/dll/release)
+set	(TARGET_PHYSX_DIR_D ${CMAKE_CURRENT_SOURCE_DIR}/deps/physx/dll/debug)
+set (BUILD_DIR ${CMAKE_BINARY_DIR}/Builds/Release)
+set (BUILD_DIR_D ${CMAKE_BINARY_DIR}/Builds/Debug)
+
 #add common include directories for dependancies
 include_directories(${CMAKE_SOURCE_DIR}/deps/gl)
 include_directories(${CMAKE_SOURCE_DIR}/deps/glfw/include)

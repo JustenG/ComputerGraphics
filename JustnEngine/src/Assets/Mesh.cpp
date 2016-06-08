@@ -1,6 +1,9 @@
 #include "Assets\Mesh.h"
 
+#ifdef FBX_SUPPORTED
 #include <FBXFile.h>
+#endif
+
 #include "gl_core_4_4.h"
 
 #include "glm/glm.hpp"
@@ -45,12 +48,14 @@ void Mesh::Render()
 	Unbind();
 }
 
+#ifdef FBX_SUPPORTED
 void Mesh::BuildRenderDataFromLoaderNode(FBXMeshNode* pMesh)
 {
 	assert(pMesh);
 
 	m_pRenderObject->CreateVAO<FBXVertex>(pMesh->m_vertices.size(), pMesh->m_indices.size(), pMesh->m_vertices.data(), pMesh->m_indices.data());
 }
+#endif
 
 void Mesh::BuildRenderDataFromLoaderNode(GLuint vertexCount, GLuint indicesCount, Vertex* vertexData, GLuint* indicesData)
 {

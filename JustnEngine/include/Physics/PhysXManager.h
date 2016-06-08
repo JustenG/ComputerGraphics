@@ -3,6 +3,7 @@
 #include <PxPhysicsAPI.h>
 #include <PxScene.h>
 #include <pvd/PxVisualDebugger.h>
+using namespace physx;
 
 class PhysxManager
 {
@@ -18,8 +19,8 @@ private:
 	PhysxManager();
 	static PhysxManager* m_instance;
 
-	PxDefaultErrorCallback m_DefaultErrorCallback;
-	PxDefaultAllocator m_DefaultAllocatorCallback;
+	static PxDefaultErrorCallback m_DefaultErrorCallback;
+	static PxDefaultAllocator m_DefaultAllocatorCallback;
 
 	PxFoundation* m_PhysicsFoundation;
 	PxPhysics* m_Physics;

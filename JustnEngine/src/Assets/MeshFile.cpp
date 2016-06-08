@@ -45,13 +45,15 @@ void MeshFile::LoadFile(std::string fileName)
 	std::string fileType = fileName.substr(startOfExtension + 1, fileName.length());
 
 	printf("filename");
-
+#ifdef FBX_SUPPORTED
 	if (fileType == "fbx")
 	{
 		LoadFBX(fileName);
 	}
+#endif
 }
 
+#ifdef FBX_SUPPORTED
 void MeshFile::LoadFBX(std::string fileName)
 {
 	//Load FBX File
@@ -71,6 +73,7 @@ void MeshFile::LoadFBX(std::string fileName)
 		pNewMesh->BuildMaterialFromLoaderNode(pMesh->m_materials[0],GetFileName() + "_MaterialMesh" + std::to_string(i));
 	}
 }
+
 
 //To be moved to a GameObjectGenerator
 //------------------------------------
@@ -126,5 +129,5 @@ void MeshFile::SetChildren(FBXNode* mesh, int parentIndex)
 		SetChildren(mesh->m_children[i], childIndex);
 	}
 }
-
+#endif
 //------------------------------------

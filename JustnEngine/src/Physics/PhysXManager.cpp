@@ -1,7 +1,5 @@
 #include "Physics\PhysXManager.h"
 
-using namespace physx;
-
 PhysxManager * PhysxManager::GetInstance()
 {
 	if (!m_instance)

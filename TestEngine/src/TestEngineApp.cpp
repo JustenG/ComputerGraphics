@@ -22,13 +22,14 @@ void TestEngineApp::Initialise()
 {
 	Transform* entityTransform;
 
+#ifdef FBX_SUPPORTED
 	//Model
 	GetAssetManager()->LoadMeshFile("data/models/soulspear/soulspear.fbx", "spear");
 	m_pModel = GetAssetManager()->GetAsset<MeshFile>("spear");
 	GetAssetManager()->LoadShader("data/shaders/defultVertexShader.vert", "data/shaders/defultFragmentShader.frag", "DefultShader");
 	m_pModel->SetShader(GetAssetManager()->GetAsset<Shader>("DefultShader"));
 	m_pModel->CreateEntitys();
-
+#endif
 	//Camera
 	m_entity = GetEntityManager()->CreateEntity();
 	m_entity->SetName("Camera");

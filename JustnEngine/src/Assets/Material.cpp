@@ -1,6 +1,8 @@
 #include "Assets\Material.h"
 
-#include "FBXFile.h"
+#ifdef FBX_SUPPORTED
+#include <FBXFile.h>
+#endif
 #include "Assets\Texture.h"
 
 Material::Material()
@@ -31,6 +33,7 @@ void Material::onUnbind()
 	}
 }
 
+#ifdef FBX_SUPPORTED
 void Material::LoadIfExists(TextureSlots slot, FBXMaterial* pMaterial, unsigned int uiTextureType)
 {
 	if (pMaterial->textures[uiTextureType])
@@ -41,6 +44,7 @@ void Material::LoadIfExists(TextureSlots slot, FBXMaterial* pMaterial, unsigned 
 		LoadTexture(m_pAssetManager->GetAsset<Texture>(name),slot);
 	}
 }
+#endif
 
 void Material::LoadTexture(Texture* texture, TextureSlots slot)
 {

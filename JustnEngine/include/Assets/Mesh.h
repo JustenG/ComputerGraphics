@@ -24,7 +24,9 @@ public:
 
 	Material* GetMaterial() { return m_pMaterial; };
 
+#ifdef FBX_SUPPORTED
 	void BuildRenderDataFromLoaderNode(FBXMeshNode* pMesh);
+#endif
 	void BuildRenderDataFromLoaderNode(GLuint vertexCount, GLuint indicesCount, Vertex* vertexData, GLuint* indicesData);
 
 	template<typename T>

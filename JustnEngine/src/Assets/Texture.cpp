@@ -1,5 +1,10 @@
 #include "Assets/Texture.h"
 
+#ifdef FBX_SUPPORTED
+#else
+#define STB_IMAGE_IMPLEMENTATION
+#endif
+
 #include "stb_image.h"
 #include <assert.h>
 

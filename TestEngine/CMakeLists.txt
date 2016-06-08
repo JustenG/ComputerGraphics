@@ -23,4 +23,9 @@ set(TARGET_ASSETS_DIR ${CMAKE_BINARY_DIR}/${PROJECT_NAME}/data)
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
 COMMAND ${CMAKE_COMMAND} -E copy_directory ${ASSETS_DIR} ${TARGET_ASSETS_DIR} COMMENT "Copying assets to output directory.")
 
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
+COMMAND ${CMAKE_COMMAND} -E copy_directory ${TARGET_PHYSX_DIR_D} ${BUILD_DIR_D} COMMENT "Copying assets to output directory.")
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
+COMMAND ${CMAKE_COMMAND} -E copy_directory ${TARGET_PHYSX_DIR} ${BUILD_DIR} COMMENT "Copying assets to output directory.")
+
 install (TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_SOURCE_DIR}/data)

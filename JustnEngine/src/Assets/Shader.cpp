@@ -6,7 +6,9 @@
 #include <sstream>
 #include <iostream>
 
-#include "FBXFile.h"
+#ifdef FBX_SUPPORTED
+#include <FBXFile.h>
+#endif
 #include "stb_image.h"
 #include "Assets\Material.h"
 

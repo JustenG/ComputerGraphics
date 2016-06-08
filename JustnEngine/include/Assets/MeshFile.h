@@ -24,7 +24,9 @@ public:
 	~MeshFile();
 
 	void LoadFile(std::string fileName);
+#ifdef FBX_SUPPORTED
 	void LoadFBX(std::string fileName);
+#endif
 	void SetShader(Shader* shader) { m_pShader = shader; };
 
 	void Update();
@@ -32,7 +34,9 @@ public:
 	//To be moved to a GameObjectGenerator
 	//------------------------------------
 	void CreateEntitys();
+#ifdef FBX_SUPPORTED
 	void SetChildren(FBXNode* mesh, int parentIndex);
+#endif
 	//------------------------------------
 
 private:
