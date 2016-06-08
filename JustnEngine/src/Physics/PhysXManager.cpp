@@ -36,9 +36,13 @@ PhysxManager::PhysxManager()
 	sceneDesc.cpuDispatcher = PxDefaultCpuDispatcherCreate(1);
 
 	m_PhysicsScene = m_Physics->createScene(sceneDesc);
-
 }
 
 PhysxManager::~PhysxManager()
 {
+	PxCloseExtensions();
+	m_Cooking->release();
+	m_Physics->release();
+	m_ProfileZoneManager->release();
+	m_PhysicsFoundation->release();
 }
