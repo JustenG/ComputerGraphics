@@ -33,6 +33,8 @@ SET(SOURCES
 	src/Entitys/GameObject.cpp
 	src/Entitys/EntityManager.cpp
 
+	src/Physics/PhysXManager.cpp
+
 	src/Rendering/FrameBuffer.cpp	
 	src/Rendering/IndexBuffer.cpp
 	src/Rendering/VertexArrayObject.cpp
@@ -67,6 +69,8 @@ SET(HEADERS
 
 	include/Entitys/GameObject.h
 	include/Entitys/EntityManager.h
+
+	include/Physics/PhysXManager.h
 	
 	include/Rendering/FrameBuffer.h
 	include/Rendering/IndexBuffer.h
@@ -81,15 +85,35 @@ SET(HEADERS
 )
 
 SET(EXTRA_SOURCES
-    ${CMAKE_SOURCE_DIR}/deps/gl/gl_core_4_4.c
+	${CMAKE_SOURCE_DIR}/deps/gl/gl_core_4_4.c
 	${CMAKE_SOURCE_DIR}/deps/utilities/all_includes.cpp
 	${CMAKE_SOURCE_DIR}/deps/utilities/global_includes.cpp
     ${CMAKE_SOURCE_DIR}/deps/utilities/Gizmos.cpp
     ${CMAKE_SOURCE_DIR}/deps/memalign/memaligned.cpp
     ${CMAKE_SOURCE_DIR}/deps/imgui/imgui.cpp
-    ${CMAKE_SOURCE_DIR}/deps/imgui/imgui_Draw.cpp
+   	${CMAKE_SOURCE_DIR}/deps/imgui/imgui_Draw.cpp
     ${CMAKE_SOURCE_DIR}/deps/imguihelpers/imgui_impl_glfw_gl3.cpp
     )
+
+SET(PHYSX_SOURCES
+	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3_x86.lib
+	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3CharacterKinematic_x86.lib
+	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3Common_x86.lib
+	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3Cooking_x86.lib
+	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3Extensions.lib
+	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3Vehicle.lib
+	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysXVisualDebuggerSDK.lib
+)
+
+SET(PHYSX_SOURCES_D
+	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3DEBUG_x86.lib
+	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3CharacterKinematicDEBUG_x86.lib
+	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3CommonDEBUG_x86.lib
+	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3CookingDEBUG_x86.lib
+	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3ExtensionsDEBUG.lib
+	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysX3VehicleDEBUG.lib
+	${CMAKE_SOURCE_DIR}/deps/physx/lib/vc14win32/PhysXVisualDebuggerSDKDEBUG.lib
+)
 
 IF(FBX_FOUND)
     SET(EXTRA_SOURCES ${EXTRA_SOURCES} ${CMAKE_SOURCE_DIR}/deps/fbx/FBXFile.cpp)
@@ -104,13 +128,14 @@ option(GLFW_DOCUMENT_INTERNALS "Include internals in documentation" OFF)
 add_subdirectory(${CMAKE_SOURCE_DIR}/deps/glfw ${CMAKE_BINARY_DIR}/deps/glfw)
   
 #Tell cmake that this will be a library (and not a exectutable)
-add_library(${PROJECT_NAME} ${SOURCES} ${EXTRA_SOURCES} ${HEADERS})
+add_library(${PROJECT_NAME} ${SOURCES} ${EXTRA_SOURCES} ${HEADERS} ${PHYSX_SOURCES_D})
   
 source_group(Base ./)
 source_group(ExtraSources FILES ${EXTRA_SOURCES})
 source_group(Assets .*/Assets.*/)
 source_group(Components .*/Components/)
 source_group(Entitys .*/Entitys/)
+source_group(Physics .*/Physics/)
 source_group(Rendering .*/Rendering/)
 source_group(Utilities .*/Utilities/)
 
@@ -119,6 +144,10 @@ target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
 
 #and link against OpenGL
 target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES})
+
+#PhysX linking
+target_link_libraries(${PROJECT_NAME} debug ${PHYSX_SOURCES_D})
+target_link_libraries(${PROJECT_NAME} optimized ${PHYSX_SOURCES})
 
 #Finally, we want the compiler to know where to find the headers
 #for this library when compiling it into other projects

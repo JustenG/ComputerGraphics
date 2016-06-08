@@ -20,6 +20,7 @@ include_directories(${CMAKE_SOURCE_DIR}/deps/imgui)
 include_directories(${CMAKE_SOURCE_DIR}/deps/imguihelpers)
 include_directories(${CMAKE_SOURCE_DIR}/deps/fbx)
 include_directories(${CMAKE_SOURCE_DIR}/deps/stb)
+include_directories(${CMAKE_SOURCE_DIR}/deps/physx/include)
 
 add_definitions(-DGLM_SWIZZLE)
 add_definitions(-DGLM_FORCE_PURE)

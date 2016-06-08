@@ -17,7 +17,7 @@ Terrain::Terrain() : MeshRenderer()
 	m_size			= 64;
 	m_scale			= 3;
 	m_octaves		= 6;
-	m_amplitude		= 1;
+	m_amplitude		= 8;
 	m_persistence	= 0.3f;
 	m_frequency		= 1;
 

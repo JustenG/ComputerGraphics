@@ -35,7 +35,7 @@ void TestEngineApp::Initialise()
 	m_entity->AddComponent<Transform>();
 	m_entity->AddComponent<Camera>(); 
 	entityTransform = m_entity->GetComponent<Transform>(); 
-	entityTransform->SetPosition(0, 2, 10);
+	entityTransform->SetPosition(0, 10, 40);
 
 	//Light 
 	m_entity = GetEntityManager()->CreateEntity();
@@ -66,7 +66,7 @@ void TestEngineApp::Initialise()
 	entityTerrain->GetMaterial()->LoadTexture(GetAssetManager()->GetAsset<Texture>("grassTex"), (Material::TextureSlots)1);
 	entityTerrain->GetMaterial()->LoadTexture(GetAssetManager()->GetAsset<Texture>("rockTex"), (Material::TextureSlots)2);
 	entityTransform = m_entity->GetComponent<Transform>();
-	entityTransform->SetPosition(-16, -0.1f, -16);
+	entityTransform->SetPosition(-32, -6, -32);
 
 
 	ComponentManager::GetInstance()->SetMainCamera(0);
