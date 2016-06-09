@@ -16,12 +16,16 @@ public:
 	// function to create a grid
 	void GenerateGrid();
 	void CreatePerlinMap();
+	float* GetHeightMap() { return perlin_data; };
+
+	int GetSize() { return m_size; };
 
 private:
 
 	void SetShaderUniforms() override;
 
 	Texture* m_perlinTexture;
+	float *perlin_data;
 
 	int m_size;
 	float m_scale;

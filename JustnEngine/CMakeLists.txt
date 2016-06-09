@@ -23,10 +23,12 @@ SET(SOURCES
 	src/Assets/Texture.cpp
 
 	src/Components/Camera.cpp
+	src/Components/Collider.cpp
 	src/Components/ComponentManager.cpp
 	src/Components/FlyCamera.cpp
 	src/Components/Light.cpp
 	src/Components/MeshRenderer.cpp
+	src/Components/RigidBody.cpp
 	src/Components/Terrain.cpp
 	src/Components/Transform.cpp
 
@@ -57,6 +59,7 @@ SET(HEADERS
 
 	include/Components/BaseComponent.h
 	include/Components/Camera.h
+	include/Components/Collider.h
 	include/Components/Component.h
 	include/Components/ComponentCollection.h
 	include/Components/ComponentManager.h
@@ -64,6 +67,7 @@ SET(HEADERS
 	include/Components/IComponentCollection.h
 	include/Components/Light.h
 	include/Components/MeshRenderer.h
+	include/Components/RigidBody.h
 	include/Components/Terrain.h
 	include/Components/Transform.h
 

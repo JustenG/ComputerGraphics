@@ -22,6 +22,7 @@ Terrain::Terrain() : MeshRenderer()
 	m_frequency		= 1;
 
 	m_sizeChanged = false;
+	perlin_data = nullptr;
 
 
 	m_dataBinder = new TerrainDataBinder(
@@ -137,10 +138,11 @@ void Terrain::GenerateGrid()
 
 void Terrain::CreatePerlinMap()
 {
-	int dims = m_size;
+	if (perlin_data != nullptr)
+		delete[] perlin_data;
 
-	float *perlin_data = new float[dims * dims];
-	float scale = (1.0f / dims) * m_scale;
+	perlin_data = new float[m_size * m_size];
+	float scale = (1.0f / m_size) * m_scale;
 	int octaves = m_octaves;
 	for (int x = 0; x < m_size; ++x)
 	{
@@ -148,12 +150,12 @@ void Terrain::CreatePerlinMap()
 		{
 			float amplitude = m_amplitude;
 			float persistence = m_persistence;
-			perlin_data[y * dims + x] = 0;
+			perlin_data[y * m_size + x] = 0;
 			for (int o = 0; o < octaves; ++o)
 			{
 				float freq = powf(2, (float)o) * m_frequency;
 				float perlin_sample = glm::perlin(vec2((float)x, (float)y) * scale * freq) * 0.5f + 0.5f;
-				perlin_data[y * dims + x] += perlin_sample * amplitude;
+				perlin_data[y * m_size + x] += perlin_sample * amplitude;
 				amplitude *= persistence;
 			}
 		}

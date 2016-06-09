@@ -1,14 +1,14 @@
 #include "Physics\PhysXManager.h"
 
-PhysxManager * PhysxManager::GetInstance()
+PhysXManager * PhysXManager::GetInstance()
 {
 	if (!m_instance)
-		m_instance = new PhysxManager();
+		m_instance = new PhysXManager();
 
 	return m_instance;
 };
 
-PhysxManager::PhysxManager()
+PhysXManager::PhysXManager()
 {
 	m_PhysicsFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, m_DefaultAllocatorCallback, m_DefaultErrorCallback);
 	if (!m_PhysicsFoundation)
@@ -38,11 +38,21 @@ PhysxManager::PhysxManager()
 	m_PhysicsScene = m_Physics->createScene(sceneDesc);
 }
 
-PhysxManager::~PhysxManager()
+PhysXManager::~PhysXManager()
 {
 	PxCloseExtensions();
 	m_Cooking->release();
 	m_Physics->release();
 	m_ProfileZoneManager->release();
 	m_PhysicsFoundation->release();
+}
+
+void PhysXManager::AddActorToScene(PxActor* PhysXActor)
+{
+	m_PhysicsScene->addActor(*PhysXActor);
+}
+
+PxHeightField* PhysXManager::CreateHeightField(PxHeightFieldDesc hfDesc)
+{
+	return m_Physics->createHeightField(hfDesc);
 }

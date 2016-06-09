@@ -30,6 +30,7 @@ void TestEngineApp::Initialise()
 	m_pModel->SetShader(GetAssetManager()->GetAsset<Shader>("DefultShader"));
 	m_pModel->CreateEntitys();
 #endif
+
 	//Camera
 	m_entity = GetEntityManager()->CreateEntity();
 	m_entity->SetName("Camera");

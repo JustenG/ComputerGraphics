@@ -5,19 +5,22 @@
 #include <pvd/PxVisualDebugger.h>
 using namespace physx;
 
-class PhysxManager
+class PhysXManager
 {
 public:
-	static PhysxManager* GetInstance();
-	~PhysxManager();
-	PhysxManager(PhysxManager const&) = delete;
-	void operator=(PhysxManager const&) = delete;
+	static PhysXManager* GetInstance();
+	~PhysXManager();
+	PhysXManager(PhysXManager const&) = delete;
+	void operator=(PhysXManager const&) = delete;
+
+	void AddActorToScene(PxActor* PhysXActor);
+	PxHeightField* CreateHeightField(PxHeightFieldDesc hfDesc);
 
 
 private:
 
-	PhysxManager();
-	static PhysxManager* m_instance;
+	PhysXManager();
+	static PhysXManager* m_instance;
 
 	static PxDefaultErrorCallback m_DefaultErrorCallback;
 	static PxDefaultAllocator m_DefaultAllocatorCallback;
