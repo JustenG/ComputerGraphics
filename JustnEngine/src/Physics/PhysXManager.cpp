@@ -52,7 +52,7 @@ void PhysXManager::AddActorToScene(PxActor* PhysXActor)
 	m_PhysicsScene->addActor(*PhysXActor);
 }
 
-PxHeightField* PhysXManager::CreateHeightField(PxHeightFieldDesc hfDesc)
+PxPhysics* PhysXManager::GetPhysics()
 {
-	return m_Physics->createHeightField(hfDesc);
+	return m_Physics;
 }

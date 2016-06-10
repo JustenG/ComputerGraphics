@@ -57,9 +57,12 @@ void Collider::InitTerrain()
 	hfDesc.samples.stride = sizeof(PxHeightFieldSample);
 	hfDesc.thickness = -100.0f;
 
-	PxHeightField* heightField = m_physXManager->CreateHeightField(hfDesc);
+	PxPhysics* physics = m_physXManager->GetPhysics();
+
+	PxHeightField* heightField = physics->createHeightField(hfDesc);
 	
 	PxHeightFieldGeometry hfGeom(heightField, PxMeshGeometryFlags(), myTransform->GetScale().y, myTransform->GetScale().x, myTransform->GetScale().z);
 	PxTransform pose = PxTransform(PxVec3(0.0f, 0, 0.0f));
-	PxShape* heightmap = _pXactor->createShape((PxHeightFieldGeometry)hfGeom, *g_PhysicsMaterial, pose);
+	//PxMaterial* mat = physics->createMaterial(; 
+	//PxShape* heightmap = physics->createShape((PxHeightFieldGeometry)hfGeom, *g_PhysicsMaterial, pose);
 }

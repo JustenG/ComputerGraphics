@@ -14,7 +14,7 @@ public:
 	void operator=(PhysXManager const&) = delete;
 
 	void AddActorToScene(PxActor* PhysXActor);
-	PxHeightField* CreateHeightField(PxHeightFieldDesc hfDesc);
+	PxPhysics* GetPhysics();
 
 
 private:
