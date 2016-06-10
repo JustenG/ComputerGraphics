@@ -5,12 +5,15 @@
 
 #include "Components\ComponentCollection.h"
 
+class PhysXManager;
 class GameObject;
 class Transform;
 class Camera;
 class Light;
 class MeshRenderer;
 class Terrain;
+class Collider;
+class RigidBody;
 
 template<typename T>
 using VT = std::vector<T>;
@@ -26,8 +29,10 @@ public:
 	Transform* GetSceneCamTransform();
 	void SetSceneCamTransform(Transform newTransform);
 
-	void UpdateAllComponents();
+	void UpdateAllComponents(float deltaTime);
 	void RenderAllComponents();
+
+	void ToggleRun();
 
 	//template<typename T>
 	//int AddComponent(GameObject* gameObject);
@@ -57,6 +62,8 @@ private:
 	ComponentManager();
 	static ComponentManager* m_instance;
 
+	PhysXManager* m_physXManager;
+
 	int m_mainCameraIndex;
 	glm::ivec2 m_mainCameraResolution;
 
@@ -71,6 +78,8 @@ private:
 	ComponentCollection<Light>			m_lights;
 	ComponentCollection<MeshRenderer>	m_meshRenderers;
 	ComponentCollection<Terrain>		m_terrains;
+	ComponentCollection<Collider>		m_colliders;
+	ComponentCollection<RigidBody>		m_rigidBodys;
 
 	std::map<uint, IComponentCollection*>	m_pCollectionsMap;
 

@@ -4,7 +4,7 @@
 #include "Assets/Shader.h"
 #include "Assets/Texture.h"
 
-AssetManager* AssetManager::m_instance = new AssetManager();
+AssetManager* AssetManager::m_instance = nullptr;
 
 AssetManager::AssetManager()
 {

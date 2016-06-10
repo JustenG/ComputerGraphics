@@ -63,6 +63,14 @@ void GUI::UpdateImGui()
 	//Update ImGui
 	DrawHierarchy();
 	DrawComponents();
+
+	ImGui::Begin("Helper");
+	if (ImGui::Button("Run", ImVec2(100, 30)))
+	{
+		m_componentManager->ToggleRun();
+	}
+	ImGui::End();
+
 	
 
 	//-------------------------------------------------

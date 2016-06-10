@@ -2,6 +2,9 @@
 #include "Components\Component.h"
 #include "Components\Transform.h"
 
+#include <PxPhysicsAPI.h>
+#include <PxScene.h>
+
 class PhysXManager;
 
 class Collider : public Component<Transform>
@@ -10,12 +13,14 @@ public:
 	Collider();
 	~Collider();
 
-	void Init();
+	void Update() override {};
+
+	void Start();
 
 private:
 
 	PhysXManager* m_physXManager;
-	PxShape* m_shape;
+	physx::PxRigidActor* m_actor;
 
 	void InitBox();
 	void InitSphere();

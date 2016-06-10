@@ -13,7 +13,12 @@ public:
 	PhysXManager(PhysXManager const&) = delete;
 	void operator=(PhysXManager const&) = delete;
 
+	void Update(float deltaTime);
+	void Init();
+	void Shutdown();
+
 	void AddActorToScene(PxActor* PhysXActor);
+	void RemoveActorFromScene(PxActor* PhysXActor);
 	PxPhysics* GetPhysics();
 
 
@@ -22,8 +27,8 @@ private:
 	PhysXManager();
 	static PhysXManager* m_instance;
 
-	static PxDefaultErrorCallback m_DefaultErrorCallback;
-	static PxDefaultAllocator m_DefaultAllocatorCallback;
+	PxDefaultErrorCallback m_DefaultErrorCallback;
+	PxDefaultAllocator m_DefaultAllocatorCallback;
 
 	PxFoundation* m_PhysicsFoundation;
 	PxPhysics* m_Physics;

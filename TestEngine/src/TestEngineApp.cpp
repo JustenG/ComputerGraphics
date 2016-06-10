@@ -10,6 +10,7 @@
 #include "Components\Camera.h"
 #include "Components\Terrain.h"
 #include "Components\Light.h"
+#include "Components\Collider.h"
 
 #include "Entitys\EntityManager.h"
 #include "Entitys\GameObject.h"
@@ -53,6 +54,7 @@ void TestEngineApp::Initialise()
 	m_entity->SetName("Terrain");
 	m_entity->AddComponent<Transform>();
 	m_entity->AddComponent<Terrain>();
+	m_entity->AddComponent<Collider>();
 	Terrain* entityTerrain = m_entity->GetComponent<Terrain>();
 	GetAssetManager()->LoadShader("data/shaders/terrain.vert", "data/shaders/terrain.frag", "terrainShader");
 	entityTerrain->SetShader(GetAssetManager()->GetAsset<Shader>("terrainShader"));

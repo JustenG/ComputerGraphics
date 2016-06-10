@@ -5,15 +5,20 @@
 #include "Components\Light.h"
 #include "Components\MeshRenderer.h"
 #include "Components\Terrain.h"
+#include "Components\Collider.h"
+#include "Components\RigidBody.h"
 #include "Entitys\GameObject.h"
+#include "Physics\PhysXManager.h"
 
-ComponentManager* ComponentManager::m_instance = new ComponentManager();
+ComponentManager* ComponentManager::m_instance = nullptr;
 
 ComponentManager::ComponentManager()
 {
+	m_physXManager = PhysXManager::GetInstance();
+
 	m_mainCameraIndex = -1;
 	m_isFreeCam = false;
-	m_isRunning = true;
+	m_isRunning = false;
 	m_freeCamPosTransform = nullptr;
 
 	m_pCollectionsMap[typeid(Transform).hash_code()]		= (IComponentCollection*)&m_transforms;
@@ -21,6 +26,8 @@ ComponentManager::ComponentManager()
 	m_pCollectionsMap[typeid(Light).hash_code()]			= (IComponentCollection*)&m_lights;
 	m_pCollectionsMap[typeid(MeshRenderer).hash_code()]		= (IComponentCollection*)&m_meshRenderers;
 	m_pCollectionsMap[typeid(Terrain).hash_code()]			= (IComponentCollection*)&m_terrains;
+	m_pCollectionsMap[typeid(Collider).hash_code()]			= (IComponentCollection*)&m_colliders;
+	m_pCollectionsMap[typeid(RigidBody).hash_code()]		= (IComponentCollection*)&m_rigidBodys;
 }
 
 ComponentManager::~ComponentManager()
@@ -54,7 +61,7 @@ void ComponentManager::SetSceneCamTransform(Transform newTransform)
 	m_freeCamPosTransform->SetScale(newTransform.GetScale());
 }
 
-void ComponentManager::UpdateAllComponents()
+void ComponentManager::UpdateAllComponents(float deltaTime)
 {
 	for (uint i = 0; i < m_transforms.Size(); ++i)
 	{
@@ -74,6 +81,11 @@ void ComponentManager::UpdateAllComponents()
 		m_lights[i].Update();
 	}
 
+	if (m_isRunning)
+	{
+		m_physXManager->Update(deltaTime);
+	}
+
 	if (m_mainCameraIndex >= 0)
 	{
 		if (m_isRunning)
@@ -83,7 +95,7 @@ void ComponentManager::UpdateAllComponents()
 		}
 		else
 		{
-			m_cameras[m_mainCameraIndex].Update(*GetSceneCamTransform());
+			//m_cameras[m_mainCameraIndex].Update(*GetSceneCamTransform());
 		}
 	}
 
@@ -105,6 +117,26 @@ void ComponentManager::RenderAllComponents()
 		m_cameras[i].Bind();
 		RenderRenderables(i);
 		m_cameras[i].Unbind();
+	}
+}
+
+void ComponentManager::ToggleRun()
+{
+	m_isRunning = !m_isRunning;
+	if (m_isRunning)
+	{
+		for (uint i = 0; i < m_colliders.Size(); ++i)
+		{
+			m_colliders[i].Start();
+		}
+		//for (uint i = 0; i < m_rigidBodys.Size(); ++i)
+		{
+
+		}
+	}
+	else
+	{
+
 	}
 }
 

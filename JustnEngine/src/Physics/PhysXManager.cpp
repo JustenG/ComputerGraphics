@@ -1,5 +1,7 @@
 #include "Physics\PhysXManager.h"
 
+PhysXManager* PhysXManager::m_instance = nullptr;
+
 PhysXManager * PhysXManager::GetInstance()
 {
 	if (!m_instance)
@@ -29,13 +31,33 @@ PhysXManager::PhysXManager()
 
 	if (!PxInitExtensions(*m_Physics))
 		printf("PxInitExtensions failed!");
-	//create physics material g_PhysicsMaterial = g_Physics->createMaterial(0.5f, 0.5f,	.5f);
+
 	PxSceneDesc sceneDesc(m_Physics->getTolerancesScale());
 	sceneDesc.gravity = PxVec3(0, -10.0f, 0);
 	sceneDesc.filterShader = &physx::PxDefaultSimulationFilterShader;
 	sceneDesc.cpuDispatcher = PxDefaultCpuDispatcherCreate(1);
 
 	m_PhysicsScene = m_Physics->createScene(sceneDesc);
+
+
+	//VISUAL DEBUGGER
+	//---------------------------------------------------------------------------
+	//---------------------------------------------------------------------------
+	// check if PvdConnection manager is available on this platform
+	if (m_Physics->getPvdConnectionManager() == NULL)
+		return;
+	// setup connection parameters
+	const char* pvd_host_ip = "127.0.0.1";
+	// IP of the PC which is running PVD
+	int port = 5425;
+	// TCP port to connect to, where PVD is listening
+	unsigned int timeout = 100;
+	// timeout in milliseconds to wait for PVD to respond,
+	//consoles and remote PCs need a higher timeout.
+	PxVisualDebuggerConnectionFlags connectionFlags = PxVisualDebuggerExt::getAllConnectionFlags();
+	// and now try to connectPxVisualDebuggerExt
+	auto theConnection = PxVisualDebuggerExt::createConnection(m_Physics->getPvdConnectionManager(), pvd_host_ip, port, timeout, connectionFlags);	//---------------------------------------------------------------------------
+	//---------------------------------------------------------------------------
 }
 
 PhysXManager::~PhysXManager()
@@ -47,9 +69,20 @@ PhysXManager::~PhysXManager()
 	m_PhysicsFoundation->release();
 }
 
+void PhysXManager::Update(float deltaTime)
+{
+	m_PhysicsScene->simulate(deltaTime > 0.033f ? 0.033f : deltaTime);
+	while (m_PhysicsScene->fetchResults() == false);
+}
+
 void PhysXManager::AddActorToScene(PxActor* PhysXActor)
 {
 	m_PhysicsScene->addActor(*PhysXActor);
+}
+
+void PhysXManager::RemoveActorFromScene(PxActor * PhysXActor)
+{
+	m_PhysicsScene->removeActor(*PhysXActor);
 }
 
 PxPhysics* PhysXManager::GetPhysics()

@@ -10,7 +10,7 @@ RigidBody::~RigidBody()
 {
 }
 
-void RigidBody::Init()
+void RigidBody::Start()
 {
 	
 }

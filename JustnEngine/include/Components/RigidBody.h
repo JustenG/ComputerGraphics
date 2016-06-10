@@ -4,13 +4,16 @@
 
 class PhysXManager;
 
-class RigidBody : public Component<Collider>
+class RigidBody : public Component<Transform>
 {
 public:
 	RigidBody();
 	~RigidBody();
 
-	void Init();
+	void Update() override {};
+
+
+	void Start();
 
 private:
 

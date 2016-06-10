@@ -1,7 +1,7 @@
 #include "Entitys\EntityManager.h"
 #include "Entitys\GameObject.h"
 
-EntityManager* EntityManager::m_instance = new EntityManager();
+EntityManager* EntityManager::m_instance = nullptr;
 
 EntityManager::EntityManager()
 {

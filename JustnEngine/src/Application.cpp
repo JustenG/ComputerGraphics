@@ -97,7 +97,7 @@ void Application::Run(int windowWidth, int windowHeight)
 void Application::EngineUpdate()
 {
 	UpdateTime();
-	m_componentManager->UpdateAllComponents();
+	m_componentManager->UpdateAllComponents(deltaTime);
 	if(m_isGUIActive) m_GUI->Update();
 }
 
