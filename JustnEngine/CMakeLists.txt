@@ -28,13 +28,16 @@ SET(SOURCES
 	src/Components/FlyCamera.cpp
 	src/Components/Light.cpp
 	src/Components/MeshRenderer.cpp
+	src/Components/Particles.cpp
 	src/Components/RigidBody.cpp
+	src/Components/PlayerController.cpp
 	src/Components/Terrain.cpp
 	src/Components/Transform.cpp
 
 	src/Entitys/GameObject.cpp
 	src/Entitys/EntityManager.cpp
 
+	src/Physics/ParticleEmitter.cpp
 	src/Physics/PhysXManager.cpp
 
 	src/Rendering/FrameBuffer.cpp	
@@ -67,6 +70,8 @@ SET(HEADERS
 	include/Components/IComponentCollection.h
 	include/Components/Light.h
 	include/Components/MeshRenderer.h
+	include/Components/Particles.h
+	include/Components/PlayerController.h
 	include/Components/RigidBody.h
 	include/Components/Terrain.h
 	include/Components/Transform.h
@@ -74,6 +79,7 @@ SET(HEADERS
 	include/Entitys/GameObject.h
 	include/Entitys/EntityManager.h
 
+	include/Physics/ParticleEmitter.h
 	include/Physics/PhysXManager.h
 	
 	include/Rendering/FrameBuffer.h
@@ -161,11 +167,14 @@ if(PHYSX_FOUND)
 	target_link_libraries(${PROJECT_NAME} debug ${PHYSX_PROFILE_SDK_LIBRARY_DEBUG})
 	target_link_libraries(${PROJECT_NAME} debug ${PHYSX_EX_LIBRARY_DEBUG})
 	target_link_libraries(${PROJECT_NAME} debug ${PHYSX_VD_SDK_LIBRARY_DEBUG})
+	target_link_libraries(${PROJECT_NAME} debug ${PHYSX_CK_LIBRARY_DEBUG})
+	
 	target_link_libraries(${PROJECT_NAME} optimized ${PHYSX_LIBRARY})
 	target_link_libraries(${PROJECT_NAME} optimized ${PHYSX_COMMON_LIBRARY})
 	target_link_libraries(${PROJECT_NAME} optimized ${PHYSX_COOKING_LIBRARY})
 	target_link_libraries(${PROJECT_NAME} optimized ${PHYSX_PROFILE_SDK_LIBRARY})
 	target_link_libraries(${PROJECT_NAME} optimized ${PHYSX_EX_LIBRARY})
+	target_link_libraries(${PROJECT_NAME} optimized ${PHYSX_CK_LIBRARY})
 	
 	target_compile_definitions(${PROJECT_NAME} PUBLIC PHYSX_SUPPORTED)
 	

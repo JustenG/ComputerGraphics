@@ -159,6 +159,7 @@ public:
 	glm::vec3 value;
 	void Render() override; // Renders Vec3 value
 };
+
 //----------------------------------------
 //----------------------------------------
 
@@ -188,6 +189,8 @@ public:
 		return DataConverter::GetPrimitive<std::remove_const_t<decltype(value)>>(data) == value;
 	}
 
+	template<typename TPrimitive>
+	static void SetPrimitive(const BaseData* data, const TPrimitive value);
 };
 //template<typename TPrimitive>
 //BaseData* DataConverter::CreateData(const TPrimitive value)

@@ -14,6 +14,8 @@ class MeshRenderer;
 class Terrain;
 class Collider;
 class RigidBody;
+class Particles;
+class PlayerController;
 
 template<typename T>
 using VT = std::vector<T>;
@@ -73,13 +75,15 @@ private:
 	Transform* m_freeCamPosTransform;
 
 	//A Vector of every componenet in-game
-	ComponentCollection<Transform>		m_transforms;
-	ComponentCollection<Camera>			m_cameras;
-	ComponentCollection<Light>			m_lights;
-	ComponentCollection<MeshRenderer>	m_meshRenderers;
-	ComponentCollection<Terrain>		m_terrains;
-	ComponentCollection<Collider>		m_colliders;
-	ComponentCollection<RigidBody>		m_rigidBodys;
+	ComponentCollection<Transform>				m_transforms;
+	ComponentCollection<Camera>					m_cameras;
+	ComponentCollection<Light>					m_lights;
+	ComponentCollection<MeshRenderer>			m_meshRenderers;
+	ComponentCollection<Terrain>				m_terrains;
+	ComponentCollection<Collider>				m_colliders;
+	ComponentCollection<RigidBody>				m_rigidBodys;
+	ComponentCollection<Particles>				m_particles;
+	ComponentCollection<PlayerController>		m_playerControllers;
 
 	std::map<uint, IComponentCollection*>	m_pCollectionsMap;
 

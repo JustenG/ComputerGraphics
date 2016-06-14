@@ -11,6 +11,8 @@
 #include "Components\Terrain.h"
 #include "Components\Light.h"
 #include "Components\Collider.h"
+#include "Components\Particles.h"
+#include "Components\PlayerController.h"
 
 #include "Entitys\EntityManager.h"
 #include "Entitys\GameObject.h"
@@ -38,13 +40,16 @@ void TestEngineApp::Initialise()
 	m_entity->AddComponent<Transform>();
 	m_entity->AddComponent<Camera>(); 
 	entityTransform = m_entity->GetComponent<Transform>(); 
-	entityTransform->SetPosition(0, 10, 40);
+	entityTransform->SetPosition(0, 64, 100);
+	entityTransform->SetRotation(-25, 0, 0);
 
 	//Light 
 	m_entity = GetEntityManager()->CreateEntity();
 	m_entity->SetName("Light");
 	m_entity->AddComponent<Transform>();
 	m_entity->AddComponent<Light>();
+	m_entity->AddComponent<Collider>();
+	m_entity->AddComponent<PlayerController>();
 	entityTransform = m_entity->GetComponent<Transform>();
 	entityTransform->SetPosition(5, 10, -5);
 	entityTransform->SetRotation(0, 0, 0);
@@ -71,6 +76,14 @@ void TestEngineApp::Initialise()
 	entityTerrain->GetMaterial()->LoadTexture(GetAssetManager()->GetAsset<Texture>("rockTex"), (Material::TextureSlots)2);
 	entityTransform = m_entity->GetComponent<Transform>();
 	entityTransform->SetPosition(-32, -6, -32);
+
+	//Particles
+	m_entity = GetEntityManager()->CreateEntity();
+	m_entity->SetName("Particles");
+	m_entity->AddComponent<Transform>();
+	m_entity->AddComponent<Particles>();
+	entityTransform = m_entity->GetComponent<Transform>();
+	entityTransform->SetPosition(-5, 10, 5);
 
 
 	ComponentManager::GetInstance()->SetMainCamera(0);

@@ -16,7 +16,7 @@ public:
 	// function to create a grid
 	void GenerateGrid();
 	void CreatePerlinMap();
-	int* GetHeightMap() { return perlin_data_int; };
+	int* GetHeightMap() { return perlin_collider_data; };
 
 	int GetSize() { return m_size; };
 
@@ -26,7 +26,7 @@ private:
 
 	Texture* m_perlinTexture;
 	float *perlin_data;
-	int *perlin_data_int;
+	int *perlin_collider_data;
 
 	int m_size;
 	float m_scale;

@@ -23,9 +23,12 @@ public:
 	void SetPosition(glm::vec3 position) { m_position = position; m_isDirty = true; };
 	void SetRotation(glm::vec3 rotation) { m_rotation = rotation; m_isDirty = true; };
 	void SetScale	(glm::vec3 scale)	 { m_scale	  = scale; m_isDirty = true; };
-	void SetPosition(float x, float y, float z) { m_position = glm::vec3(x, y, z); };
-	void SetRotation(float x, float y, float z) { m_rotation = glm::vec3(x, y, z); };
-	void SetScale	(float x, float y, float z) { m_scale	 = glm::vec3(x, y, z); };
+	void SetPosition(float x, float y, float z) { m_position = glm::vec3(x, y, z); m_isDirty = true; };
+	void SetRotation(float x, float y, float z) { m_rotation = glm::vec3(x, y, z); m_isDirty = true; };
+	void SetScale	(float x, float y, float z) { m_scale	 = glm::vec3(x, y, z);  m_isDirty = true; };
+	void SetRotation(float x, float y, float z , float w) { m_rotation = glm::eulerAngles(glm::quat(w, x, y, z)); m_isDirty = true; };
+
+	
 
 	Transform* GetParent() { return m_pParent; };
 	std::vector<Transform*> GetChildren() { return m_pChildren; };

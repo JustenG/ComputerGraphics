@@ -7,6 +7,8 @@
 #include "Components\Terrain.h"
 #include "Components\Collider.h"
 #include "Components\RigidBody.h"
+#include "Components\Particles.h"
+#include "Components\PlayerController.h"
 #include "Entitys\GameObject.h"
 #include "Physics\PhysXManager.h"
 
@@ -28,6 +30,8 @@ ComponentManager::ComponentManager()
 	m_pCollectionsMap[typeid(Terrain).hash_code()]			= (IComponentCollection*)&m_terrains;
 	m_pCollectionsMap[typeid(Collider).hash_code()]			= (IComponentCollection*)&m_colliders;
 	m_pCollectionsMap[typeid(RigidBody).hash_code()]		= (IComponentCollection*)&m_rigidBodys;
+	m_pCollectionsMap[typeid(Particles).hash_code()]		= (IComponentCollection*)&m_particles;
+	m_pCollectionsMap[typeid(PlayerController).hash_code()]	= (IComponentCollection*)&m_playerControllers;
 }
 
 ComponentManager::~ComponentManager()
@@ -81,10 +85,29 @@ void ComponentManager::UpdateAllComponents(float deltaTime)
 		m_lights[i].Update();
 	}
 
+	//IF RUNNING
+	//----------------------------
+	//----------------------------
 	if (m_isRunning)
 	{
 		m_physXManager->Update(deltaTime);
+		for (uint i = 0; i < m_colliders.Size(); ++i)
+		{
+			m_colliders[i].Update();
+		}
+
+		for (uint i = 0; i < m_particles.Size(); ++i)
+		{
+			m_particles[i].Update(deltaTime);
+		}
+
+		for (uint i = 0; i < m_playerControllers.Size(); ++i)
+		{
+			m_playerControllers[i].Update(deltaTime);
+		}
 	}
+	//----------------------------
+	//----------------------------
 
 	if (m_mainCameraIndex >= 0)
 	{
@@ -103,6 +126,14 @@ void ComponentManager::UpdateAllComponents(float deltaTime)
 
 void ComponentManager::RenderAllComponents()
 {
+	if (m_isRunning)
+	{
+		for (uint i = 0; i < m_particles.Size(); ++i)
+		{
+			m_particles[i].Render();
+		}
+	}
+
 	//Render all Lights
 	for (uint i = 0; i < m_lights.Size(); ++i)
 	{
@@ -129,14 +160,21 @@ void ComponentManager::ToggleRun()
 		{
 			m_colliders[i].Start();
 		}
-		//for (uint i = 0; i < m_rigidBodys.Size(); ++i)
+		for (uint i = 0; i < m_particles.Size(); ++i)
 		{
-
+			m_particles[i].Start();
 		}
+		for (uint i = 0; i < m_playerControllers.Size(); ++i)
+		{
+			m_playerControllers[i].Start();
+		}		
 	}
 	else
 	{
-
+		for (uint i = 0; i < m_particles.Size(); ++i)
+		{
+			m_particles[i].End();
+		}
 	}
 }
 

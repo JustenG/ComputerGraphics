@@ -1,10 +1,9 @@
 #pragma once
-#include "Components\Component.h"
 #include "Components\Collider.h"
 
 class PhysXManager;
 
-class RigidBody : public Component<Transform>
+class RigidBody : public Component<Collider>
 {
 public:
 	RigidBody();

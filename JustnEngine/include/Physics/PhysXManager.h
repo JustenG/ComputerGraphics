@@ -19,7 +19,8 @@ public:
 
 	void AddActorToScene(PxActor* PhysXActor);
 	void RemoveActorFromScene(PxActor* PhysXActor);
-	PxPhysics* GetPhysics();
+	PxPhysics* GetPhysics() { return m_Physics;	};
+	PxControllerManager* GetControllerManager() { return m_ControllerManager; };
 
 
 private:
@@ -36,6 +37,7 @@ private:
 	PxScene* m_PhysicsScene;
 	PxSimulationFilterShader m_DefaultFilterShader = PxDefaultSimulationFilterShader;
 	PxCooking* m_Cooking;
+	PxControllerManager* m_ControllerManager;
 
 
 };

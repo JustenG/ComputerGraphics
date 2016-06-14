@@ -8,6 +8,7 @@ RigidBody::RigidBody()
 
 RigidBody::~RigidBody()
 {
+
 }
 
 void RigidBody::Start()

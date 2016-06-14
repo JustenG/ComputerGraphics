@@ -141,27 +141,34 @@ void Terrain::CreatePerlinMap()
 	if (perlin_data != nullptr)
 	{
 		delete[] perlin_data;
-		delete[] perlin_data_int;
+		delete[] perlin_collider_data;
 	}
 
-	perlin_data = new float[m_size * m_size];
-	perlin_data_int = new int[m_size * m_size];
+	perlin_data				= new float	[m_size * m_size];
+	perlin_collider_data	= new int	[m_size * m_size];
+
 	float scale = (1.0f / m_size) * m_scale;
 	int octaves = m_octaves;
+
 	for (int x = 0; x < m_size; ++x)
 	{
 		for (int y = 0; y < m_size; ++y)
 		{
 			float amplitude = m_amplitude;
 			float persistence = m_persistence;
-			perlin_data[y * m_size + x] = 0;
-			perlin_data_int[y * m_size + x] = 0;
+
+			//Collider Data must be inverst due to internal PhysX calculations
+			perlin_data				[y * m_size + x] = 0;
+			perlin_collider_data	[x * m_size + y] = 0;
+
 			for (int o = 0; o < octaves; ++o)
 			{
 				float freq = powf(2, (float)o) * m_frequency;
 				float perlin_sample = glm::perlin(vec2((float)x, (float)y) * scale * freq) * 0.5f + 0.5f;
-				perlin_data[y * m_size + x] += perlin_sample * amplitude;
-				perlin_data_int[y * m_size + x] = (int)perlin_data[y * m_size + x];
+
+				perlin_data				[y * m_size + x] += perlin_sample * amplitude;
+				perlin_collider_data	[x * m_size + y] = (int)perlin_data[y * m_size + x];
+
 				amplitude *= persistence;
 			}
 		}

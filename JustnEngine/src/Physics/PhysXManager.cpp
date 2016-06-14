@@ -32,6 +32,8 @@ PhysXManager::PhysXManager()
 	if (!PxInitExtensions(*m_Physics))
 		printf("PxInitExtensions failed!");
 
+	m_ControllerManager = PxCreateControllerManager(*m_PhysicsScene);
+
 	PxSceneDesc sceneDesc(m_Physics->getTolerancesScale());
 	sceneDesc.gravity = PxVec3(0, -10.0f, 0);
 	sceneDesc.filterShader = &physx::PxDefaultSimulationFilterShader;
@@ -39,6 +41,7 @@ PhysXManager::PhysXManager()
 
 	m_PhysicsScene = m_Physics->createScene(sceneDesc);
 
+	m_ControllerManager = PxCreateControllerManager(*m_PhysicsScene);
 
 	//VISUAL DEBUGGER
 	//---------------------------------------------------------------------------
@@ -56,7 +59,8 @@ PhysXManager::PhysXManager()
 	//consoles and remote PCs need a higher timeout.
 	PxVisualDebuggerConnectionFlags connectionFlags = PxVisualDebuggerExt::getAllConnectionFlags();
 	// and now try to connectPxVisualDebuggerExt
-	auto theConnection = PxVisualDebuggerExt::createConnection(m_Physics->getPvdConnectionManager(), pvd_host_ip, port, timeout, connectionFlags);	//---------------------------------------------------------------------------
+	auto theConnection = PxVisualDebuggerExt::createConnection(m_Physics->getPvdConnectionManager(), pvd_host_ip, port, timeout, connectionFlags);
+	//---------------------------------------------------------------------------
 	//---------------------------------------------------------------------------
 }
 
@@ -83,9 +87,4 @@ void PhysXManager::AddActorToScene(PxActor* PhysXActor)
 void PhysXManager::RemoveActorFromScene(PxActor * PhysXActor)
 {
 	m_PhysicsScene->removeActor(*PhysXActor);
-}
-
-PxPhysics* PhysXManager::GetPhysics()
-{
-	return m_Physics;
 }

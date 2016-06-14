@@ -39,12 +39,15 @@ public:
 	uint GetComponentCount() { return m_componentIndex.size(); };
 	void SetName(std::string name) {  m_name = name; };
 	std::string GetName() { return m_name; };
+	bool GetStaticTag() { return m_isStatic; };
 
 private:
 
 	ComponentManager* m_pComponentManager;
 	std::map<uint, int> m_componentIndex;
 	std::string m_name;
+	bool m_isStatic;
+	bool m_forceStatic;
 };
 
 template<class TComponent>
@@ -57,6 +60,12 @@ GameObject::AddComponent()
 	//Already has this component
 	if (HasComponent<TComponent>())
 		return;
+
+	if (Utils::IsSameType<TComponent, Terrain>())
+	{
+		m_isStatic = true;
+		m_forceStatic = true;
+	}
 
 	m_componentIndex[Utils::GetTypeID<TComponent>()] = m_pComponentManager->AddComponent<TComponent>(this);
 }

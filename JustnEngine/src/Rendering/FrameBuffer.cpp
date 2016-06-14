@@ -16,7 +16,7 @@ FrameBuffer::~FrameBuffer()
 void FrameBuffer::Bind()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, m_fboId);
-	glViewport(0, 0, m_fboSize.x, m_fboSize.y);
+	glViewport(0,0, m_fboSize.x, m_fboSize.y);
 
 	m_fboTexture->Bind();
 	m_fboDepthTex->Bind();
