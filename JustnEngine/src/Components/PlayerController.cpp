@@ -57,27 +57,38 @@ void PlayerController::Update(float deltaTime)
 	PxQuat rotation(m_rotation, PxVec3(0, 1, 0));
 	//PxVec3 velocity(0, m_yVelocity, 0);
 	//move the controller
-	m_playerController->move(rotation.rotate(velocity), minDistance, deltaTime,	filter);
+	if(m_playerController != nullptr)
+		m_playerController->move(rotation.rotate(velocity), minDistance, deltaTime,	filter);
 }
 
 void PlayerController::Start()
 {
-	if(GetGameObject()->GetComponent<Transform>() != nullptr)
+	if (GetGameObject()->GetComponent<Transform>() != nullptr)
 		m_myTransform = GetGameObject()->GetComponent<Transform>();
 	vec3 pos = m_myTransform->GetPosition();
+
+	m_physXMaterial = m_physXManager->GetPhysics()->createMaterial(0.5f, 0.5f, 0.5f);
 
 	//ControllerHitRe
 	myHitReport = new MyControllerHitReport();
 	//describe our controller...
 	PxCapsuleControllerDesc desc;
 	desc.height = 1.6f;
-	desc.radius = 0.4f;
-	desc.position.set(0, 0, 0);
+	desc.radius = 1.0f;
+	desc.position.set(0, 5, 0);
 	desc.material = m_physXMaterial;
 	desc.reportCallback = myHitReport; //connect it to our collision detection routine
 	desc.density = 10; 	//create the layer controller
-	m_playerController = m_physXManager->GetControllerManager()->createController(desc);
-	m_playerController->setPosition(PxExtendedVec3(pos.x, pos.y, pos.z)); //set up some variables to control our player with
+
+	PxControllerManager* controllerManager = m_physXManager->GetControllerManager();
+	if (controllerManager != nullptr)
+	{
+		PxController* controller = controllerManager->createController(desc);
+		m_playerController = controller;
+		if(m_playerController != nullptr)
+			m_playerController->setPosition(PxExtendedVec3(pos.x, pos.y, pos.z)); //set up some variables to control our player with
+	}
+	
 	m_yVelocity = 0; //initialize character velocity
 	m_rotation = 0; //and rotation
 	m_gravity = -0.5f; //set up the player gravity

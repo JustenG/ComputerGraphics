@@ -2,7 +2,9 @@
 
 #include <PxPhysicsAPI.h>
 #include <PxScene.h>
-#include <pvd/PxVisualDebugger.h>
+#include <pvd/PxPvd.h>
+//#include <pvd/PxVisualDebugger.h>
+
 using namespace physx;
 
 class PhysXManager
@@ -19,7 +21,8 @@ public:
 
 	void AddActorToScene(PxActor* PhysXActor);
 	void RemoveActorFromScene(PxActor* PhysXActor);
-	PxPhysics* GetPhysics() { return m_Physics;	};
+	PxPhysics* GetPhysics() { return m_Physics; };
+	PxCooking* GetCooking() { return m_Cooking;	};
 	PxControllerManager* GetControllerManager() { return m_ControllerManager; };
 
 
@@ -33,7 +36,8 @@ private:
 
 	PxFoundation* m_PhysicsFoundation;
 	PxPhysics* m_Physics;
-	PxProfileZoneManager* m_ProfileZoneManager;
+	PxPvd* m_ProfileVisualDebugger;
+	PxPvdTransport* m_PvdTransport;
 	PxScene* m_PhysicsScene;
 	PxSimulationFilterShader m_DefaultFilterShader = PxDefaultSimulationFilterShader;
 	PxCooking* m_Cooking;

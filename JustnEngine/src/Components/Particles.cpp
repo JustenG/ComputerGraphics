@@ -55,12 +55,12 @@ void Particles::Start()
 		m_particleFluid = m_physXManager->GetPhysics()->createParticleFluid(m_maxParticles, perParticleRestOffset);
 
 		m_particleFluid->setRestParticleDistance(.3f);
-		m_particleFluid->setDynamicFriction(0.1);
-		m_particleFluid->setStaticFriction(0.1);
+		m_particleFluid->setDynamicFriction(0.1f);
+		m_particleFluid->setStaticFriction(0.1f);
 
-		m_particleFluid->setDamping(0.1);
-		m_particleFluid->setParticleMass(.1);
-		m_particleFluid->setRestitution(0);
+		m_particleFluid->setDamping(0.1f);
+		m_particleFluid->setParticleMass(0.1f);
+		m_particleFluid->setRestitution(0.0f);
 
 		//pf->setParticleReadDataFlag(PxParticleReadDataFlag::eDENSITY_BUFFER, true);
 		m_particleFluid->setParticleBaseFlag(PxParticleBaseFlag::eCOLLISION_TWOWAY, true);
@@ -72,7 +72,7 @@ void Particles::Start()
 			glm::vec3 pos = m_myTransform->GetPosition();
 
 			m_physXManager->AddActorToScene(m_particleFluid);
-			m_particleEmitter = new ParticleEmitter(m_maxParticles, PxVec3(pos.x, pos.y, pos.z), m_particleFluid, .1);
+			m_particleEmitter = new ParticleEmitter(m_maxParticles, PxVec3(pos.x, pos.y, pos.z), m_particleFluid, 0.1f);
 			m_particleEmitter->SetStartVelocityRange(-0.001f, -250.0f, -0.001f, 0.001f, -250.0f, 0.001f);
 		}
 	}
@@ -90,9 +90,9 @@ void Particles::Start()
 
 		//m_particleSystem->setDynamicFriction(0.1);
 		//m_particleSystem->setStaticFriction(0.1);
-		m_particleSystem->setDamping(0.1);
-		m_particleSystem->setParticleMass(.1);
-		m_particleSystem->setRestitution(0);
+		m_particleSystem->setDamping(0.1f);
+		m_particleSystem->setParticleMass(0.1f);
+		m_particleSystem->setRestitution(0.0f);
 
 		m_particleSystem->setParticleBaseFlag(PxParticleBaseFlag::eCOLLISION_TWOWAY, true);
 
@@ -102,7 +102,7 @@ void Particles::Start()
 			glm::vec3 pos = m_myTransform->GetPosition();
 
 			m_physXManager->AddActorToScene(m_particleSystem);
-			m_particleEmitter = new ParticleEmitter(m_maxParticles, PxVec3(pos.x, pos.y, pos.z), m_particleSystem, .1);
+			m_particleEmitter = new ParticleEmitter(m_maxParticles, PxVec3(pos.x, pos.y, pos.z), m_particleSystem, 0.1f);
 			m_particleEmitter->SetStartVelocityRange(-0.001f, -250.0f, -0.001f, 0.001f, -250.0f, 0.001f);
 		}
 	}

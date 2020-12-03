@@ -25,6 +25,7 @@ private:
 
 	PhysXManager* m_physXManager;
 	physx::PxPhysics* m_physics;
+	physx::PxCooking* m_cooking;
 	physx::PxRigidActor* m_actor;
 	physx::PxShape* m_shape;
 	physx::PxMaterial* m_physXMaterial;

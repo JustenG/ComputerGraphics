@@ -14,6 +14,7 @@ Collider::Collider()
 {
 	m_physXManager = PhysXManager::GetInstance();
 	m_physics = m_physXManager->GetPhysics();
+	m_cooking = m_physXManager->GetCooking();
 	m_physXMaterial = m_physics->createMaterial(0.5f, 0.5f, 0.5f);
 
 	m_xScale = 1;
@@ -208,8 +209,7 @@ void Collider::InitTerrain()
 	hfDesc.samples.stride = sizeof(PxHeightFieldSample);
 	hfDesc.thickness = -100.0f;
 
-	PxHeightField* heightField = m_physics->createHeightField(hfDesc);
-	
+	PxHeightField* heightField = m_cooking->createHeightField(hfDesc, m_physics->getPhysicsInsertionCallback());
 	PxHeightFieldGeometry hfGeom(heightField, PxMeshGeometryFlags(), m_myTransform->GetScale().y, m_myTransform->GetScale().z, m_myTransform->GetScale().x);
 
 	m_shape = m_physics->createShape((PxHeightFieldGeometry)hfGeom, *m_physXMaterial);

@@ -2,6 +2,7 @@
 #include "global_includes.h"
 #include "Components\ComponentManager.h"
 #include "Components\BaseComponent.h"
+#include "Components\Terrain.h"
 #include "Utilities\Utils.h"
 #include <type_traits>
 

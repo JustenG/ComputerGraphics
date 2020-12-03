@@ -55,6 +55,7 @@ void TestEngineApp::Initialise()
 	entityTransform->SetRotation(0, 0, 0);
 
 	//Terrain
+	/*
 	m_entity = GetEntityManager()->CreateEntity();
 	m_entity->SetName("Terrain");
 	m_entity->AddComponent<Transform>();
@@ -76,15 +77,17 @@ void TestEngineApp::Initialise()
 	entityTerrain->GetMaterial()->LoadTexture(GetAssetManager()->GetAsset<Texture>("rockTex"), (Material::TextureSlots)2);
 	entityTransform = m_entity->GetComponent<Transform>();
 	entityTransform->SetPosition(-32, -6, -32);
+	*/
 
 	//Particles
+	/*
 	m_entity = GetEntityManager()->CreateEntity();
 	m_entity->SetName("Particles");
 	m_entity->AddComponent<Transform>();
 	m_entity->AddComponent<Particles>();
 	entityTransform = m_entity->GetComponent<Transform>();
 	entityTransform->SetPosition(-5, 10, 5);
-
+	*/
 
 	ComponentManager::GetInstance()->SetMainCamera(0);
 

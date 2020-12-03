@@ -108,7 +108,7 @@ bool ParticleEmitter::AddPhysXParticle(int particleIndex)
 {
 
 	//set up the buffers
-	PxU32 myIndexBuffer[] = {particleIndex};
+	PxU32 myIndexBuffer[] = {(PxU32)particleIndex};
 	PxVec3 startPos = m_position;
 	PxVec3 startVel(0, 0, 0);
 	//randomize starting velocity.

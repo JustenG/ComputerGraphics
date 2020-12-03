@@ -12,16 +12,20 @@ PhysXManager * PhysXManager::GetInstance()
 
 PhysXManager::PhysXManager()
 {
-	m_PhysicsFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, m_DefaultAllocatorCallback, m_DefaultErrorCallback);
+	m_PhysicsFoundation = PxCreateFoundation(PX_FOUNDATION_VERSION, m_DefaultAllocatorCallback, m_DefaultErrorCallback);
 	if (!m_PhysicsFoundation)
 		printf("PxCreateFoundation failed!");
 
 	bool recordMemoryAllocations = true;
-	m_ProfileZoneManager = &PxProfileZoneManager::createProfileZoneManager(m_PhysicsFoundation);
-	if (!m_ProfileZoneManager)
-		printf("PxProfileZoneManager::createProfileZoneManager failed!");
 
-	m_Physics = PxCreatePhysics(PX_PHYSICS_VERSION, *m_PhysicsFoundation, PxTolerancesScale(), recordMemoryAllocations, m_ProfileZoneManager);
+	m_ProfileVisualDebugger = PxCreatePvd(*m_PhysicsFoundation);
+	PxPvdTransport* transport = PxDefaultPvdFileTransportCreate(NULL);
+	m_ProfileVisualDebugger->connect(*transport, PxPvdInstrumentationFlag::eALL);
+
+	if (!m_ProfileVisualDebugger)
+		printf("PxCreatePvd failed!");
+
+	m_Physics = PxCreatePhysics(PX_PHYSICS_VERSION, *m_PhysicsFoundation, PxTolerancesScale(), recordMemoryAllocations, m_ProfileVisualDebugger);
 	if (!m_Physics)
 		printf("PxCreatePhysics failed!");
 
@@ -29,10 +33,8 @@ PhysXManager::PhysXManager()
 	if (!m_Cooking)
 		printf("PxCreateCooking failed!");
 
-	if (!PxInitExtensions(*m_Physics))
+	if (!PxInitExtensions(*m_Physics, m_ProfileVisualDebugger))
 		printf("PxInitExtensions failed!");
-
-	m_ControllerManager = PxCreateControllerManager(*m_PhysicsScene);
 
 	PxSceneDesc sceneDesc(m_Physics->getTolerancesScale());
 	sceneDesc.gravity = PxVec3(0, -10.0f, 0);
@@ -40,15 +42,11 @@ PhysXManager::PhysXManager()
 	sceneDesc.cpuDispatcher = PxDefaultCpuDispatcherCreate(1);
 
 	m_PhysicsScene = m_Physics->createScene(sceneDesc);
-
 	m_ControllerManager = PxCreateControllerManager(*m_PhysicsScene);
 
 	//VISUAL DEBUGGER
 	//---------------------------------------------------------------------------
 	//---------------------------------------------------------------------------
-	// check if PvdConnection manager is available on this platform
-	if (m_Physics->getPvdConnectionManager() == NULL)
-		return;
 	// setup connection parameters
 	const char* pvd_host_ip = "127.0.0.1";
 	// IP of the PC which is running PVD
@@ -57,9 +55,9 @@ PhysXManager::PhysXManager()
 	unsigned int timeout = 100;
 	// timeout in milliseconds to wait for PVD to respond,
 	//consoles and remote PCs need a higher timeout.
-	PxVisualDebuggerConnectionFlags connectionFlags = PxVisualDebuggerExt::getAllConnectionFlags();
-	// and now try to connectPxVisualDebuggerExt
-	auto theConnection = PxVisualDebuggerExt::createConnection(m_Physics->getPvdConnectionManager(), pvd_host_ip, port, timeout, connectionFlags);
+
+	m_PvdTransport = PxDefaultPvdSocketTransportCreate(pvd_host_ip, port, timeout);
+	m_ProfileVisualDebugger->connect(*m_PvdTransport, PxPvdInstrumentationFlag::eALL);
 	//---------------------------------------------------------------------------
 	//---------------------------------------------------------------------------
 }
@@ -69,7 +67,8 @@ PhysXManager::~PhysXManager()
 	PxCloseExtensions();
 	m_Cooking->release();
 	m_Physics->release();
-	m_ProfileZoneManager->release();
+	m_ProfileVisualDebugger->release();
+	m_PvdTransport->release();
 	m_PhysicsFoundation->release();
 }
 

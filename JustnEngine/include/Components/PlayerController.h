@@ -7,7 +7,7 @@
 using namespace physx;
 
 class PhysXManager;
-class GLFWwindow;
+struct GLFWwindow;
 
 class MyControllerHitReport : public PxUserControllerHitReport
 {
@@ -39,14 +39,14 @@ public:
 
 private:
 
-	Transform* m_myTransform;
+	Transform* m_myTransform = nullptr;
 
-	PhysXManager* m_physXManager;
-	PxMaterial* m_physXMaterial;
-	PxController* m_playerController;
-	MyControllerHitReport* myHitReport;
+	PhysXManager* m_physXManager = nullptr;
+	PxMaterial* m_physXMaterial = nullptr;
+	PxController* m_playerController = nullptr;
+	MyControllerHitReport* myHitReport = nullptr;
 
-	GLFWwindow* m_currentWindow;
+	GLFWwindow* m_currentWindow = nullptr;
 
 	float m_yVelocity;
 	float m_rotation;
